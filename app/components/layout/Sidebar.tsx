@@ -6,10 +6,12 @@ import { NavigationItemComponent } from '../NavigationItems';
 import { useNav } from '@/app/context/ThemeContext';
 
 const Sidebar = () => {
-  const { isOpen, closeSideBar } = useNav();
+  const { isOpen, isWide, closeSideBar } = useNav();
   return (
     <aside
       className={`w-80 absolute min-[980px]:relative bg-custom-bg text-custom-color h-screen p-4 overflow-y-scroll ${
+        isWide ? 'hidden' : 'block'
+      }  ${
         isOpen
           ? 'translate-x-0 transition duration-500 ease-in-out '
           : '-translate-x-full block transition duration-500 ease-in-out'
@@ -17,7 +19,7 @@ const Sidebar = () => {
     >
       <span className='flex justify-between items-center'>
         <span className='flex justify-between items-center'>
-          <Rocket />
+          <Rocket size={48} />
           <h2 className='font-bold '>Admin</h2>
         </span>
         <span
@@ -35,7 +37,7 @@ const Sidebar = () => {
         <div className='w-[100%] flex justify-between items-center p-3 bg-gray-800 rounded-4xl h-32 sticky left-0 bottom-0'>
           <small>admin</small>
           <Link href='/auth/login'>
-            <LogOut className='inline-block mr-2' />
+            <LogOut size={32} className='inline-block mr-2' />
           </Link>
         </div>
       </nav>

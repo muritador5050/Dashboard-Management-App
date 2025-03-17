@@ -5,9 +5,11 @@ import { createContext } from 'react';
 type NavContextType = {
   isOpen: boolean;
   collapse: boolean;
+  isWide: boolean;
   handleToggle: () => void;
   closeSideBar: () => void;
   handleCollapse: () => void;
+  toggleSiderbarWidth: () => void;
 };
 
 export const NavContextProvider = createContext<NavContextType | null>(null);
@@ -18,6 +20,7 @@ export default function NavContext({
 }) {
   const [isOpen, setIsOpen] = useState(true);
   const [collapse, setCollapse] = useState(false);
+  const [isWide, setIsWide] = useState(false);
   const handleToggle = () => {
     setIsOpen((prev) => !prev);
   };
@@ -27,9 +30,21 @@ export default function NavContext({
   const handleCollapse = () => {
     setCollapse((prev) => !prev);
   };
+
+  const toggleSiderbarWidth = () => {
+    setIsWide((prev) => !prev);
+  };
   return (
     <NavContextProvider.Provider
-      value={{ isOpen, handleToggle, collapse, handleCollapse, closeSideBar }}
+      value={{
+        isWide,
+        isOpen,
+        handleToggle,
+        collapse,
+        toggleSiderbarWidth,
+        handleCollapse,
+        closeSideBar,
+      }}
     >
       {children}
     </NavContextProvider.Provider>

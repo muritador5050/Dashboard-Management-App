@@ -17,7 +17,8 @@ import { useNav } from '@/app/context/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
 // import Image from 'next/image';
 export default function Navbar() {
-  const { collapse, handleCollapse, handleToggle } = useNav();
+  const { collapse, handleCollapse, handleToggle, toggleSiderbarWidth } =
+    useNav();
   const [swipeModal, setSwipeModal] = useState(false);
   return (
     <>
@@ -85,7 +86,7 @@ export default function Navbar() {
         <div className='hidden min-[980px]:flex justify-between items-center '>
           <ul className='flex gap-3 items-center'>
             <li>
-              <ArrowUpWideNarrow />
+              <ArrowUpWideNarrow onClick={toggleSiderbarWidth} />
             </li>
             <li className='flex items-center'>
               Apps

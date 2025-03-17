@@ -27,13 +27,13 @@ export const NavigationItemComponent: React.FC<{ item: NavigationItem }> = ({
               {item.title && capitalizeFirstLetter(item.title)}
             </span>
           </div>
-          <span className='cursor-pointer'>
+          <span className='cursor-pointer '>
             {isOpen ? <ChevronDown /> : <ChevronRight />}
           </span>
         </div>
       ) : (
         <Link
-          href={`/${item.segment}`}
+          href={`/dashboard/${item.segment}`}
           className={`flex text-xl items-center gap-3 p-2 hover:bg-gray-700 rounded block active:text-red-900 `}
         >
           {item.icon && <span>{item.icon}</span>}
