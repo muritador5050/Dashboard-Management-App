@@ -1,8 +1,10 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --dash-bg: rgb(17, 28, 45);
+  --dash-color: rgb(124, 143, 172);
 }
 
 @theme inline {
@@ -10,6 +12,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-custom-bg: var(--dash-bg);
+  --color-custom-color: var(--dash-color);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,6 +25,6 @@
 
 body {
   background: var(--background);
-  color: var(--foreground);
+  /* color: var(--foreground); */
   font-family: Arial, Helvetica, sans-serif;
 }
