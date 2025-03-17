@@ -1,59 +1,129 @@
 'use client';
 import React, { useState } from 'react';
-// import Search from '../Search';
+import Search from '../Search';
 import BlinkingIcon from '../BlinkingIcon';
-import { ChevronDown, AlignJustify, Ellipsis, X, SearchX } from 'lucide-react';
+import {
+  ChevronDown,
+  AlignJustify,
+  Ellipsis,
+  X,
+  SearchX,
+  SunMoon,
+  Layers2,
+  ArrowUpWideNarrow,
+  Rocket,
+} from 'lucide-react';
 import { useNav } from '@/app/context/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
+// import Image from 'next/image';
 export default function Navbar() {
   const { collapse, handleCollapse, handleToggle } = useNav();
   const [swipeModal, setSwipeModal] = useState(false);
   return (
-    <nav className='flex flex-col items-center justify-between bg-custom-bg p-5  top-0 text-custom-color rounded-2xl m-[1em] text-2xl cursor-pointer'>
-      <div className='flex justify-between items-center px-4'>
-        <div className='flex gap-20 items-center min-[980px]:hidden'>
-          <span>
-            <AlignJustify onClick={handleToggle} />
-          </span>
-          <span>Admin dashboard</span>
-          <span onClick={handleCollapse}>
-            <Ellipsis />
-          </span>
+    <>
+      <nav className=' bg-custom-bg p-5  top-0 text-custom-color rounded-2xl m-[1em] text-2xl cursor-pointer'>
+        {/* mobile-view */}
+        <div className='px-2 min-[980px]:hidden'>
+          <div className='flex justify-between items-center '>
+            <span>
+              <AlignJustify onClick={handleToggle} />
+            </span>
+            <span className='flex gap-4 items-center'>
+              <Rocket /> Admin
+            </span>
+            <span onClick={handleCollapse}>
+              <Ellipsis />
+            </span>
+          </div>
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={
+              collapse
+                ? { opacity: 1, height: 'auto' }
+                : { opacity: 0, height: 0 }
+            }
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <hr className='w-full my-4' />
+            <div className='flex justify-between items-center'>
+              <span>
+                <AlignJustify onClick={() => setSwipeModal(true)} />
+              </span>
+              <ul className='flex gap-2 items-center'>
+                <li>
+                  <span>
+                    <SearchX />
+                  </span>
+                </li>
+                <li>
+                  <BlinkingIcon />
+                </li>
+                <li>
+                  <SunMoon />
+                </li>
+                <li>
+                  <Layers2 />
+                </li>
+                <li className='flex gap-4 items-center'>
+                  {/* <Image
+                className='border-3 border-white-400 rounded-full'
+                src=''
+                alt='A'
+                width={50}
+                height={50}
+              /> */}
+                  <small>
+                    Mike Nelson <br />
+                    admin
+                  </small>
+                </li>
+              </ul>
+            </div>
+          </motion.div>
         </div>
-      </div>
-      <ul className='hidden min-[980px]:flex gap-10'>
-        <li className='flex items-center'>
-          Apps
-          <ChevronDown />
-        </li>
-        <li>Chat</li>
-        <li>Calendar</li>
-        <li>Email</li>
-      </ul>
-      <motion.div
-        initial={{ height: 0, opacity: 0 }}
-        animate={
-          collapse ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }
-        }
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className='overflow-hidden p-4 rounded-md mt-2'
-      >
-        <div className=''>
-          <hr className='w-full my-4' />
-          <ul className='flex gap-10'>
+        {/* desktop-view */}
+        <div className='hidden min-[980px]:flex justify-between items-center '>
+          <ul className='flex gap-3 items-center'>
             <li>
-              <AlignJustify onClick={() => setSwipeModal(true)} />
+              <ArrowUpWideNarrow />
+            </li>
+            <li className='flex items-center'>
+              Apps
+              <ChevronDown />
+            </li>
+            <li>Chat</li>
+            <li>Calendar</li>
+            <li>Email</li>
+          </ul>
+          <ul className='flex gap-3 items-center'>
+            <li>
+              <span className=''>
+                <Search />
+              </span>
             </li>
             <li>
-              {/* <Search /> */}
-              <SearchX className='min-[980px]:hidden' />
+              {' '}
               <BlinkingIcon />
             </li>
-            <li>logout</li>
-            <li>read</li>
+            <li>
+              <SunMoon />
+            </li>
+            <li>
+              <Layers2 />
+            </li>
+            <li className='flex gap-4 items-center '>
+              {/* <Image
+                className='border-3 border-white-400 rounded-full'
+                src=''
+                alt='A'
+                width={50}
+                height={50}
+              /> */}
+              <small className='wrap-all'>Mike Nelson admin</small>
+            </li>
           </ul>
         </div>
-      </motion.div>
+      </nav>
       {/*overlay-modal */}
       <AnimatePresence>
         {swipeModal && (
@@ -62,7 +132,7 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className='fixed inset-0 bg-black bg-opacity-50'
+              className='fixed inset-0 bg-black bg-opacity-10'
               onClick={() => setSwipeModal(false)}
             />
 
@@ -71,7 +141,7 @@ export default function Navbar() {
               animate={{ x: '0%' }}
               exit={{ x: '100%' }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className='fixed top-0 right-0 w-80 h-full bg-custom-bg shadow-lg p-6 flex flex-col'
+              className='fixed top-0 right-0 w-80 h-full bg-custom-bg text-custom-color shadow-lg p-6 flex flex-col'
             >
               <span>
                 <X
@@ -92,6 +162,6 @@ export default function Navbar() {
           </>
         )}
       </AnimatePresence>
-    </nav>
+    </>
   );
 }
