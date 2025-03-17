@@ -1,5 +1,5 @@
 export interface NavigationItem {
-  title?: string;
+  title?: string | null;
   segment?: string;
   icon?: React.ReactElement;
   kind?: 'header';

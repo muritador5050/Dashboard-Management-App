@@ -34,8 +34,7 @@ export const routes: NavigationItem[] = [
     title: 'APPS',
   },
   {
-    segment: 'dashboard/ecommerce',
-    title: 'Ecommerce',
+    title: 'ecommerce',
     icon: <ShoppingBag />,
     children: [
       {
@@ -71,8 +70,7 @@ export const routes: NavigationItem[] = [
     ],
   },
   {
-    segment: 'dashboard/blog',
-    title: 'Blog',
+    title: 'blog',
     icon: <Rss />,
     children: [
       {
@@ -149,13 +147,12 @@ export const routes: NavigationItem[] = [
     icon: <TableOfContents />,
   },
   {
-    title: 'Widgets',
-    segment: 'dashboard/widgets',
+    title: 'widgets',
     icon: <ShieldEllipsis />,
     children: [
       {
         title: 'Appswidgets',
-        segment: 'appswidgets',
+        segment: 'appsWidgets',
         icon: <Dot />,
       },
       {
@@ -169,13 +166,13 @@ export const routes: NavigationItem[] = [
         icon: <Dot />,
       },
       {
-        title: 'Datawidgets',
-        segment: 'datawidgets',
+        title: 'DataWidgets',
+        segment: 'dataWidgets',
         icon: <Dot />,
       },
       {
         title: 'Feedwidgets',
-        segment: 'feedwidgets',
+        segment: 'feedWidgets',
         icon: <Dot />,
       },
     ],

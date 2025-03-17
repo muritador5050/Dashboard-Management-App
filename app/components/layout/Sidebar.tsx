@@ -32,16 +32,12 @@ const Sidebar = () => {
           <NavigationItemComponent key={index} item={item} />
         ))}
 
-        <Link
-          href='/auth/login'
-          className='w-full p-3 mt-5 text-left bg-red-600 rounded-lg'
-        >
-          <LogOut
-            className='inline-block mr-2'
-            onClick={() => localStorage.clear()}
-          />{' '}
-          Logout
-        </Link>
+        <div className='w-[100%] flex justify-between items-center p-3 bg-gray-800 rounded-4xl h-32 sticky left-0 bottom-0'>
+          <small>admin</small>
+          <Link href='/auth/login'>
+            <LogOut className='inline-block mr-2' />
+          </Link>
+        </div>
       </nav>
     </aside>
   );
