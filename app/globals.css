@@ -16,6 +16,20 @@
   --color-custom-color: var(--dash-color);
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--dash-color);
+  border-radius: 10px;
+  min-height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  display: none;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

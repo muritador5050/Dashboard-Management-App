@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useNav } from '@/app/context/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 // import Image from 'next/image';
 export default function Navbar() {
   const { collapse, handleCollapse, handleToggle, toggleSiderbarWidth } =
@@ -60,10 +61,10 @@ export default function Navbar() {
                   <BlinkingIcon />
                 </li>
                 <li>
-                  <SunMoon />
+                  <SunMoon size={32} />
                 </li>
                 <li>
-                  <Layers2 />
+                  <Layers2 size={32} />
                 </li>
                 <li className='flex gap-4 items-center'>
                   {/* <Image
@@ -92,9 +93,16 @@ export default function Navbar() {
               Apps
               <ChevronDown />
             </li>
-            <li>Chat</li>
-            <li>Calendar</li>
-            <li>Email</li>
+            <li>
+              {' '}
+              <Link href={'/dashboard/chat'}>Chat</Link>{' '}
+            </li>
+            <li>
+              <Link href={'/dashboard/calendar'}>Calendar</Link>
+            </li>
+            <li>
+              <Link href={'/dashboard/email'}>Email</Link>
+            </li>
           </ul>
           <ul className='flex gap-3 items-center'>
             <li>

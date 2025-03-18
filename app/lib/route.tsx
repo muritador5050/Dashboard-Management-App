@@ -24,8 +24,8 @@ export const routes: NavigationItem[] = [
     title: 'HOME',
   },
   {
-    segment: 'dashboard',
     title: 'Dashboard',
+    segment: '/',
     icon: <Airplay />,
   },
 
@@ -38,33 +38,33 @@ export const routes: NavigationItem[] = [
     icon: <ShoppingBag />,
     children: [
       {
-        segment: 'addProduct',
         title: 'AddProduct',
+        segment: 'addProduct',
         icon: <Dot />,
       },
       {
-        segment: 'checkout',
         title: 'Checkout',
+        segment: 'checkout',
         icon: <Dot />,
       },
       {
-        segment: 'details',
         title: 'Details',
+        segment: 'details',
         icon: <Dot />,
       },
       {
-        segment: 'editProduct',
         title: 'EditProduct',
+        segment: 'editProduct',
         icon: <Dot />,
       },
       {
-        segment: 'list',
         title: 'List',
+        segment: 'list',
         icon: <Dot />,
       },
       {
-        segment: 'shop',
         title: 'Shop',
+        segment: 'shop',
         icon: <Dot />,
       },
     ],
@@ -74,13 +74,13 @@ export const routes: NavigationItem[] = [
     icon: <Rss />,
     children: [
       {
-        segment: 'details',
         title: 'Details',
+        segment: 'details',
         icon: <Dot />,
       },
       {
-        segment: 'post',
         title: 'Post',
+        segment: 'post',
         icon: <Dot />,
       },
     ],
@@ -88,48 +88,48 @@ export const routes: NavigationItem[] = [
 
   {
     title: 'profile',
-    segment: 'dashboard/profile',
+    segment: 'profile',
     icon: <UserRoundPen />,
   },
 
   {
     title: 'email',
-    segment: 'dashboard/email',
+    segment: 'email',
     icon: <Mail />,
   },
   {
     title: 'calender',
-    segment: 'dashboard/calendar',
+    segment: 'calendar',
     icon: <CalendarFold />,
   },
   {
     title: 'kanban',
-    segment: 'dashboard/kanban',
+    segment: 'kanban',
     icon: <SquareKanban />,
   },
   {
     title: 'chat',
-    segment: 'dashboard/chat',
+    segment: 'chat',
     icon: <MessageCircleCode />,
   },
   {
     title: 'notes',
-    segment: 'dashboard/notes',
+    segment: 'notes',
     icon: <Notebook />,
   },
   {
     title: 'contact Table',
-    segment: 'dashboard/contactTable',
+    segment: 'contactTable',
     icon: <Phone />,
   },
   {
     title: 'contact List',
-    segment: 'dashboard/contactList',
+    segment: 'contactList',
     icon: <FileCode />,
   },
   {
     title: 'invoices',
-    segment: 'dashboard/invoices',
+    segment: 'invoices',
     icon: <NotebookTabs />,
   },
   {
@@ -138,12 +138,12 @@ export const routes: NavigationItem[] = [
   },
   {
     title: 'pricing',
-    segment: 'dashboard/pricing',
+    segment: 'pricing',
     icon: <BadgePercent />,
   },
   {
     title: 'FAQ',
-    segment: 'dashboard/faq',
+    segment: 'faq',
     icon: <TableOfContents />,
   },
   {

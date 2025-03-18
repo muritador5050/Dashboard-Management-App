@@ -3,14 +3,15 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
-export const NavigationItemComponent: React.FC<{ item: NavigationItem }> = ({
-  item,
-}) => {
+export const NavigationItemComponent: React.FC<{
+  item: NavigationItem;
+  isWide: boolean;
+}> = ({ item, isWide }) => {
   const [isOpen, setIsOpen] = useState(false);
   function capitalizeFirstLetter(str: string) {
     return str.replace(/^./, (match) => match.toUpperCase());
   }
-  if (item.kind === 'header') {
+  if (item.kind === 'header' && !isWide) {
     return <small className='text-sm text-gray-400 mt-4'>{item.title}</small>;
   }
 
@@ -19,25 +20,29 @@ export const NavigationItemComponent: React.FC<{ item: NavigationItem }> = ({
       {item.children ? (
         <div
           onClick={() => setIsOpen(!isOpen)}
-          className='flex items-center justify-between w-full p-2 hover:bg-gray-700 rounded cursor-pointer'
+          className={`flex items-center justify-between w-full p-2 hover:bg-purple-700  rounded cursor-pointer `}
         >
           <div className='flex items-center gap-3'>
             {item.icon && <span>{item.icon}</span>}
-            <span className='text-xl'>
-              {item.title && capitalizeFirstLetter(item.title)}
-            </span>
+            {!isWide && (
+              <span className='text-xl'>
+                {item.title && capitalizeFirstLetter(item.title)}
+              </span>
+            )}
           </div>
-          <span className='cursor-pointer '>
-            {isOpen ? <ChevronDown /> : <ChevronRight />}
-          </span>
+          {!isWide && (
+            <span className='cursor-pointer '>
+              {isOpen ? <ChevronDown /> : <ChevronRight />}
+            </span>
+          )}
         </div>
       ) : (
         <Link
           href={`/dashboard/${item.segment}`}
-          className={`flex text-xl items-center gap-3 p-2 hover:bg-gray-700 rounded block active:text-red-900 `}
+          className={`flex text-xl items-center gap-3 p-2 hover:bg-red-700 transition duration-500  rounded block`}
         >
           {item.icon && <span>{item.icon}</span>}
-          <span>{item.title}</span>
+          {!isWide && <span>{item.title}</span>}
         </Link>
       )}
 
@@ -56,7 +61,7 @@ export const NavigationItemComponent: React.FC<{ item: NavigationItem }> = ({
                 key={idx}
               >
                 {child.icon && <span>{child.icon}</span>}
-                <span>{child.title}</span>
+                {!isWide && <span>{child.title}</span>}
               </Link>
             ))}
           </div>
