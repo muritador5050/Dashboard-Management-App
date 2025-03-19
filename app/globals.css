@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -16,7 +15,7 @@
   --color-custom-color: var(--dash-color);
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 10px;
 }
 
@@ -28,7 +27,7 @@
 
 ::-webkit-scrollbar-track {
   display: none;
-}
+} */
 
 @media (prefers-color-scheme: dark) {
   :root {

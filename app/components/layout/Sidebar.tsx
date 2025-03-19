@@ -4,14 +4,12 @@ import Link from 'next/link';
 import { routes } from '@/app/lib/route';
 import { NavigationItemComponent } from '../NavigationItems';
 import { useNav } from '@/app/context/ThemeContext';
-// import { useState } from 'react';
 
 const Sidebar = () => {
   const { isOpen, isWide, closeSideBar } = useNav();
-  // const [isHover, setIsHover] = useState(false);
   return (
     <aside
-      className={`bg-custom-bg text-custom-color h-screen p-4 overflow-y-scroll  ${
+      className={`fixed left-0 z-100 bg-custom-bg text-custom-color h-screen p-4 overflow-y-scroll  ${
         isWide ? 'w-20 p-2' : 'w-84'
       } 
         ${

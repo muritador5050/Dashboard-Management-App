@@ -7,7 +7,7 @@ function DasboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className='flex h-screen bg-gray-800 text-3xl'>
       <Sidebar />
-      <div className='flex flex-col flex-1'>
+      <div className='flex flex-col flex-1 h-screen '>
         <Navbar />
         <main className='p-4 mx-5'>{children}</main>
         <div className=' flex justify-center items-center fixed bottom-10 right-15 bg-sky-600 text-custom-color cursor-pointer w-[70px] h-[70px] rounded-full'>
