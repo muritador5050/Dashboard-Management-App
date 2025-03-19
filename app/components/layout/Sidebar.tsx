@@ -9,9 +9,7 @@ const Sidebar = () => {
   const { isOpen, isWide, closeSideBar } = useNav();
   return (
     <aside
-      className={`fixed left-0 z-100 bg-custom-bg text-custom-color h-screen p-4 overflow-y-scroll  ${
-        isWide ? 'w-20 p-2' : 'w-84'
-      } 
+      className={`bg-custom-bg text-custom-color p-4  
         ${
           isOpen
             ? 'translate-x-0 transition duration-500 ease-in-out '
