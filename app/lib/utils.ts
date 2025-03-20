@@ -36,6 +36,11 @@ export interface YearlyProfitData {
   color: string;
 }
 
+export type CustomersEarning = {
+  totalOrders: number;
+  totalSpent: number;
+};
+
 export function formatCurrency(number: number) {
   const currency = new Intl.NumberFormat('en-US', {
     style: 'currency',

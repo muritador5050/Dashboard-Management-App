@@ -16,7 +16,9 @@ import {
 import { useNav } from '@/app/context/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-// import Image from 'next/image';
+import Image from 'next/image';
+import userImage from '@/public/user-11.jpg';
+//Navbar
 export default function Navbar() {
   const { collapse, handleCollapse, handleToggle, toggleSiderbarWidth } =
     useNav();
@@ -67,13 +69,13 @@ export default function Navbar() {
                   <Layers2 size={32} />
                 </li>
                 <li className='flex gap-4 items-center'>
-                  {/* <Image
-                className='border-3 border-white-400 rounded-full'
-                src=''
-                alt='A'
-                width={50}
-                height={50}
-              /> */}
+                  <Image
+                    className='border-3 border-white-400 rounded-full'
+                    src={userImage}
+                    alt='A'
+                    width={50}
+                    height={50}
+                  />
                   <small>
                     Mike Nelson <br />
                     admin

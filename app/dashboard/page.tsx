@@ -1,5 +1,6 @@
 'use client';
 import {
+  Customers,
   EarningsChart,
   LatestDeal,
   TotalOrders,
@@ -7,18 +8,19 @@ import {
 } from '../components/chartscomponent';
 const Dashboard = () => {
   return (
-    <main>
-      <section className='min-[980px]:flex'>
+    <main className='min-h-screen'>
+      <section className='min-[980px]:flex gap-7'>
         <div className='flex flex-col gap-5 min-[980px]:basis-1/2'>
           <EarningsChart />
           <LatestDeal />
         </div>
-        <div className='rounded-xl min-[980px]:basis-2/3'>
+        <div className='rounded-xl min-[980px]:basis-3/3'>
           <TotalOrders />
         </div>
-        <div className='min-[980px]:basis-1/2'>
+
+        <div className='flex flex-col gap-5 min-[980px]:basis-1/2'>
           <YearlyProfitPieChart />
-          <div className='rounded-xl'></div>
+          <Customers />
         </div>
       </section>
       <section>
