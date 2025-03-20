@@ -7,15 +7,11 @@ import { useNav } from '@/app/context/ThemeContext';
 
 const Sidebar = () => {
   const { isOpen, isWide, closeSideBar } = useNav();
+  const sidebarOpen = isOpen
+    ? 'translate-x-0 transition duration-500 ease-in-out '
+    : '-translate-x-full block transition duration-500 ease-in-out';
   return (
-    <aside
-      className={`bg-custom-bg text-custom-color p-4  
-        ${
-          isOpen
-            ? 'translate-x-0 transition duration-500 ease-in-out '
-            : '-translate-x-full block transition duration-500 ease-in-out'
-        } `}
-    >
+    <aside className={`bg-custom-bg text-custom-color p-4 ${sidebarOpen}`}>
       <span className='flex justify-between items-center'>
         <span className='flex justify-between items-center'>
           <Rocket size={48} />

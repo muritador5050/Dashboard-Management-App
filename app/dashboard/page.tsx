@@ -7,7 +7,7 @@ import {
 } from '../components/chartscomponent';
 const Dashboard = () => {
   return (
-    <>
+    <main>
       <section className='min-[980px]:flex'>
         <div className='flex flex-col gap-5 min-[980px]:basis-1/2'>
           <EarningsChart />
@@ -28,7 +28,7 @@ const Dashboard = () => {
       <section>
         <div></div>
       </section>
-    </>
+    </main>
   );
 };
 //  ;

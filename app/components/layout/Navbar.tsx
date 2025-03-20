@@ -150,7 +150,7 @@ export default function Navbar() {
               animate={{ x: '0%' }}
               exit={{ x: '100%' }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className='fixed top-0 right-0 w-80 h-full bg-custom-bg text-custom-color shadow-lg p-6 flex flex-col'
+              className='fixed top-0 right-0 z-1000 w-80 h-full bg-custom-bg text-custom-color shadow-lg p-6 flex flex-col'
             >
               <span>
                 <X
