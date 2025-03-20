@@ -41,6 +41,52 @@ export type CustomersEarning = {
   totalSpent: number;
 };
 
+//products
+interface Review {
+  rating: number;
+  comment: string;
+  date: string;
+  reviewerName: string;
+  reviewerEmail: string;
+}
+interface Dimensions {
+  width: number;
+  height: number;
+  depth: number;
+}
+interface Meta {
+  createdAt: string; // Assuming ISO 8601 date-time string
+  updatedAt: string; // Assuming ISO 8601 date-time string
+  barcode: string;
+  qrCode: string; // Or whatever type the QR code is
+}
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  dimensions: Dimensions;
+  price: number;
+  discountPercentage: number;
+  meta: Meta;
+  rating: number;
+  stock: number;
+  tags: string[];
+  brand: string;
+  weight: number;
+  warrantyInformation: string;
+  shippingInformation: string;
+  availabilityStatus: string;
+  reviews: Review[];
+  returnPolicy: string;
+  minimumOrderQuantity: number;
+  thumbnail: string;
+  images: string[];
+  payment?: string | React.ReactNode;
+  status?: string;
+}
+
+export type { Review, Product };
 export function formatCurrency(number: number) {
   const currency = new Intl.NumberFormat('en-US', {
     style: 'currency',

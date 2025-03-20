@@ -13,6 +13,7 @@ import {
   Pie,
   Cell,
 } from 'recharts';
+
 import { formatCurrency, formatAxisTick, CustomersEarning } from '../lib/utils';
 import { Bike, ListOrdered, Pause, Truck, XCircle } from 'lucide-react';
 import {
@@ -23,6 +24,7 @@ import {
 import { dailyProfitData, yearlyProfit } from '../lib/datas';
 import Image from 'next/image';
 import manImage from '@/public/man-working-on-laptop (1).png';
+
 // data
 export function EarningsChart() {
   const [earningsData, setEarningsData] = useState<EarningsData[]>([]);
@@ -211,8 +213,8 @@ export function TotalOrders() {
   }, []);
 
   return (
-    <div className='bg-custom-bg rounded-xl p-4'>
-      <div className=' border-b-2 border-indigo-600 mb-10 flex relative'>
+    <div className='bg-custom-bg rounded-xl p-4 min-h-[850px]'>
+      <div className='flex relative border-b-2 border-indigo-600 mb-10  min-h-1/2'>
         <div className='flex flex-col gap-5'>
           <span>
             <p>Congratulation mike</p>
@@ -247,7 +249,7 @@ export function TotalOrders() {
           <Image src={manImage} alt='man' />
         </div>
       </div>
-      <div className='flex flex-col justify-center gap-5'>
+      <div className='flex flex-col justify-center gap-5 min-h-1/2'>
         <div className='flex items-center justify-between'>
           <span>
             <p>Total order</p>

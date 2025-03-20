@@ -1,4 +1,5 @@
 'use client';
+import { useMemo } from 'react';
 import {
   Customers,
   EarningsChart,
@@ -6,7 +7,21 @@ import {
   TotalOrders,
   YearlyProfitPieChart,
 } from '../components/chartscomponent';
+import dynamic from 'next/dynamic';
+import ProductWithStatusAndPayment, {
+  ProductWithRewiewAndTime,
+} from '../components/TableComponent';
+
 const Dashboard = () => {
+  const MyMap = useMemo(
+    () =>
+      dynamic(() => import('../components/Map'), {
+        loading: () => <p>A map is loading</p>,
+        ssr: false,
+      }),
+    []
+  );
+
   return (
     <main className='min-h-screen'>
       <section className='min-[980px]:flex gap-7'>
@@ -23,12 +38,18 @@ const Dashboard = () => {
           <Customers />
         </div>
       </section>
-      <section>
-        <div></div>
-        <div></div>
+      <section className='min-[980px]:flex '>
+        <div className='w-60 h-96 bg-custom-bg p-3 rounded-xl '>
+          <MyMap />
+        </div>
+        <div className=''>
+          <ProductWithStatusAndPayment />
+        </div>
       </section>
       <section>
-        <div></div>
+        <div>
+          <ProductWithRewiewAndTime />
+        </div>
       </section>
     </main>
   );
