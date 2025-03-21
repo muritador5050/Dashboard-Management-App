@@ -67,7 +67,7 @@ export function EarningsChart() {
       <span className='flex justify-between items-center'>
         <small>Last 7days </small> <small>-32%</small>
       </span>{' '}
-      <ResponsiveContainer aspect={0.8}>
+      <ResponsiveContainer aspect={0.85}>
         <BarChart
           data={chartData}
           margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
@@ -270,36 +270,36 @@ export function TotalOrders() {
 
 export function YearlyProfitPieChart() {
   return (
-    <div className='bg-custom-bg rounded-xl p-5'>
-      <div>
-        <span className='flex justify-between'>
-          <p>Profit</p>
-          <small>432</small>
-        </span>
-        <span className='flex justify-between'>
-          <p>Years</p>
-          <small>32%</small>
-        </span>
+    <div className='bg-custom-bg rounded-xl p-3'>
+      <span className='flex justify-between'>
+        <p>Profit</p>
+        <small>432</small>
+      </span>
+      <span className='flex justify-between'>
+        <p>Years</p>
+        <small>32%</small>
+      </span>
+      <div className=''>
+        <ResponsiveContainer aspect={0.95}>
+          <PieChart>
+            <Pie
+              data={yearlyProfit}
+              dataKey='value'
+              nameKey='name'
+              cx='50%'
+              cy='50%'
+              innerRadius={120}
+              outerRadius={140}
+              fill='#8884d8'
+            >
+              {yearlyProfit.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </ResponsiveContainer>
       </div>
-      <ResponsiveContainer aspect={0.9}>
-        <PieChart>
-          <Pie
-            data={yearlyProfit}
-            dataKey='value'
-            nameKey='name'
-            cx='50%'
-            cy='50%'
-            innerRadius={120}
-            outerRadius={140}
-            fill='#8884d8'
-          >
-            {yearlyProfit.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color} />
-            ))}
-          </Pie>
-          <Tooltip />
-        </PieChart>
-      </ResponsiveContainer>
       <p className='text-center'>$18k profit more then last year</p>
     </div>
   );
@@ -336,22 +336,23 @@ export function Customers() {
           <small>32%</small>
         </span>
       </div>
-      <ResponsiveContainer height={270}>
-        <LineChart data={customers}>
-          <Tooltip />
-          <Line type='monotone' dataKey='totalSpent' stroke='#8884d8' />
-        </LineChart>
-      </ResponsiveContainer>
       <div>
-        <span className='flex justify-between'>
-          <p>Profit</p>
-          <small>432</small>
-        </span>
-        <span className='flex justify-between'>
-          <p>Years</p>
-          <small>32%</small>
-        </span>
+        <ResponsiveContainer aspect={1.2}>
+          <LineChart data={customers}>
+            <Tooltip />
+            <Line type='monotone' dataKey='totalSpent' stroke='#8884d8' />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
+
+      <span className='flex justify-between'>
+        <p>Profit</p>
+        <small>432</small>
+      </span>
+      <span className='flex justify-between'>
+        <p>Years</p>
+        <small>32%</small>
+      </span>
     </div>
   );
 }

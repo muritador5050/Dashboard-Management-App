@@ -41,24 +41,25 @@ export default function ProductWithStatusAndPayment() {
 
   const getOrderStatus = (stock: number): string => {
     if (stock > 0) {
-      return 'In Stock';
+      return 'confirmed';
     } else {
-      return 'Out of Stock';
+      return 'pending';
     }
   };
 
   return (
-    <table className='table-auto bg-custom-bg p-3 rounded-xl min-[980px]:grow'>
+    <table className='table-auto min-[980px]:w-full'>
       <thead>
-        <tr className='h-32'>
+        <tr className=' text-left h-24'>
           <th>Products</th>
+          <th></th>
           <th>Payment</th>
           <th>Status</th>
         </tr>
       </thead>
       <tbody>
         {products.map((product) => (
-          <tr key={product.id} className='border-t h-32'>
+          <tr key={product.id} className='border-t h-24'>
             <td className='flex items-center '>
               <Image
                 src={product.images[0]}
@@ -66,8 +67,8 @@ export default function ProductWithStatusAndPayment() {
                 width={product.dimensions.width * 5}
                 height={product.dimensions.height * 5}
               />
-              <p>{product.title}</p>
             </td>
+            <td>{product.title}</td>
             <td>{product.payment}</td>
             <td>{product.status}</td>
           </tr>
@@ -97,18 +98,19 @@ export function ProductWithRewiewAndTime() {
 
   const getOrderStatus = (stock: number): string => {
     if (stock > 0) {
-      return 'In Stock';
+      return 'confirmed';
     } else {
-      return 'Out of Stock';
+      return 'pending';
     }
   };
 
   return (
-    <table className='table-auto bg-custom-bg p-3 rounded-xl min-[980px]:w-full'>
+    <table className='table-auto min-[980px]:w-full'>
       <thead>
-        <tr className='h-32'>
+        <tr className='h-24'>
           <th className='text-left'>#</th>
-          <th className='text-left'>Products</th>
+          <th className='text-left '>Products</th>
+          <th></th>
           <th className='text-left'>Customer</th>
           <th className='text-left'>Reviews</th>
           <th className='text-left'>Status</th>
@@ -117,7 +119,7 @@ export function ProductWithRewiewAndTime() {
       </thead>
       <tbody>
         {products.map((product) => (
-          <tr key={product.id} className='border-t h-32 hover:bg-gray-500'>
+          <tr key={product.id} className='border-t h-24'>
             <td className='text-left'>
               <input type='checkbox' />
             </td>
@@ -128,8 +130,8 @@ export function ProductWithRewiewAndTime() {
                 width={product.dimensions.width * 5}
                 height={product.dimensions.height * 5}
               />
-              <p>{product.title}</p>
             </td>
+            <td>{product.title}</td>
             <td className='text-left'>{product.warrantyInformation}</td>
             <td className='text-left'>
               {<UnicodeStarRating rating={product.rating} />}

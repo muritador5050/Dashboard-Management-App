@@ -6,7 +6,7 @@ import {
   LatestDeal,
   TotalOrders,
   YearlyProfitPieChart,
-} from '../components/chartscomponent';
+} from '../components/Chartscomponent';
 import dynamic from 'next/dynamic';
 import ProductWithStatusAndPayment, {
   ProductWithRewiewAndTime,
@@ -24,7 +24,7 @@ const Dashboard = () => {
 
   return (
     <main className='min-h-screen'>
-      <section className='min-[980px]:flex gap-7'>
+      <section className='min-[980px]:flex gap-7 mb-9'>
         <div className='flex flex-col gap-5 min-[980px]:basis-1/2'>
           <EarningsChart />
           <LatestDeal />
@@ -38,15 +38,16 @@ const Dashboard = () => {
           <Customers />
         </div>
       </section>
-      <section className='min-[980px]:flex '>
-        <MyMap />
-        <div className='bg-custom-bg p-3 rounded-xl'></div>
+      <section className='min-[980px]:flex gap-10 mb-9'>
         <div className=''>
+          <MyMap />
+        </div>
+        <div className='w-full h-fit bg-custom-bg px-5 py-2 rounded-xl'>
           <ProductWithStatusAndPayment />
         </div>
       </section>
       <section>
-        <div>
+        <div className='bg-custom-bg py-3 px-5 rounded-xl'>
           <ProductWithRewiewAndTime />
         </div>
       </section>

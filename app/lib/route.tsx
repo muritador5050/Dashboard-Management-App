@@ -38,13 +38,8 @@ export const routes: NavigationItem[] = [
     icon: <ShoppingBag />,
     children: [
       {
-        title: 'AddProduct',
-        segment: 'addProduct',
-        icon: <Dot />,
-      },
-      {
-        title: 'Checkout',
-        segment: 'checkout',
+        title: 'Shop',
+        segment: 'shop',
         icon: <Dot />,
       },
       {
@@ -53,18 +48,23 @@ export const routes: NavigationItem[] = [
         icon: <Dot />,
       },
       {
-        title: 'EditProduct',
-        segment: 'editProduct',
-        icon: <Dot />,
-      },
-      {
         title: 'List',
         segment: 'list',
         icon: <Dot />,
       },
       {
-        title: 'Shop',
-        segment: 'shop',
+        title: 'Checkout',
+        segment: 'checkout',
+        icon: <Dot />,
+      },
+      {
+        title: 'AddProduct',
+        segment: 'addProduct',
+        icon: <Dot />,
+      },
+      {
+        title: 'EditProduct',
+        segment: 'editProduct',
         icon: <Dot />,
       },
     ],
