@@ -39,9 +39,8 @@ const Dashboard = () => {
         </div>
       </section>
       <section className='min-[980px]:flex '>
-        <div className='w-60 h-96 bg-custom-bg p-3 rounded-xl '>
-          <MyMap />
-        </div>
+        <MyMap />
+        <div className='bg-custom-bg p-3 rounded-xl'></div>
         <div className=''>
           <ProductWithStatusAndPayment />
         </div>

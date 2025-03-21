@@ -1,5 +1,5 @@
 import React, { JSX, useEffect, useState } from 'react';
-import { Product } from '../lib/utils';
+import { formatTime, Product } from '../lib/utils';
 import Image from 'next/image';
 
 //tables
@@ -70,7 +70,6 @@ export default function ProductWithStatusAndPayment() {
             </td>
             <td>{product.payment}</td>
             <td>{product.status}</td>
-            <td></td>
           </tr>
         ))}
       </tbody>
@@ -86,8 +85,8 @@ export function ProductWithRewiewAndTime() {
       .then((data: { products: Product[] }) => {
         const productsWithPaymentAndStatus = data.products.map((product) => ({
           ...product,
-          payment: getPaymentStatus(product.price),
           status: getOrderStatus(product.stock),
+          rating: product.rating,
         }));
         setProducts(productsWithPaymentAndStatus);
       })
@@ -95,24 +94,6 @@ export function ProductWithRewiewAndTime() {
         console.error('Error fetching data:', error);
       });
   }, []);
-
-  const getPaymentStatus = (price: number): JSX.Element => {
-    if (price > 50) {
-      return (
-        <span className='flex flex-col'>
-          <small>Paid</small>
-          <progress max={100} value={100}></progress>
-        </span>
-      );
-    } else {
-      return (
-        <span className='flex flex-col'>
-          <small> pending</small>
-          <progress max={100} value={50}></progress>
-        </span>
-      );
-    }
-  };
 
   const getOrderStatus = (stock: number): string => {
     if (stock > 0) {
@@ -154,8 +135,7 @@ export function ProductWithRewiewAndTime() {
               {<UnicodeStarRating rating={product.rating} />}
             </td>
             <td className='text-left'>{product.status}</td>
-            <td className='text-left'>{product.meta.createdAt}</td>
-            <td className='text-left'></td>
+            <td className='text-left'>{formatTime(product.meta?.createdAt)}</td>
           </tr>
         ))}
       </tbody>
@@ -173,62 +153,3 @@ export function UnicodeStarRating({ rating }: { rating: number }) {
     </span>
   );
 }
-
-export interface TableData {
-  id: number;
-  [key: string]: any;
-}
-
-export interface TableHeader {
-  key: string;
-  label: string | React.ReactNode;
-  renderImage?: boolean; // Add renderImage property
-}
-
-interface ReusableTableProps {
-  data: TableData[];
-  headers: TableHeader[];
-}
-
-export const ReusableTable: React.FC<ReusableTableProps> = ({
-  data,
-  headers,
-}) => {
-  return (
-    <table className='table-auto bg-custom-bg p-3 rounded-xl min-[980px]:grow'>
-      <thead>
-        <tr className='h-32'>
-          {headers.map((header) => (
-            <th key={header.key}>
-              {typeof header.label === 'string' ? header.label : header.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item) => (
-          <tr key={item.id} className='border-t h-32'>
-            {headers.map((header) => {
-              if (header.renderImage) {
-                return (
-                  <td key={header.key} className='flex items-center'>
-                    <Image
-                      src={item.images[0]}
-                      alt='product-img'
-                      width={item.dimensions.width * 5}
-                      height={item.dimensions.height * 5}
-                    />
-                    <p>{item.title}</p>
-                  </td>
-                );
-              } else {
-                return <td key={header.key}>{item[header.key]}</td>;
-              }
-            })}
-            <td></td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};

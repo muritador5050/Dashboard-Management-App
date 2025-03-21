@@ -246,7 +246,7 @@ export function TotalOrders() {
           ))}
         </div>
         <div className='absolute bottom-0 right-0'>
-          <Image src={manImage} alt='man' />
+          <Image src={manImage} alt='man' priority />
         </div>
       </div>
       <div className='flex flex-col justify-center gap-5 min-h-1/2'>

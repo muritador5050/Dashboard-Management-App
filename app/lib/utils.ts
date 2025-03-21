@@ -1,3 +1,5 @@
+import { JSX } from 'react';
+
 export interface NavigationItem {
   title?: string | null;
   segment?: string;
@@ -41,52 +43,25 @@ export type CustomersEarning = {
   totalSpent: number;
 };
 
-//products
-interface Review {
-  rating: number;
-  comment: string;
-  date: string;
-  reviewerName: string;
-  reviewerEmail: string;
-}
-interface Dimensions {
-  width: number;
-  height: number;
-  depth: number;
-}
-interface Meta {
-  createdAt: string; // Assuming ISO 8601 date-time string
-  updatedAt: string; // Assuming ISO 8601 date-time string
-  barcode: string;
-  qrCode: string; // Or whatever type the QR code is
-}
-interface Product {
+export interface Product {
   id: number;
   title: string;
   description: string;
-  category: string;
-  dimensions: Dimensions;
   price: number;
   discountPercentage: number;
-  meta: Meta;
   rating: number;
   stock: number;
-  tags: string[];
   brand: string;
-  weight: number;
-  warrantyInformation: string;
-  shippingInformation: string;
-  availabilityStatus: string;
-  reviews: Review[];
-  returnPolicy: string;
-  minimumOrderQuantity: number;
+  category: string;
   thumbnail: string;
   images: string[];
-  payment?: string | React.ReactNode;
+  dimensions: { width: number; height: number };
+  payment?: JSX.Element;
   status?: string;
+  meta?: { createdAt: string };
+  warrantyInformation?: string;
 }
 
-export type { Review, Product };
 export function formatCurrency(number: number) {
   const currency = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -100,4 +75,21 @@ export function formatAxisTick(value: number) {
     return `${(value / 1000).toFixed(0)}k`;
   }
   return value.toString();
+}
+
+export function formatTime(dateString: string | undefined): string {
+  if (!dateString) {
+    return 'N/A'; // Or any default value
+  }
+
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) {
+    return 'Invalid Date'; // Handle invalid date strings
+  }
+
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true, // Use 12-hour format (AM/PM)
+  });
 }
