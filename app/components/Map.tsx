@@ -1,3 +1,6 @@
+'use client';
+import { Progress } from '@chakra-ui/react';
+
 export default function MapComponent() {
   return (
     <div className=' flex flex-col justify-between bg-custom-bg rounded-xl h-[650px] p-3 min-[980px]:w-[400px]'>
@@ -5,22 +8,22 @@ export default function MapComponent() {
       <div className='h-50%'>
         <span className='flex justify-between'>
           <p>LA</p>
-          <progress max={100} value={25} />
+          <Progress size='sm' value={25} colorScheme='pink' />
           <p>25%</p>
         </span>
         <span className='flex justify-between'>
           <p>NY</p>
-          <progress max={100} value={25} />
+          <Progress size='sm' value={25} colorScheme='pink' />
           <p>25%</p>
         </span>
         <span className='flex justify-between'>
           <p>KA</p>
-          <progress max={100} value={25} />
+          <Progress size='sm' value={25} colorScheme='pink' />
           <p>25%</p>
         </span>
         <span className='flex justify-between'>
           <p>AZ</p>
-          <progress max={100} value={25} />
+          <Progress size='sm' value={25} colorScheme='pink' />
           <p>25%</p>
         </span>
       </div>

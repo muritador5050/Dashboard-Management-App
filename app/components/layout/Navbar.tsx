@@ -17,7 +17,6 @@ import { useNav } from '@/context/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import userImage from '@/public/user-11.jpg';
 //Navbar
 export default function Navbar() {
   const { collapse, handleCollapse, handleToggle, toggleSiderbarWidth } =
@@ -71,7 +70,7 @@ export default function Navbar() {
                 <li className='flex gap-4 items-center'>
                   <Image
                     className='border-3 border-white-400 rounded-full'
-                    src={userImage}
+                    src='/user-11.jpg'
                     alt='A'
                     width={50}
                     height={50}
@@ -125,7 +124,7 @@ export default function Navbar() {
             <li className='flex gap-4 items-center '>
               <Image
                 className='border-3 border-white-400 rounded-full'
-                src={userImage}
+                src='/user-11.jpg'
                 alt='A'
                 width={50}
                 height={50}

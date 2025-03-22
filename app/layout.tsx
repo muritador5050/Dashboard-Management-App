@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import Provider from './lib/Chakraprovider';
+
 import NavContext from './context/ThemeContext';
 export const metadata: Metadata = {
   title: 'Admin Dasboard',
@@ -12,10 +14,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <NavContext>
-      <html lang='en'>
-        <body>{children}</body>
-      </html>
-    </NavContext>
+    <html lang='en'>
+      <NavContext>
+        <body>
+          <Provider>{children}</Provider>
+        </body>
+      </NavContext>
+    </html>
   );
 }

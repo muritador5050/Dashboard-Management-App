@@ -1,6 +1,7 @@
 import React, { JSX, useEffect, useState } from 'react';
 import { formatTime, Product } from '../lib/utils';
 import Image from 'next/image';
+import { Progress } from '@chakra-ui/react';
 
 //tables
 export default function ProductWithStatusAndPayment() {
@@ -33,7 +34,7 @@ export default function ProductWithStatusAndPayment() {
       return (
         <span className='flex flex-col'>
           <small> pending</small>
-          <progress max={100} value={50}></progress>
+          <Progress size='sm' value={25} />
         </span>
       );
     }

@@ -3,7 +3,7 @@ import React from 'react';
 import Sidebar from '../components/layout/Sidebar';
 import Navbar from '../components/layout/Navbar';
 import { Settings } from 'lucide-react';
-import { useNav } from '@/app/context/ThemeContext';
+import { useNav } from '@/context/ThemeContext';
 
 function DasboardLayout({ children }: { children: React.ReactNode }) {
   const { isWide } = useNav();
@@ -11,7 +11,7 @@ function DasboardLayout({ children }: { children: React.ReactNode }) {
   const contentMargin = isWide ? 'ml-20' : 'ml-80';
 
   return (
-    <div className='flex bg-gray-800 min-h-screen'>
+    <div className='flex bg-gray-800 min-h-screen text-white'>
       <div
         className={`fixed top-0 left-0 h-screen overflow-y-scroll ${sidebarWidth} `}
       >

@@ -23,7 +23,6 @@ import {
 } from '../lib/utils';
 import { dailyProfitData, yearlyProfit } from '../lib/datas';
 import Image from 'next/image';
-import manImage from '@/public/man-working-on-laptop (1).png';
 
 // data
 export function EarningsChart() {
@@ -246,7 +245,7 @@ export function TotalOrders() {
           ))}
         </div>
         <div className='absolute bottom-0 right-0'>
-          <Image src={manImage} alt='man' priority />
+          <Image src='/man.png' alt='man' priority width={400} height={400} />
         </div>
       </div>
       <div className='flex flex-col justify-center gap-5 min-h-1/2'>

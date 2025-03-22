@@ -1,9 +1,9 @@
 'use client';
 import { LogOut, X, Rocket } from 'lucide-react';
 import Link from 'next/link';
-import { routes } from '@/app/lib/route';
+import { routes } from '@/lib/route';
 import { NavigationItemComponent } from '../NavigationItems';
-import { useNav } from '@/app/context/ThemeContext';
+import { useNav } from '@/context/ThemeContext';
 
 const Sidebar = () => {
   const { isOpen, isWide, closeSideBar } = useNav();
