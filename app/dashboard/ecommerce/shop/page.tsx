@@ -24,26 +24,37 @@ import {
   Button,
   Text,
   Box,
+  Image,
 } from '@chakra-ui/react';
 import Search from '@/components/Search';
 import { Product } from '@/lib/utils';
+import { UnicodeStarRating } from '@/components/TableComponent';
 
 const categoryOptions = [
-  { label: 'all', icon: <Shapes /> },
-  { label: 'Phones', icon: <Webhook /> },
-  { label: 'Fashion', icon: <BookOpenText /> },
-  { label: 'Elctronics', icon: <Laptop /> },
+  {
+    label: 'All',
+    icon: <Shapes />,
+    subcategories: [],
+  },
+  {
+    label: 'Phones',
+    icon: <Webhook />,
+    subcategories: ['smartphones', 'laptops', 'tablets'],
+  },
+  {
+    label: 'Fashion',
+    icon: <BookOpenText />,
+    subcategories: ['mens-shirts', 'womens-dresses', 'womens-shoes'],
+  },
+  {
+    label: 'Electronics',
+    icon: <Laptop />,
+    subcategories: ['laptops', 'smartphones', 'televisions'],
+  },
 ];
 
-const sortOptions = [
-  { label: 'Newest', icon: <Shapes /> },
-  { label: 'Price:High-Low', icon: <Webhook /> },
-  { label: 'Price:Low-High', icon: <BookOpenText /> },
-  { label: 'Discounted', icon: <Smile /> },
-];
 export default function Shop() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedByGender, setSelectedByGender] = useState('All');
   const [selectedByPrice, setSelectedByPrice] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedSort, setSelectedSort] = useState('Newest');
@@ -73,25 +84,6 @@ export default function Shop() {
       }
       const response: { products: Product[] } = await request.json();
       setDisplayProduct(response.products);
-      // const requestAllProducts = await fetch('https://dummyjson.com/products');
-      // const requestByCategory = await fetch(
-      //   `https://dummyjson.com/products/category/${selectedCategory}`
-      // );
-      // const responseToAllProducts: { products: Product[] } =
-      //   await requestAllProducts.json();
-      // const responseByCategory: { products: Product[] } =
-      //   await requestByCategory.json();
-      // const productToDisplay = responseToAllProducts.products;
-      // let categoryToDisplay = responseByCategory.products;
-      // if (selectedCategory === 'all') {
-      //   setDisplayProduct(productToDisplay);
-      // }
-      // if (selectedCategory !== 'all') {
-      //   categoryToDisplay = categoryToDisplay.filter(
-      //     (product) => product.category === selectedCategory
-      //   );
-      //   setDisplayProduct(categoryToDisplay);
-      // }
     };
 
     fetchProducts();
@@ -123,10 +115,10 @@ export default function Shop() {
           </Drawer>
         </>
         <div className='flex p-5 bg-custom-bg rounded-xl'>
-          <div className='bg-red-400 border-r-4 border-purple-500 max-[980px]:hidden grow-1'>
-            <section className='border-b-4 border-white'>
-              <h1>Filter by category</h1>
-              <ul className='flex flex-col justify-around'>
+          <div className='flex flex-col gap-5  border-r-4 border-purple-500 max-[980px]:hidden grow-1'>
+            {/* <section className='border-b-4 border-white'>
+              <h1>Filter by collection</h1>
+              <ul className='flex flex-col gap-3'>
                 {categoryOptions.map((option) => (
                   <li
                     key={option.label}
@@ -137,23 +129,9 @@ export default function Shop() {
                   </li>
                 ))}
               </ul>
-            </section>
-            <section className='border-b-4 border-white'>
-              <h1>Sort by</h1>
-              <ul className='flex flex-col justify-around'>
-                {sortOptions.map((option) => (
-                  <li
-                    key={option.label}
-                    className='flex items-center gap-3 cursor-pointer'
-                    onClick={() => setSelectedSort(option.label)}
-                  >
-                    {option.icon} {option.label}
-                  </li>
-                ))}
-              </ul>
-            </section>
-            <section className='border-b-4 border-white'>
-              <h1>By Gender</h1>
+            </section> */}
+            <section className='flex flex-col gap-5 border-b-4 border-white'>
+              <h1>By Category</h1>
               <RadioGroup
                 onChange={setSelectedCategory}
                 value={selectedCategory}
@@ -196,7 +174,7 @@ export default function Shop() {
             </section>
             <Button colorScheme='cyan'>Reset filter</Button>
           </div>
-          <div className='bg-blue-500 grow-7'>
+          <div className=' grow-7'>
             <div className='flex justify-between items-center'>
               <span onClick={onOpen} className='min-[980px]:hidden'>
                 <TableOfContents />
@@ -204,24 +182,35 @@ export default function Shop() {
               <h1 className='max-[980px]:hidden'>Product</h1>
               <Search />
             </div>
-            {displayProducts.map((product) => (
-              <Box
-                key={product.id}
-                borderWidth='1px'
-                borderRadius='lg'
-                padding='4'
-                marginBottom='2'
-              >
-                <Stack spacing={2}>
-                  <Text fontWeight='bold' fontSize='lg'>
-                    {product.title}
-                  </Text>
-                  <Text>Category: {product.category}</Text>
-                  <Text>Gender: {product.brand}</Text>
-                  <Text>Price: ${product.price}</Text>
-                </Stack>
-              </Box>
-            ))}
+            <div className='grid grid-cols-2 gap-3'>
+              {displayProducts.map((product) => (
+                <Box
+                  key={product.id}
+                  borderWidth='1px'
+                  borderRadius='lg'
+                  padding='4'
+                  marginBottom='2'
+                >
+                  <Stack spacing={2}>
+                    <Image
+                      src={product.images[0]}
+                      alt='product'
+                      objectFit='cover'
+                      boxSize='300px'
+                    />
+                    <Text fontWeight='bold' fontSize='lg'>
+                      {product.title}
+                    </Text>
+                    <Text>Category: {product.category}</Text>
+                    <Text>Gender: {product.brand}</Text>
+                    <Text>Price: ${product.price}</Text>
+                    <Text>
+                      Review: <UnicodeStarRating rating={product.rating} />
+                    </Text>
+                  </Stack>
+                </Box>
+              ))}
+            </div>
           </div>
         </div>
       </div>
