@@ -1,14 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import {
-  BookOpenText,
-  Dot,
-  Laptop,
-  Shapes,
-  Smile,
-  TableOfContents,
-  Webhook,
-} from 'lucide-react';
+import { Dot, TableOfContents } from 'lucide-react';
 import {
   useDisclosure,
   Link,
@@ -30,48 +22,12 @@ import Search from '@/components/Search';
 import { Product } from '@/lib/utils';
 import { UnicodeStarRating } from '@/components/TableComponent';
 
-const categoryOptions = [
-  {
-    label: 'All',
-    icon: <Shapes />,
-    subcategories: [],
-  },
-  {
-    label: 'Phones',
-    icon: <Webhook />,
-    subcategories: ['smartphones', 'laptops', 'tablets'],
-  },
-  {
-    label: 'Fashion',
-    icon: <BookOpenText />,
-    subcategories: ['mens-shirts', 'womens-dresses', 'womens-shoes'],
-  },
-  {
-    label: 'Electronics',
-    icon: <Laptop />,
-    subcategories: ['laptops', 'smartphones', 'televisions'],
-  },
-];
-
 export default function Shop() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedByPrice, setSelectedByPrice] = useState('All');
+  const [selectedByPrice, setSelectedByPrice] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedSort, setSelectedSort] = useState('Newest');
   const [displayProducts, setDisplayProduct] = useState<Product[]>([]);
-
-  async function fetchProductsFromCategories(categories: Product[]) {
-    const allProducts = [];
-    for (const category of categories) {
-      const request = await fetch(
-        `https://dummyjson.com/products/category${category}`
-      );
-      const response: { products: Product[] } = await request.json();
-      allProducts.push(...response.products);
-    }
-    return allProducts;
-  }
-
+  const [originalProducts, setOriginalProducts] = useState<Product[]>([]);
   useEffect(() => {
     const fetchProducts = async () => {
       let request;
@@ -83,11 +39,42 @@ export default function Shop() {
         );
       }
       const response: { products: Product[] } = await request.json();
-      setDisplayProduct(response.products);
+      setOriginalProducts(response.products); // Store original list
+      setDisplayProduct(response.products); // Display initial list
     };
 
-    fetchProducts();
-  }, [selectedCategory]);
+    const fetchProductByPrice = async () => {
+      let filteredProducts = [];
+
+      if (selectedByPrice === '0-15') {
+        filteredProducts = originalProducts.filter(
+          (product) => product.price >= 0 && product.price <= 15
+        );
+      } else if (selectedByPrice === '15-50') {
+        filteredProducts = originalProducts.filter(
+          (product) => product.price > 15 && product.price <= 50
+        );
+      } else if (selectedByPrice === '50-100') {
+        filteredProducts = originalProducts.filter(
+          (product) => product.price > 50 && product.price <= 100
+        );
+      } else if (selectedByPrice === 'Over100') {
+        filteredProducts = originalProducts.filter(
+          (product) => product.price > 100
+        );
+      } else {
+        filteredProducts = originalProducts;
+      }
+
+      setDisplayProduct(filteredProducts);
+    };
+
+    if (selectedByPrice !== 'all') {
+      fetchProductByPrice();
+    } else {
+      fetchProducts();
+    }
+  }, [selectedCategory, selectedByPrice, originalProducts]);
 
   return (
     <div>
@@ -116,20 +103,6 @@ export default function Shop() {
         </>
         <div className='flex p-5 bg-custom-bg rounded-xl'>
           <div className='flex flex-col gap-5  border-r-4 border-purple-500 max-[980px]:hidden grow-1'>
-            {/* <section className='border-b-4 border-white'>
-              <h1>Filter by collection</h1>
-              <ul className='flex flex-col gap-3'>
-                {categoryOptions.map((option) => (
-                  <li
-                    key={option.label}
-                    className='flex items-center gap-3 cursor-pointer'
-                    onClick={() => setSelectedCategory(option.label)}
-                  >
-                    {option.icon} {option.label}
-                  </li>
-                ))}
-              </ul>
-            </section> */}
             <section className='flex flex-col gap-5 border-b-4 border-white'>
               <h1>By Category</h1>
               <RadioGroup
@@ -153,11 +126,11 @@ export default function Shop() {
               <h1>By Pricing</h1>
               <RadioGroup onChange={setSelectedByPrice} value={selectedByPrice}>
                 <Stack spacing={3}>
-                  <Radio value='All'>All</Radio>
-                  <Radio value='0-50'>0-50</Radio>
+                  <Radio value='all'>All</Radio>
+                  <Radio value='0-15'>0-15</Radio>
+                  <Radio value='15-50'>15-50</Radio>
                   <Radio value='50-100'>50-100</Radio>
-                  <Radio value='100-200'>100-200</Radio>
-                  <Radio value='Over200'>Over200</Radio>
+                  <Radio value='Over100'>Over100</Radio>
                 </Stack>
               </RadioGroup>
             </section>
