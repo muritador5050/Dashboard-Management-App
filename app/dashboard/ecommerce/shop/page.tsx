@@ -30,12 +30,9 @@ import { Product } from '@/lib/utils';
 
 const categoryOptions = [
   { label: 'all', icon: <Shapes /> },
-  { label: 'beauty', icon: <Webhook /> },
-  { label: 'skin-care', icon: <BookOpenText /> },
-  { label: 'smartphones', icon: <Smile /> },
-  { label: 'mens-shirts', icon: <Laptop /> },
-  { label: 'womens-dresses', icon: <Laptop /> },
-  { label: 'sports-accessories', icon: <Laptop /> },
+  { label: 'Phones', icon: <Webhook /> },
+  { label: 'Fashion', icon: <BookOpenText /> },
+  { label: 'Elctronics', icon: <Laptop /> },
 ];
 
 const sortOptions = [
@@ -52,74 +49,53 @@ export default function Shop() {
   const [selectedSort, setSelectedSort] = useState('Newest');
   const [displayProducts, setDisplayProduct] = useState<Product[]>([]);
 
+  async function fetchProductsFromCategories(categories: Product[]) {
+    const allProducts = [];
+    for (const category of categories) {
+      const request = await fetch(
+        `https://dummyjson.com/products/category${category}`
+      );
+      const response: { products: Product[] } = await request.json();
+      allProducts.push(...response.products);
+    }
+    return allProducts;
+  }
+
   useEffect(() => {
     const fetchProducts = async () => {
-      const requestAllProducts = await fetch('https://dummyjson.com/products');
-      const requestByCategory = await fetch(
-        `https://dummyjson.com/products/category/${selectedCategory}`
-      );
-      const responseToAllProducts: { products: Product[] } =
-        await requestAllProducts.json();
-      const responseByCategory: { products: Product[] } =
-        await requestByCategory.json();
-      const productToDisplay = responseToAllProducts.products;
-      let categoryToDisplay = responseByCategory.products;
+      let request;
       if (selectedCategory === 'all') {
-        setDisplayProduct(productToDisplay);
-      }
-      if (selectedCategory !== 'all') {
-        categoryToDisplay = categoryToDisplay.filter(
-          (product) => product.category === selectedCategory
+        request = await fetch('https://dummyjson.com/products');
+      } else {
+        request = await fetch(
+          `https://dummyjson.com/products/category/${selectedCategory}`
         );
-        setDisplayProduct(categoryToDisplay);
       }
+      const response: { products: Product[] } = await request.json();
+      setDisplayProduct(response.products);
+      // const requestAllProducts = await fetch('https://dummyjson.com/products');
+      // const requestByCategory = await fetch(
+      //   `https://dummyjson.com/products/category/${selectedCategory}`
+      // );
+      // const responseToAllProducts: { products: Product[] } =
+      //   await requestAllProducts.json();
+      // const responseByCategory: { products: Product[] } =
+      //   await requestByCategory.json();
+      // const productToDisplay = responseToAllProducts.products;
+      // let categoryToDisplay = responseByCategory.products;
+      // if (selectedCategory === 'all') {
+      //   setDisplayProduct(productToDisplay);
+      // }
+      // if (selectedCategory !== 'all') {
+      //   categoryToDisplay = categoryToDisplay.filter(
+      //     (product) => product.category === selectedCategory
+      //   );
+      //   setDisplayProduct(categoryToDisplay);
+      // }
     };
 
     fetchProducts();
   }, [selectedCategory]);
-
-  // const filteredByCategory =
-  //   selectedCategory === 'All'
-  //     ? products
-  //     : products.filter((product) => product.category === selectedCategory);
-
-  // const filteredByGenderAndPrice = filteredByCategory.filter((product) => {
-  //   const genderMatch =
-  //     selectedByGender === 'All' || product.gender === selectedByGender;
-  //   const priceMatch =
-  //     selectedByPrice === 'All' ||
-  //     (selectedByPrice === '0-50' &&
-  //       product.price >= 0 &&
-  //       product.price <= 50) ||
-  //     (selectedByPrice === '50-100' &&
-  //       product.price > 50 &&
-  //       product.price <= 100) ||
-  //     (selectedByPrice === '100-200' &&
-  //       product.price > 100 &&
-  //       product.price <= 200) ||
-  //     (selectedByPrice === 'Over200' && product.price > 200);
-
-  //   return genderMatch && priceMatch;
-  // });
-  // const sortedProducts = [...filteredByGenderAndPrice];
-
-  // if (selectedSort === 'Price:High-Low') {
-  //   sortedProducts.sort((a, b) => b.price - a.price);
-  // } else if (selectedSort === 'Price:Low-High') {
-  //   sortedProducts.sort((a, b) => a.price - b.price);
-  // } else if (selectedSort === 'Discounted') {
-  //   sortedProducts.sort((a, b) => {
-  //     if (a && !b) {
-  //       return -1;
-  //     } else if (!a && b) {
-  //       return 1;
-  //     } else {
-  //       return 0;
-  //     }
-  //   });
-  // } else {
-  //   return selectedSort;
-  // }
 
   return (
     <div>
@@ -185,7 +161,9 @@ export default function Shop() {
                 <Stack spacing={3}>
                   <Radio value='all'>All</Radio>
                   <Radio value='beauty'>Beauty</Radio>
-                  <Radio value='skin-cares'>Skin-care</Radio>
+                  <Radio value='skin-care'>Skin-care</Radio>
+                  <Radio value='fragrances'>Fragrances</Radio>
+                  <Radio value='furniture'>Furniture</Radio>
                   <Radio value='smartphones'>Smartphones</Radio>
                   <Radio value='mens-shirts'>Mens-shirt</Radio>
                   <Radio value='womens-dresses'>Womens-shirt</Radio>
