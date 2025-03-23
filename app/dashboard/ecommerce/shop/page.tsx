@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BookOpenText,
   Dot,
@@ -22,88 +22,105 @@ import {
   RadioGroup,
   Stack,
   Button,
+  Text,
+  Box,
 } from '@chakra-ui/react';
 import Search from '@/components/Search';
+import { Product } from '@/lib/utils';
 
-const products = [
-  { id: 1, name: 'Product A', category: 'Fashion', gender: 'Men', price: 30 },
-  { id: 2, name: 'Product B', category: 'Fashion', gender: 'Women', price: 70 },
-  { id: 3, name: 'Product C', category: 'Books', gender: 'Kids', price: 120 },
-  {
-    id: 4,
-    name: 'Product D',
-    category: 'Electronics',
-    gender: 'Men',
-    price: 250,
-  },
-  { id: 5, name: 'Product E', category: 'Toys', gender: 'Women', price: 40 },
-  { id: 6, name: 'Product F', category: 'Fashion', gender: 'All', price: 150 },
+const categoryOptions = [
+  { label: 'all', icon: <Shapes /> },
+  { label: 'beauty', icon: <Webhook /> },
+  { label: 'skin-care', icon: <BookOpenText /> },
+  { label: 'smartphones', icon: <Smile /> },
+  { label: 'mens-shirts', icon: <Laptop /> },
+  { label: 'womens-dresses', icon: <Laptop /> },
+  { label: 'sports-accessories', icon: <Laptop /> },
+];
+
+const sortOptions = [
+  { label: 'Newest', icon: <Shapes /> },
+  { label: 'Price:High-Low', icon: <Webhook /> },
+  { label: 'Price:Low-High', icon: <BookOpenText /> },
+  { label: 'Discounted', icon: <Smile /> },
 ];
 export default function Shop() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectByGender, setSelectByGender] = useState('All');
-  const [selectByPrice, setSelectByPrice] = useState('All');
-  const [selectedCategory, setSelectedCategory] = useState('All'); // New state for category
-  const [selectedSort, setSelectedSort] = useState('Newest'); // New state for sort
+  const [selectedByGender, setSelectedByGender] = useState('All');
+  const [selectedByPrice, setSelectedByPrice] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedSort, setSelectedSort] = useState('Newest');
+  const [displayProducts, setDisplayProduct] = useState<Product[]>([]);
 
-  const categoryOptions = [
-    { label: 'All', icon: <Shapes /> },
-    { label: 'Fashion', icon: <Webhook /> },
-    { label: 'Books', icon: <BookOpenText /> },
-    { label: 'Toys', icon: <Smile /> },
-    { label: 'Electronics', icon: <Laptop /> },
-  ];
-
-  const sortOptions = [
-    { label: 'Newest', icon: <Shapes /> },
-    { label: 'Price:High-Low', icon: <Webhook /> },
-    { label: 'Price:Low-High', icon: <BookOpenText /> },
-    { label: 'Discounted', icon: <Smile /> },
-  ];
-
-  const filteredByCategory =
-    selectedCategory === 'All'
-      ? products
-      : products.filter((product) => product.category === selectedCategory);
-
-  const filteredByGenderAndPrice = filteredByCategory.filter((product) => {
-    const genderMatch =
-      selectByGender === 'All' || product.gender === selectByGender;
-    const priceMatch =
-      selectByPrice === 'All' ||
-      (selectByPrice === '0-50' && product.price >= 0 && product.price <= 50) ||
-      (selectByPrice === '50-100' &&
-        product.price > 50 &&
-        product.price <= 100) ||
-      (selectByPrice === '100-200' &&
-        product.price > 100 &&
-        product.price <= 200) ||
-      (selectByPrice === 'Over200' && product.price > 200);
-
-    return genderMatch && priceMatch;
-  });
-  const sortedProducts = [...filteredByGenderAndPrice];
-
-  if (selectedSort === 'Price:High-Low') {
-    sortedProducts.sort((a, b) => b.price - a.price);
-  } else if (selectedSort === 'Price:Low-High') {
-    sortedProducts.sort((a, b) => a.price - b.price);
-  } else if (selectedSort === 'Discounted') {
-    sortedProducts.sort((a, b) => {
-      if (a && !b) {
-        return -1;
-      } else if (!a && b) {
-        return 1;
-      } else {
-        return 0;
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const requestAllProducts = await fetch('https://dummyjson.com/products');
+      const requestByCategory = await fetch(
+        `https://dummyjson.com/products/category/${selectedCategory}`
+      );
+      const responseToAllProducts: { products: Product[] } =
+        await requestAllProducts.json();
+      const responseByCategory: { products: Product[] } =
+        await requestByCategory.json();
+      const productToDisplay = responseToAllProducts.products;
+      let categoryToDisplay = responseByCategory.products;
+      if (selectedCategory === 'all') {
+        setDisplayProduct(productToDisplay);
       }
-    });
+      if (selectedCategory !== 'all') {
+        categoryToDisplay = categoryToDisplay.filter(
+          (product) => product.category === selectedCategory
+        );
+        setDisplayProduct(categoryToDisplay);
+      }
+    };
 
-    // Example: If 'discount' is a number, sort by discount percentage (descending)
-    // sortedProducts.sort((a, b) => (b.discount || 0) - (a.discount || 0));
-  } else {
-    // Newest: return the original order (no sorting needed)
-  }
+    fetchProducts();
+  }, [selectedCategory]);
+
+  // const filteredByCategory =
+  //   selectedCategory === 'All'
+  //     ? products
+  //     : products.filter((product) => product.category === selectedCategory);
+
+  // const filteredByGenderAndPrice = filteredByCategory.filter((product) => {
+  //   const genderMatch =
+  //     selectedByGender === 'All' || product.gender === selectedByGender;
+  //   const priceMatch =
+  //     selectedByPrice === 'All' ||
+  //     (selectedByPrice === '0-50' &&
+  //       product.price >= 0 &&
+  //       product.price <= 50) ||
+  //     (selectedByPrice === '50-100' &&
+  //       product.price > 50 &&
+  //       product.price <= 100) ||
+  //     (selectedByPrice === '100-200' &&
+  //       product.price > 100 &&
+  //       product.price <= 200) ||
+  //     (selectedByPrice === 'Over200' && product.price > 200);
+
+  //   return genderMatch && priceMatch;
+  // });
+  // const sortedProducts = [...filteredByGenderAndPrice];
+
+  // if (selectedSort === 'Price:High-Low') {
+  //   sortedProducts.sort((a, b) => b.price - a.price);
+  // } else if (selectedSort === 'Price:Low-High') {
+  //   sortedProducts.sort((a, b) => a.price - b.price);
+  // } else if (selectedSort === 'Discounted') {
+  //   sortedProducts.sort((a, b) => {
+  //     if (a && !b) {
+  //       return -1;
+  //     } else if (!a && b) {
+  //       return 1;
+  //     } else {
+  //       return 0;
+  //     }
+  //   });
+  // } else {
+  //   return selectedSort;
+  // }
+
   return (
     <div>
       <p className='text-3xl'>Shop</p>
@@ -161,18 +178,24 @@ export default function Shop() {
             </section>
             <section className='border-b-4 border-white'>
               <h1>By Gender</h1>
-              <RadioGroup onChange={setSelectByGender} value={selectByGender}>
+              <RadioGroup
+                onChange={setSelectedCategory}
+                value={selectedCategory}
+              >
                 <Stack spacing={3}>
-                  <Radio value='All'>All</Radio>
-                  <Radio value='Men'>Men</Radio>
-                  <Radio value='Women'>Women</Radio>
-                  <Radio value='Kids'>Kids</Radio>
+                  <Radio value='all'>All</Radio>
+                  <Radio value='beauty'>Beauty</Radio>
+                  <Radio value='skin-cares'>Skin-care</Radio>
+                  <Radio value='smartphones'>Smartphones</Radio>
+                  <Radio value='mens-shirts'>Mens-shirt</Radio>
+                  <Radio value='womens-dresses'>Womens-shirt</Radio>
+                  <Radio value='sports-accessories'>Sport-accessories</Radio>
                 </Stack>
               </RadioGroup>
             </section>
             <section className='border-b-4 border-white'>
               <h1>By Pricing</h1>
-              <RadioGroup onChange={setSelectByPrice} value={selectByPrice}>
+              <RadioGroup onChange={setSelectedByPrice} value={selectedByPrice}>
                 <Stack spacing={3}>
                   <Radio value='All'>All</Radio>
                   <Radio value='0-50'>0-50</Radio>
@@ -203,21 +226,23 @@ export default function Shop() {
               <h1 className='max-[980px]:hidden'>Product</h1>
               <Search />
             </div>
-            {/* <div>
-            
-              <h2>Selected Category: {selectedCategory}</h2>
-              <h2>Selected Sort: {selectedSort}</h2>
-              <h2>Selected Gender: {selectByGender}</h2>
-              <h2>Selected Price: {selectByPrice}</h2>
-            
-            </div> */}
-            {sortedProducts.map((product) => (
-              <div key={product.id}>
-                <p>{product.name}</p>
-                <p>Category: {product.category}</p>
-                <p>Gender: {product.gender}</p>
-                <p>Price: {product.price}</p>
-              </div>
+            {displayProducts.map((product) => (
+              <Box
+                key={product.id}
+                borderWidth='1px'
+                borderRadius='lg'
+                padding='4'
+                marginBottom='2'
+              >
+                <Stack spacing={2}>
+                  <Text fontWeight='bold' fontSize='lg'>
+                    {product.title}
+                  </Text>
+                  <Text>Category: {product.category}</Text>
+                  <Text>Gender: {product.brand}</Text>
+                  <Text>Price: ${product.price}</Text>
+                </Stack>
+              </Box>
             ))}
           </div>
         </div>
