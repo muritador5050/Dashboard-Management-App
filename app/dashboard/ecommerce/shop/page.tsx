@@ -26,61 +26,75 @@ export default function Shop() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedByPrice, setSelectedByPrice] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [displayProducts, setDisplayProduct] = useState<Product[]>([]);
-  const [originalProducts, setOriginalProducts] = useState<Product[]>([]);
-
+  const [products, setProducts] = useState<Product[]>([]);
+  const [searchItem, setSearchItem] = useState('');
   function handleReset() {
     setSelectedCategory('all');
     setSelectedByPrice('all');
   }
+  const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const search = e.target.value;
+    setSearchItem(search);
+
+    const filterItems = products.filter((product) =>
+      product.category.toLowerCase().includes(search.toLowerCase())
+    );
+    setProducts(filterItems);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
-      let request;
-      if (selectedCategory === 'all') {
-        request = await fetch('https://dummyjson.com/products');
-      } else {
-        request = await fetch(
-          `https://dummyjson.com/products/category/${selectedCategory}`
-        );
+      try {
+        let request;
+        if (selectedCategory === 'all') {
+          request = await fetch('https://dummyjson.com/products');
+        } else {
+          request = await fetch(
+            `https://dummyjson.com/products/category/${selectedCategory}`
+          );
+        }
+        if (!request.ok) {
+          return <p>Fail to fetch please check your internet connection!</p>;
+        }
+        const response: { products: Product[] } = await request.json();
+        setProducts(response.products);
+      } catch (error) {
+        throw new Error('error in fetching ' + error);
       }
-      const response: { products: Product[] } = await request.json();
-      setOriginalProducts(response.products); // Store original list
-      setDisplayProduct(response.products); // Display initial list
     };
 
     const fetchProductByPrice = async () => {
       let filteredProducts = [];
 
       if (selectedByPrice === '0-15') {
-        filteredProducts = originalProducts.filter(
+        filteredProducts = products.filter(
           (product) => product.price >= 0 && product.price <= 15
         );
       } else if (selectedByPrice === '15-50') {
-        filteredProducts = originalProducts.filter(
+        filteredProducts = products.filter(
           (product) => product.price > 15 && product.price <= 50
         );
       } else if (selectedByPrice === '50-100') {
-        filteredProducts = originalProducts.filter(
+        filteredProducts = products.filter(
           (product) => product.price > 50 && product.price <= 100
         );
       } else if (selectedByPrice === 'Over100') {
-        filteredProducts = originalProducts.filter(
-          (product) => product.price > 100
-        );
+        filteredProducts = products.filter((product) => product.price > 100);
       } else {
-        filteredProducts = originalProducts;
+        filteredProducts = products;
       }
 
-      setDisplayProduct(filteredProducts);
+      setProducts(filteredProducts);
     };
-
-    if (selectedByPrice !== 'all') {
-      fetchProductByPrice();
-    } else {
-      fetchProducts();
-    }
-  }, [selectedCategory, selectedByPrice, originalProducts]);
+    fetchProductByPrice();
+    fetchProducts();
+    // if (selectedByPrice !== 'all') {
+    //   fetchProductByPrice();
+    // } else {
+    //   fetchProducts();
+    // }
+  }, [selectedCategory, selectedByPrice, products]);
 
   return (
     <div>
@@ -156,15 +170,19 @@ export default function Shop() {
             </Button>
           </div>
           <div className=' grow-7'>
-            <div className='flex justify-between items-center'>
+            <div className='flex justify-between items-center mb-7'>
               <span onClick={onOpen} className='min-[980px]:hidden'>
                 <TableOfContents />
               </span>
               <h1 className='max-[980px]:hidden'>Product</h1>
-              <Search />
+              <Search
+                value={searchItem}
+                placeholder='Try search by category...'
+                onChange={handleOnchange}
+              />
             </div>
             <div className='grid grid-cols-2 gap-3'>
-              {displayProducts.map((product) => (
+              {products.map((product) => (
                 <Box
                   key={product.id}
                   borderWidth='1px'
