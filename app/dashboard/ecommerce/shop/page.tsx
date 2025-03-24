@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Dot, TableOfContents } from 'lucide-react';
 import {
   useDisclosure,
@@ -32,15 +32,22 @@ export default function Shop() {
     setSelectedCategory('all');
     setSelectedByPrice('all');
   }
-  const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOnchange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const search = e.target.value;
     setSearchItem(search);
 
-    const filterItems = products.filter((product) =>
-      product.category.toLowerCase().includes(search.toLowerCase())
+    if (!search) {
+      const allProducts = await fetchProductsByCategory(selectedCategory);
+      setProducts(filterProductsByPrice(allProducts, selectedByPrice));
+      return;
+    }
+
+    const filteredProducts = await searchProductByCategory(
+      selectedCategory,
+      search
     );
-    setProducts(filterItems);
+    setProducts(filteredProducts);
   };
 
   const fetchProductsByCategory = async (category: string) => {
@@ -79,18 +86,40 @@ export default function Shop() {
       return true;
     });
   };
+
+  const searchProductByCategory = useCallback(
+    async (category: string, searchQuery: string) => {
+      try {
+        const allProducts = await fetchProductsByCategory(category);
+
+        // Filter by product title (not category)
+        return allProducts.filter((product) =>
+          product.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      } catch (error) {
+        console.error('Error searching products:', error);
+        return [];
+      }
+    },
+    []
+  );
+
   useEffect(() => {
-    const fetchAndFilterProducts = async () => {
-      const allProducts = await fetchProductsByCategory(selectedCategory);
-      const filteredProducts = filterProductsByPrice(
-        allProducts,
-        selectedByPrice
-      );
-      setProducts(filteredProducts);
+    const fetchAndSearchProducts = async () => {
+      if (!searchItem) {
+        const allProducts = await fetchProductsByCategory(selectedCategory);
+        setProducts(filterProductsByPrice(allProducts, selectedByPrice));
+      } else {
+        const searchResults = await searchProductByCategory(
+          selectedCategory,
+          searchItem
+        );
+        setProducts(searchResults);
+      }
     };
 
-    fetchAndFilterProducts();
-  }, [selectedCategory, selectedByPrice]);
+    fetchAndSearchProducts();
+  }, [searchItem, selectedCategory, selectedByPrice, searchProductByCategory]);
 
   return (
     <div>
@@ -178,33 +207,39 @@ export default function Shop() {
               />
             </div>
             <div className='grid grid-cols-2 gap-3'>
-              {products.map((product) => (
-                <Box
-                  key={product.id}
-                  borderWidth='1px'
-                  borderRadius='lg'
-                  padding='4'
-                  marginBottom='2'
-                >
-                  <Stack spacing={2}>
-                    <Image
-                      src={product.images[0]}
-                      alt='product'
-                      objectFit='cover'
-                      boxSize='300px'
-                    />
-                    <Text fontWeight='bold' fontSize='lg'>
-                      {product.title}
-                    </Text>
-                    <Text>Category: {product.category}</Text>
-                    <Text>Gender: {product.brand}</Text>
-                    <Text>Price: ${product.price}</Text>
-                    <Text>
-                      Review: <UnicodeStarRating rating={product.rating} />
-                    </Text>
-                  </Stack>
-                </Box>
-              ))}
+              {products.length === 0 ? (
+                <Text className='text-center'>No item found</Text>
+              ) : (
+                <>
+                  {products.map((product) => (
+                    <Box
+                      key={product.id}
+                      borderWidth='1px'
+                      borderRadius='lg'
+                      padding='4'
+                      marginBottom='2'
+                    >
+                      <Stack spacing={2}>
+                        <Image
+                          src={product.images[0]}
+                          alt='product'
+                          objectFit='cover'
+                          boxSize='300px'
+                        />
+                        <Text fontWeight='bold' fontSize='lg'>
+                          {product.title}
+                        </Text>
+                        <Text>Category: {product.category}</Text>
+                        <Text>Gender: {product.brand}</Text>
+                        <Text>Price: ${product.price}</Text>
+                        <Text>
+                          Review: <UnicodeStarRating rating={product.rating} />
+                        </Text>
+                      </Stack>
+                    </Box>
+                  ))}
+                </>
+              )}
             </div>
           </div>
         </div>
