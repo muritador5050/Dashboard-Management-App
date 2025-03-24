@@ -30,8 +30,10 @@ export default function Shop() {
   const [searchItem, setSearchItem] = useState('');
   const pathname = usePathname();
 
-  // const searchParams = useSearchParams();
-  // const productId = searchParams.get('id');
+  const handleProductDetail = (id: number) => {
+    const findProduct = products.find((product) => product.id === id);
+  };
+
   //Reset function
   function handleReset() {
     setSelectedCategory('all');
@@ -289,8 +291,8 @@ export default function Shop() {
                         <Stack spacing={2}>
                           <Link
                             href={{
-                              pathname: `${pathname}/details`,
-                              query: { id: product.id }, // Correct way to pass the ID
+                              pathname: `/dashboard/ecommerce/details`,
+                              query: { id: product.id },
                             }}
                           >
                             <Image
