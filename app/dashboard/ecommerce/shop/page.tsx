@@ -43,58 +43,54 @@ export default function Shop() {
     setProducts(filterItems);
   };
 
+  const fetchProductsByCategory = async (category: string) => {
+    try {
+      const url =
+        category === 'all'
+          ? 'https://dummyjson.com/products'
+          : `https://dummyjson.com/products/category/${category}`;
+
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(
+          'Failed to fetch. Please check your internet connection!'
+        );
+      }
+
+      const data: { products: Product[] } = await response.json();
+      return data.products;
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return [];
+    }
+  };
+
+  const filterProductsByPrice = (products: Product[], priceRange: string) => {
+    if (priceRange === 'all') return products;
+
+    return products.filter((product) => {
+      if (priceRange === '0-15')
+        return product.price >= 0 && product.price <= 15;
+      if (priceRange === '15-50')
+        return product.price > 15 && product.price <= 50;
+      if (priceRange === '50-100')
+        return product.price > 50 && product.price <= 100;
+      if (priceRange === 'Over100') return product.price > 100;
+      return true;
+    });
+  };
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        let request;
-        if (selectedCategory === 'all') {
-          request = await fetch('https://dummyjson.com/products');
-        } else {
-          request = await fetch(
-            `https://dummyjson.com/products/category/${selectedCategory}`
-          );
-        }
-        if (!request.ok) {
-          return <p>Fail to fetch please check your internet connection!</p>;
-        }
-        const response: { products: Product[] } = await request.json();
-        setProducts(response.products);
-      } catch (error) {
-        throw new Error('error in fetching ' + error);
-      }
-    };
-
-    const fetchProductByPrice = async () => {
-      let filteredProducts = [];
-
-      if (selectedByPrice === '0-15') {
-        filteredProducts = products.filter(
-          (product) => product.price >= 0 && product.price <= 15
-        );
-      } else if (selectedByPrice === '15-50') {
-        filteredProducts = products.filter(
-          (product) => product.price > 15 && product.price <= 50
-        );
-      } else if (selectedByPrice === '50-100') {
-        filteredProducts = products.filter(
-          (product) => product.price > 50 && product.price <= 100
-        );
-      } else if (selectedByPrice === 'Over100') {
-        filteredProducts = products.filter((product) => product.price > 100);
-      } else {
-        filteredProducts = products;
-      }
-
+    const fetchAndFilterProducts = async () => {
+      const allProducts = await fetchProductsByCategory(selectedCategory);
+      const filteredProducts = filterProductsByPrice(
+        allProducts,
+        selectedByPrice
+      );
       setProducts(filteredProducts);
     };
-    fetchProductByPrice();
-    fetchProducts();
-    // if (selectedByPrice !== 'all') {
-    //   fetchProductByPrice();
-    // } else {
-    //   fetchProducts();
-    // }
-  }, [selectedCategory, selectedByPrice, products]);
+
+    fetchAndFilterProducts();
+  }, [selectedCategory, selectedByPrice]);
 
   return (
     <div>
