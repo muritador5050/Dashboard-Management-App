@@ -28,6 +28,12 @@ export default function Shop() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [displayProducts, setDisplayProduct] = useState<Product[]>([]);
   const [originalProducts, setOriginalProducts] = useState<Product[]>([]);
+
+  function handleReset() {
+    setSelectedCategory('all');
+    setSelectedByPrice('all');
+  }
+
   useEffect(() => {
     const fetchProducts = async () => {
       let request;
@@ -145,7 +151,9 @@ export default function Shop() {
                 <div className='w-7 h-7 rounded-full bg-brown-500'></div>
               </div>
             </section>
-            <Button colorScheme='cyan'>Reset filter</Button>
+            <Button colorScheme='cyan' onClick={handleReset}>
+              Reset filter
+            </Button>
           </div>
           <div className=' grow-7'>
             <div className='flex justify-between items-center'>
