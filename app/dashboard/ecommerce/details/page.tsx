@@ -53,7 +53,7 @@ export default function Details() {
 
   return (
     <div>
-      <Box maxW='700px' mx='auto' p={5}>
+      <Box mx='auto' p={5}>
         <Stack spacing={2}>
           <Image
             src={product.images[0]}

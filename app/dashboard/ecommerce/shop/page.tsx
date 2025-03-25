@@ -1,6 +1,6 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Dot, TableOfContents } from 'lucide-react';
+import { TableOfContents } from 'lucide-react';
 import {
   useDisclosure,
   Drawer,
@@ -21,18 +21,12 @@ import Link from 'next/link';
 import Search from '@/components/Search';
 import { Product } from '@/lib/utils';
 import { UnicodeStarRating } from '@/components/TableComponent';
-import { usePathname } from 'next/navigation';
 export default function Shop() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedByPrice, setSelectedByPrice] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [products, setProducts] = useState<Product[]>([]);
   const [searchItem, setSearchItem] = useState('');
-  const pathname = usePathname();
-
-  const handleProductDetail = (id: number) => {
-    const findProduct = products.find((product) => product.id === id);
-  };
 
   //Reset function
   function handleReset() {
@@ -135,14 +129,6 @@ export default function Shop() {
 
   return (
     <div>
-      <p className='text-3xl'>Shop</p>
-      <div className='flex items-center'>
-        <Link href='/dashboard' className='hover:text-blue-400'>
-          Home
-        </Link>
-        <Dot size={28} />
-        <p>Shop</p>
-      </div>
       <div>
         <>
           <Drawer placement='left' onClose={onClose} isOpen={isOpen}>
@@ -273,8 +259,6 @@ export default function Shop() {
               ) : (
                 <>
                   {products.map((product) => {
-                    // const productURL = `${pathname}/details?id=${productId}`;
-
                     return (
                       <Box
                         key={product.id}
