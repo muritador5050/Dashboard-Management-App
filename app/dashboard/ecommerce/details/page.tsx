@@ -10,8 +10,9 @@ import {
   CardBody,
   CardFooter,
   ButtonGroup,
-  Divider,
-  VStack,
+  Spinner,
+  Center,
+  AbsoluteCenter,
 } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { Product } from '@/lib/utils';
@@ -51,7 +52,16 @@ export default function Details() {
   }, [id]);
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return (
+      <Center>
+        <Spinner
+          thickness='4px'
+          emptyColor='gray.200'
+          color='blue.500'
+          size='xl'
+        />
+      </Center>
+    );
   }
 
   if (error) {
@@ -59,7 +69,11 @@ export default function Details() {
   }
 
   if (!product) {
-    return <Text>Product not found.</Text>;
+    return (
+      <AbsoluteCenter>
+        <Text>Product not found try to select a product</Text>
+      </AbsoluteCenter>
+    );
   }
 
   return (
