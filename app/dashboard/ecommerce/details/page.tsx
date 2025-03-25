@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Image, Stack } from '@chakra-ui/react';
+import { Box, Text, Image, Button, Stack, HStack } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 
 import { Product } from '@/lib/utils';
@@ -52,28 +52,65 @@ export default function Details() {
   }
 
   return (
-    <div>
-      <Box mx='auto' p={5}>
-        <Stack spacing={2}>
-          <Image
-            src={product.images[0]}
-            alt={product.title}
-            objectFit='cover'
-            width='100%'
-            borderTopRadius='2xl'
-            background='whitesmoke'
-          />
-          <Text px={3} fontWeight='bold' fontSize='lg'>
+    <div className='min-[980px]:flex gap-15 rounded-xl bg-custom-bg p-3 inset-shadow-sm border border-indigo-600'>
+      <Image
+        src={product.images[0]}
+        alt={product.title}
+        objectFit='cover'
+        // width='50%'
+        // maxH='50vh'
+        height='500px'
+        borderRadius='2xl'
+        background='whitesmoke'
+      />
+      <Stack spacing={20} p={5}>
+        <Box display='flex' flexDir='column' gap='3'>
+          <Text fontWeight='bold' fontSize='lg'>
             {product.title}
           </Text>
-          <Text px={3}>Category: {product.category}</Text>
-          <Text px={3}>Gender: {product.brand}</Text>
-          <Text px={3}>Price: ${product.price}</Text>
-          <Text px={3}>
+          <Text>Desc: {product.description}</Text>
+          <Text>Price: ${product.price}</Text>
+          <Text>
             Review: <UnicodeStarRating rating={product.rating} />
           </Text>
-        </Stack>
-      </Box>
+        </Box>
+        <HStack borderTop='1px' borderBottom='1px' py={16}>
+          <Text>QTY: </Text>
+          <Box display='flex' border='1px' color='skyblue' borderRadius='2xl'>
+            <Button
+              borderRight='1px'
+              background='inherit'
+              color='skyblue'
+              fontSize='2xl'
+              px={6}
+              _hover={{ background: 'none' }}
+            >
+              -
+            </Button>
+            <Text background='inherit' color='skyblue' fontSize='2xl' px={6}>
+              0
+            </Text>
+            <Button
+              borderLeft='1px'
+              background='inherit'
+              color='skyblue'
+              fontSize='2xl'
+              px={6}
+              _hover={{ background: 'none' }}
+            >
+              +
+            </Button>
+          </Box>
+        </HStack>
+        <HStack>
+          <Button background='skyblue' borderRadius='2xl' px='12'>
+            Buy Now
+          </Button>
+          <Button background='orange.300' borderRadius='2xl' px='12'>
+            Add to Cart
+          </Button>
+        </HStack>
+      </Stack>
     </div>
   );
 }

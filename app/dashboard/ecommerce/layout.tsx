@@ -7,25 +7,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   // Define a mapping of paths to page titles
   const pageTitles: Record<string, string> = {
-    '/dashboard/ecommerce/shop': 'shop',
-    '/dashboard/ecommerce/details': 'details',
-    '/dashboard/ecommerce/list': 'list',
+    '/dashboard/ecommerce/shop': 'Shop',
+    '/dashboard/ecommerce/details': 'Product Details',
+    '/dashboard/ecommerce/list': 'Shop List',
     '/dashboard/ecommerce/checkout': 'checkout',
-    '/dashboard/ecommerce/addProduct': 'addProduct',
-    '/dashboard/ecommerce/editProduct': 'editProduct',
+    '/dashboard/ecommerce/addProduct': 'Add Product',
+    '/dashboard/ecommerce/editProduct': 'Edit Product',
   };
 
   const pageTitle = pageTitles[pathname] || '';
   return (
     <>
       <header>
-        <p className='text-3xl'>Shop</p>
+        <h1 className='text-3xl'>{pageTitle}</h1>
         <div className='flex items-center'>
           <Link href='/dashboard' className='hover:text-blue-500'>
             Home
           </Link>
           <Dot size={28} />
-          <p>{pageTitle}</p>
+          <small>{pageTitle}</small>
         </div>
       </header>
       <main>{children}</main>
