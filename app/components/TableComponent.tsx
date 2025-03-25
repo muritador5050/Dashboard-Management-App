@@ -1,7 +1,7 @@
 import React, { JSX, useEffect, useState } from 'react';
 import { formatTime, Product } from '../lib/utils';
 import Image from 'next/image';
-import { Progress } from '@chakra-ui/react';
+import { Badge, Progress } from '@chakra-ui/react';
 
 //tables
 export default function ProductWithStatusAndPayment() {
@@ -71,7 +71,16 @@ export default function ProductWithStatusAndPayment() {
             </td>
             <td>{product.title}</td>
             <td>{product.payment}</td>
-            <td>{product.status}</td>
+            <td>
+              <Badge
+                borderRadius='2xl'
+                p={1}
+                variant='subtle'
+                colorScheme='green'
+              >
+                {product.status}
+              </Badge>
+            </td>
           </tr>
         ))}
       </tbody>

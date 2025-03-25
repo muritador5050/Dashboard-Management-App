@@ -1,10 +1,18 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Image, Button, Stack, HStack } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Image,
+  Button,
+  Stack,
+  HStack,
+  Flex,
+} from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
-
 import { Product } from '@/lib/utils';
 import { UnicodeStarRating } from '@/components/TableComponent';
+import Link from 'next/link';
 
 export default function Details() {
   const [product, setProduct] = useState<Product | null>(null);
@@ -12,7 +20,6 @@ export default function Details() {
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
-
   useEffect(() => {
     if (!id) {
       setLoading(false);
@@ -76,7 +83,7 @@ export default function Details() {
         </Box>
         <HStack borderTop='1px' borderBottom='1px' py={16}>
           <Text>QTY: </Text>
-          <Box display='flex' border='1px' color='skyblue' borderRadius='2xl'>
+          <Flex border='1px' color='skyblue' borderRadius='2xl'>
             <Button
               borderRight='1px'
               background='inherit'
@@ -100,12 +107,14 @@ export default function Details() {
             >
               +
             </Button>
-          </Box>
+          </Flex>
         </HStack>
         <HStack>
-          <Button background='skyblue' borderRadius='2xl' px='12'>
-            Buy Now
-          </Button>
+          <Link href='/dashboard/ecommerce/checkout'>
+            <Button background='skyblue' borderRadius='2xl' px='12'>
+              Buy Now
+            </Button>
+          </Link>
           <Button background='orange.300' borderRadius='2xl' px='12'>
             Add to Cart
           </Button>
