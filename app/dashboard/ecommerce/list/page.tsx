@@ -45,6 +45,10 @@ export default function List() {
   const totalPages = Math.ceil(totalProducts / limit);
   return (
     <TableContainer>
+      <div className='flex justify-between w-full my-5'>
+        <p>search</p>
+        <p>filter</p>
+      </div>
       <Table>
         <Thead>
           <Tr>
