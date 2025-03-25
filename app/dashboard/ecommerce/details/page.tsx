@@ -13,18 +13,26 @@ import {
   Spinner,
   Center,
   AbsoluteCenter,
+  Tab,
+  TabList,
+  Tabs,
+  TabIndicator,
+  TabPanels,
+  TabPanel,
+  Flex,
+  Box,
 } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { Product } from '@/lib/utils';
 import { UnicodeStarRating } from '@/components/TableComponent';
 import Link from 'next/link';
-
 export default function Details() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
+
   useEffect(() => {
     if (!id) {
       setLoading(false);
@@ -77,73 +85,111 @@ export default function Details() {
   }
 
   return (
-    <Card
-      direction={{ base: 'column', xxl: 'row' }}
-      background='rgb(17, 28, 45)'
-      color='rgb(124, 143, 172)'
-      p={3}
-      borderRadius='2xl'
-    >
-      <Image
-        src={product.images[0]}
-        alt={product.title}
-        objectFit='cover'
-        height='500px'
+    <>
+      <Card
+        direction={{ base: 'column', xxl: 'row' }}
+        background='rgb(17, 28, 45)'
+        color='rgb(124, 143, 172)'
+        p={3}
         borderRadius='2xl'
-        background='whitesmoke'
-      />
-      <Stack>
-        <CardBody>
-          <Stack>
-            <Heading>{product.title}</Heading>
-            <Text>{product.description}</Text>
-            <Text>${product.price}</Text>
-            <Text>
-              <UnicodeStarRating rating={product.rating} />
-            </Text>
-          </Stack>
-        </CardBody>
-        <CardFooter>
-          <Stack width='100%'>
-            <ButtonGroup borderTop='1px' borderBottom='1px' py={16}>
-              <Text>QTY: </Text>
-              <Button
-                borderRight='1px'
-                background='inherit'
-                color='skyblue'
-                fontSize='2xl'
-                px={6}
-                _hover={{ background: 'none' }}
-              >
-                -
-              </Button>
-              <Text background='inherit' color='skyblue' fontSize='2xl' px={6}>
-                0
+      >
+        <Image
+          src={product.images[0]}
+          alt={product.title}
+          objectFit='cover'
+          height='500px'
+          borderRadius='2xl'
+          background='whitesmoke'
+        />
+        <Stack>
+          <CardBody>
+            <Stack>
+              <Heading>{product.title}</Heading>
+              <Text>{product.description}</Text>
+              <Text>${product.price}</Text>
+              <Text>
+                <UnicodeStarRating rating={product.rating} />
               </Text>
-              <Button
-                borderLeft='1px'
-                background='inherit'
-                color='skyblue'
-                fontSize='2xl'
-                px={6}
-                _hover={{ background: 'none' }}
-              >
-                +
-              </Button>
-            </ButtonGroup>
-            <ButtonGroup spacing='20px' mt='12'>
-              <Link href='/dashboard/ecommerce/checkout'>
-                <Button background='skyblue' borderRadius='2xl' px='12'>
-                  Buy Now
+            </Stack>
+          </CardBody>
+          <CardFooter>
+            <Stack width='100%'>
+              <ButtonGroup borderTop='1px' borderBottom='1px' py={16}>
+                <Text>QTY: </Text>
+                <Button
+                  borderRight='1px'
+                  background='inherit'
+                  color='skyblue'
+                  fontSize='2xl'
+                  px={6}
+                  _hover={{ background: 'none' }}
+                >
+                  -
                 </Button>
-              </Link>
-              <Button background='orange.300' borderRadius='2xl' px='12'>
-                Add to Cart
-              </Button>
-            </ButtonGroup>
-          </Stack>
-        </CardFooter>
-      </Stack>
-    </Card>
+                <Text
+                  background='inherit'
+                  color='skyblue'
+                  fontSize='2xl'
+                  px={6}
+                >
+                  0
+                </Text>
+                <Button
+                  borderLeft='1px'
+                  background='inherit'
+                  color='skyblue'
+                  fontSize='2xl'
+                  px={6}
+                  _hover={{ background: 'none' }}
+                >
+                  +
+                </Button>
+              </ButtonGroup>
+              <ButtonGroup spacing='20px' mt='12'>
+                <Link href='/dashboard/ecommerce/checkout'>
+                  <Button background='skyblue' borderRadius='2xl' px='12'>
+                    Buy Now
+                  </Button>
+                </Link>
+                <Button background='orange.300' borderRadius='2xl' px='12'>
+                  Add to Cart
+                </Button>
+              </ButtonGroup>
+            </Stack>
+          </CardFooter>
+        </Stack>
+      </Card>
+      <Tabs
+        background='rgb(17, 28, 45)'
+        color='rgb(124, 143, 172)'
+        p={3}
+        borderRadius='2xl'
+        my={9}
+        height='500px'
+      >
+        <TabList>
+          <Tab>Description</Tab>
+          <Tab>Reviews</Tab>
+        </TabList>
+        <TabIndicator
+          mt='-1.5px'
+          height='2px'
+          bg='blue.500'
+          borderRadius='1px'
+        />
+        <TabPanels>
+          <TabPanel>
+            <Heading>{product.description}</Heading>
+          </TabPanel>
+          <TabPanel>
+            <Flex>
+              <Box>1</Box>
+              <Box>2</Box>
+              <Box>3</Box>
+            </Flex>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </>
   );
 }

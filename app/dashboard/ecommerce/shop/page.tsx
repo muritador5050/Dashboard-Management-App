@@ -21,6 +21,7 @@ import Link from 'next/link';
 import Search from '@/components/Search';
 import { Product } from '@/lib/utils';
 import { UnicodeStarRating } from '@/components/TableComponent';
+import { showToast } from '@/lib/toastService';
 export default function Shop() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedByPrice, setSelectedByPrice] = useState('all');
@@ -67,11 +68,19 @@ export default function Shop() {
           'Failed to fetch. Please check your internet connection!'
         );
       }
-
       const data: { products: Product[] } = await response.json();
+      showToast({
+        title: 'Success!',
+        description: 'Data loaded successfully.',
+        status: 'success',
+      });
       return data.products;
     } catch (error) {
-      console.error('Error fetching products:', error);
+      showToast({
+        title: 'Error',
+        description: 'Error in fetching data!' + error,
+        status: 'error',
+      });
       return [];
     }
   };
