@@ -1,6 +1,6 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { TableOfContents } from 'lucide-react';
+import { Flower, TableOfContents } from 'lucide-react';
 import {
   useDisclosure,
   Drawer,
@@ -16,13 +16,19 @@ import {
   Text,
   Box,
   Image,
+  Center,
+  Tooltip,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import Search from '@/components/Search';
 import { Product } from '@/lib/utils';
 import { UnicodeStarRating } from '@/components/TableComponent';
 import { showToast } from '@/lib/toastService';
+import { useCart } from '@/context/ThemeContext';
+
+//Shop
 export default function Shop() {
+  const { addToCart } = useCart();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedByPrice, setSelectedByPrice] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -282,22 +288,44 @@ export default function Shop() {
                         cursor='pointer'
                       >
                         <Stack spacing={2}>
-                          <Link
-                            href={{
-                              pathname: `/dashboard/ecommerce/details`,
-                              query: { id: product.id },
-                            }}
-                          >
-                            <Image
-                              src={product.images[0]}
-                              alt='product'
-                              objectFit='cover'
-                              width='100%'
-                              maxH='50vh'
-                              borderTopRadius='2xl'
-                              background='whitesmoke'
-                            />
-                          </Link>
+                          <Box position='relative'>
+                            <Link
+                              href={{
+                                pathname: `/dashboard/ecommerce/details`,
+                                query: { id: product.id },
+                              }}
+                            >
+                              <Image
+                                src={product.images[0]}
+                                alt='product'
+                                objectFit='cover'
+                                width='100%'
+                                maxH='50vh'
+                                borderTopRadius='2xl'
+                                background='whitesmoke'
+                              />
+                            </Link>
+                            <Center
+                              background='skyblue'
+                              position='absolute'
+                              width='50px'
+                              height='50px'
+                              rounded='full'
+                            >
+                              <Tooltip
+                                hasArrow
+                                placement='top'
+                                label='Add To Cart'
+                                background='white'
+                                color='black'
+                              >
+                                <Flower
+                                  size={32}
+                                  onClick={() => addToCart(product)}
+                                />
+                              </Tooltip>
+                            </Center>
+                          </Box>
                           <Text px={3} fontWeight='bold' fontSize='lg'>
                             {product.title}
                           </Text>

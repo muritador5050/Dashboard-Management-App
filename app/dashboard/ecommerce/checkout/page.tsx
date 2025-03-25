@@ -1,4 +1,5 @@
 'use client';
+import { useCart } from '@/context/ThemeContext';
 import {
   useSteps,
   Box,
@@ -10,6 +11,7 @@ import {
   StepStatus,
   StepTitle,
   Stepper,
+  Text,
 } from '@chakra-ui/react';
 
 // Define steps
@@ -21,7 +23,21 @@ const steps = [
 
 // Step 1 Component
 function Cart() {
-  return <Box p={5}>🛍️ Select a product to continue...</Box>;
+  const { cart } = useCart();
+  return (
+    <Box p='4'>
+      <Text fontSize='2xl' fontWeight='bold'>
+        Shopping Cart
+      </Text>
+      {cart.length === 0 ? <Text>No items in cart</Text> : null}
+      {cart.map((item) => (
+        <Box key={item.id} p='4' borderWidth='1px' mb='2'>
+          <Text>{item.title}</Text>
+          <Text>Quantity: {item.quantity}</Text>
+        </Box>
+      ))}
+    </Box>
+  );
 }
 
 // Step 2 Component
@@ -87,7 +103,7 @@ export default function StepperWithPages() {
       </Box>
 
       {/* Navigation Buttons */}
-      <Box mt={6} display='flex' justifyContent='space-between'>
+      <Box mt={6} display='flex' gap={3} float='right'>
         <Button
           onClick={() => setActiveStep(Math.max(activeStep - 1, 0))}
           isDisabled={activeStep === 0}

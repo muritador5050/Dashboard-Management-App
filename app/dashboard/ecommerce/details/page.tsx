@@ -26,13 +26,14 @@ import { useSearchParams } from 'next/navigation';
 import { Product } from '@/lib/utils';
 import { UnicodeStarRating } from '@/components/TableComponent';
 import Link from 'next/link';
+import { useCart } from '@/context/ThemeContext';
 export default function Details() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
-
+  const { addToCart } = useCart();
   useEffect(() => {
     if (!id) {
       setLoading(false);
@@ -151,7 +152,12 @@ export default function Details() {
                     Buy Now
                   </Button>
                 </Link>
-                <Button background='orange.300' borderRadius='2xl' px='12'>
+                <Button
+                  onClick={() => addToCart(product)}
+                  background='orange.300'
+                  borderRadius='2xl'
+                  px='12'
+                >
                   Add to Cart
                 </Button>
               </ButtonGroup>
