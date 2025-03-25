@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Provider from './lib/Chakraprovider';
-
 import NavContext from './context/ThemeContext';
 export const metadata: Metadata = {
   title: 'Admin Dasboard',

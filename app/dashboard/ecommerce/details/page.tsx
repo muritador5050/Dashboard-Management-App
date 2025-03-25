@@ -1,13 +1,17 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import {
-  Box,
   Text,
   Image,
   Button,
   Stack,
-  HStack,
-  Flex,
+  Card,
+  Heading,
+  CardBody,
+  CardFooter,
+  ButtonGroup,
+  Divider,
+  VStack,
 } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { Product } from '@/lib/utils';
@@ -59,67 +63,73 @@ export default function Details() {
   }
 
   return (
-    <div className='min-[980px]:flex gap-15 rounded-xl bg-custom-bg p-3 inset-shadow-sm border border-indigo-600'>
+    <Card
+      direction={{ base: 'column', xxl: 'row' }}
+      background='rgb(17, 28, 45)'
+      color='rgb(124, 143, 172)'
+      p={3}
+      borderRadius='2xl'
+    >
       <Image
         src={product.images[0]}
         alt={product.title}
         objectFit='cover'
-        // width='50%'
-        // maxH='50vh'
         height='500px'
         borderRadius='2xl'
         background='whitesmoke'
       />
-      <Stack spacing={20} p={5}>
-        <Box display='flex' flexDir='column' gap='3'>
-          <Text fontWeight='bold' fontSize='lg'>
-            {product.title}
-          </Text>
-          <Text>Desc: {product.description}</Text>
-          <Text>Price: ${product.price}</Text>
-          <Text>
-            Review: <UnicodeStarRating rating={product.rating} />
-          </Text>
-        </Box>
-        <HStack borderTop='1px' borderBottom='1px' py={16}>
-          <Text>QTY: </Text>
-          <Flex border='1px' color='skyblue' borderRadius='2xl'>
-            <Button
-              borderRight='1px'
-              background='inherit'
-              color='skyblue'
-              fontSize='2xl'
-              px={6}
-              _hover={{ background: 'none' }}
-            >
-              -
-            </Button>
-            <Text background='inherit' color='skyblue' fontSize='2xl' px={6}>
-              0
+      <Stack>
+        <CardBody>
+          <Stack>
+            <Heading>{product.title}</Heading>
+            <Text>{product.description}</Text>
+            <Text>${product.price}</Text>
+            <Text>
+              <UnicodeStarRating rating={product.rating} />
             </Text>
-            <Button
-              borderLeft='1px'
-              background='inherit'
-              color='skyblue'
-              fontSize='2xl'
-              px={6}
-              _hover={{ background: 'none' }}
-            >
-              +
-            </Button>
-          </Flex>
-        </HStack>
-        <HStack>
-          <Link href='/dashboard/ecommerce/checkout'>
-            <Button background='skyblue' borderRadius='2xl' px='12'>
-              Buy Now
-            </Button>
-          </Link>
-          <Button background='orange.300' borderRadius='2xl' px='12'>
-            Add to Cart
-          </Button>
-        </HStack>
+          </Stack>
+        </CardBody>
+        <CardFooter>
+          <Stack width='100%'>
+            <ButtonGroup borderTop='1px' borderBottom='1px' py={16}>
+              <Text>QTY: </Text>
+              <Button
+                borderRight='1px'
+                background='inherit'
+                color='skyblue'
+                fontSize='2xl'
+                px={6}
+                _hover={{ background: 'none' }}
+              >
+                -
+              </Button>
+              <Text background='inherit' color='skyblue' fontSize='2xl' px={6}>
+                0
+              </Text>
+              <Button
+                borderLeft='1px'
+                background='inherit'
+                color='skyblue'
+                fontSize='2xl'
+                px={6}
+                _hover={{ background: 'none' }}
+              >
+                +
+              </Button>
+            </ButtonGroup>
+            <ButtonGroup spacing='20px' mt='12'>
+              <Link href='/dashboard/ecommerce/checkout'>
+                <Button background='skyblue' borderRadius='2xl' px='12'>
+                  Buy Now
+                </Button>
+              </Link>
+              <Button background='orange.300' borderRadius='2xl' px='12'>
+                Add to Cart
+              </Button>
+            </ButtonGroup>
+          </Stack>
+        </CardFooter>
       </Stack>
-    </div>
+    </Card>
   );
 }
