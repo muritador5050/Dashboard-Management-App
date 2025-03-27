@@ -23,7 +23,6 @@ import Link from 'next/link';
 import Search from '@/components/Search';
 import { Product } from '@/lib/utils';
 import { UnicodeStarRating } from '@/components/TableComponent';
-import { showToast } from '@/lib/toastService';
 import { useCart } from '@/context/ThemeContext';
 
 //Shop
@@ -75,18 +74,9 @@ export default function Shop() {
         );
       }
       const data: { products: Product[] } = await response.json();
-      showToast({
-        title: 'Success!',
-        description: 'Data loaded successfully.',
-        status: 'success',
-      });
       return data.products;
     } catch (error) {
-      showToast({
-        title: 'Error',
-        description: 'Error in fetching data!' + error,
-        status: 'error',
-      });
+      console.error('error in network' + error);
       return [];
     }
   };
@@ -311,6 +301,8 @@ export default function Shop() {
                               width='50px'
                               height='50px'
                               rounded='full'
+                              bottom='0.5'
+                              right='0.5'
                             >
                               <Tooltip
                                 hasArrow

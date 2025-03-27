@@ -1,6 +1,7 @@
 'use client';
+import { showToast } from '@/lib/toastService';
 import { Product } from '@/lib/utils';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { createContext } from 'react';
 
 type NavContextType = {
@@ -15,8 +16,9 @@ type NavContextType = {
 interface CartContextProps {
   cart: Product[];
   addToCart: (product: Product) => void;
+  increaseQuantity: (id: number) => void;
+  decreaseQuantity: (id: number) => void;
 }
-
 //Createcontext
 export const NavContextProvider = createContext<NavContextType | null>(null);
 export const CartContext = createContext<CartContextProps | undefined>(
@@ -54,6 +56,7 @@ export default function NavContext({
   const addToCart = (product: Product) => {
     setCart((prev) => {
       const existingItem = prev.find((item) => item.id === product.id);
+
       if (existingItem) {
         return prev.map((item) =>
           item.id === product.id
@@ -63,7 +66,45 @@ export default function NavContext({
       }
       return [...prev, { ...product, quantity: 1 }];
     });
+    showToast({
+      title: 'success',
+      description: 'Successfully added to cart!',
+      status: 'success',
+    });
   };
+
+  //Increase cartitem quantity
+  const increaseQuantity = (id: number) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
+
+  //Decrease cartitem quantity
+  const decreaseQuantity = (id: number) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === id && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    );
+  };
+
+  useEffect(() => {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
+  }, []);
+
+  // Save cart to localStorage whenever it updates
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
   return (
     <NavContextProvider.Provider
       value={{
@@ -76,7 +117,11 @@ export default function NavContext({
         closeSideBar,
       }}
     >
-      <CartContext value={{ cart, addToCart }}>{children}</CartContext>
+      <CartContext
+        value={{ cart, addToCart, increaseQuantity, decreaseQuantity }}
+      >
+        {children}
+      </CartContext>
     </NavContextProvider.Provider>
   );
 }

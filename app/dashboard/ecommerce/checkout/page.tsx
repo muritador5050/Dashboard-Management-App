@@ -12,6 +12,7 @@ import {
   StepTitle,
   Stepper,
   Text,
+  Image,
 } from '@chakra-ui/react';
 
 // Define steps
@@ -32,6 +33,12 @@ function Cart() {
       {cart.length === 0 ? <Text>No items in cart</Text> : null}
       {cart.map((item) => (
         <Box key={item.id} p='4' borderWidth='1px' mb='2'>
+          <Image
+            src={item.images[0]}
+            alt={item.title}
+            width='100px'
+            height='100px'
+          />
           <Text>{item.title}</Text>
           <Text>Quantity: {item.quantity}</Text>
         </Box>

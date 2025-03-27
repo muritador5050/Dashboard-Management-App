@@ -27,13 +27,17 @@ import { Product } from '@/lib/utils';
 import { UnicodeStarRating } from '@/components/TableComponent';
 import Link from 'next/link';
 import { useCart } from '@/context/ThemeContext';
+
+//Details
 export default function Details() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
-  const { addToCart } = useCart();
+  const { cart, addToCart, increaseQuantity, decreaseQuantity } = useCart();
+
+  //Effect
   useEffect(() => {
     if (!id) {
       setLoading(false);
@@ -117,34 +121,39 @@ export default function Details() {
             <Stack width='100%'>
               <ButtonGroup borderTop='1px' borderBottom='1px' py={16}>
                 <Text>QTY: </Text>
-                <Button
-                  borderRight='1px'
-                  background='inherit'
-                  color='skyblue'
-                  fontSize='2xl'
-                  px={6}
-                  _hover={{ background: 'none' }}
-                >
-                  -
-                </Button>
-                <Text
-                  background='inherit'
-                  color='skyblue'
-                  fontSize='2xl'
-                  px={6}
-                >
-                  0
-                </Text>
-                <Button
-                  borderLeft='1px'
-                  background='inherit'
-                  color='skyblue'
-                  fontSize='2xl'
-                  px={6}
-                  _hover={{ background: 'none' }}
-                >
-                  +
-                </Button>
+                {/* {cart.map((item) => ( */}
+                <Flex gap={3} key={product.id}>
+                  <Button
+                    borderRight='1px'
+                    background='inherit'
+                    color='skyblue'
+                    fontSize='2xl'
+                    px={6}
+                    _hover={{ background: 'none' }}
+                    onClick={() => decreaseQuantity(product.id)}
+                  >
+                    -
+                  </Button>
+                  {product ? (
+                    <Text background='inherit' color='skyblue' fontSize='2xl'>
+                      {product.quantity}
+                    </Text>
+                  ) : (
+                    0
+                  )}
+                  <Button
+                    borderLeft='1px'
+                    background='inherit'
+                    color='skyblue'
+                    fontSize='2xl'
+                    px={6}
+                    _hover={{ background: 'none' }}
+                    onClick={() => increaseQuantity(product.id)}
+                  >
+                    +
+                  </Button>
+                </Flex>
+                {/* // ))} */}
               </ButtonGroup>
               <ButtonGroup spacing='20px' mt='12'>
                 <Link href='/dashboard/ecommerce/checkout'>
