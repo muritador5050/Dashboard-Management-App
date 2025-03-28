@@ -21,6 +21,7 @@ import {
   TabPanel,
   Flex,
   Box,
+  Divider,
 } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { Product } from '@/lib/utils';
@@ -35,7 +36,7 @@ export default function Details() {
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
-  const { cart, addToCart, increaseQuantity, decreaseQuantity } = useCart();
+  const { addToCart } = useCart();
 
   //Effect
   useEffect(() => {
@@ -106,7 +107,7 @@ export default function Details() {
           borderRadius='2xl'
           background='whitesmoke'
         />
-        <Stack>
+        <Stack px={3}>
           <CardBody>
             <Stack>
               <Heading>{product.title}</Heading>
@@ -117,60 +118,23 @@ export default function Details() {
               </Text>
             </Stack>
           </CardBody>
+          <Divider />
           <CardFooter>
-            <Stack width='100%'>
-              <ButtonGroup borderTop='1px' borderBottom='1px' py={16}>
-                <Text>QTY: </Text>
-                {/* {cart.map((item) => ( */}
-                <Flex gap={3} key={product.id}>
-                  <Button
-                    borderRight='1px'
-                    background='inherit'
-                    color='skyblue'
-                    fontSize='2xl'
-                    px={6}
-                    _hover={{ background: 'none' }}
-                    onClick={() => decreaseQuantity(product.id)}
-                  >
-                    -
-                  </Button>
-                  {product ? (
-                    <Text background='inherit' color='skyblue' fontSize='2xl'>
-                      {product.quantity}
-                    </Text>
-                  ) : (
-                    0
-                  )}
-                  <Button
-                    borderLeft='1px'
-                    background='inherit'
-                    color='skyblue'
-                    fontSize='2xl'
-                    px={6}
-                    _hover={{ background: 'none' }}
-                    onClick={() => increaseQuantity(product.id)}
-                  >
-                    +
-                  </Button>
-                </Flex>
-                {/* // ))} */}
-              </ButtonGroup>
-              <ButtonGroup spacing='20px' mt='12'>
-                <Link href='/dashboard/ecommerce/checkout'>
-                  <Button background='skyblue' borderRadius='2xl' px='12'>
-                    Buy Now
-                  </Button>
-                </Link>
-                <Button
-                  onClick={() => addToCart(product)}
-                  background='orange.300'
-                  borderRadius='2xl'
-                  px='12'
-                >
-                  Add to Cart
+            <ButtonGroup spacing='20px' mt='12'>
+              <Link href='/dashboard/ecommerce/checkout'>
+                <Button background='skyblue' borderRadius='2xl' px='12'>
+                  Buy Now
                 </Button>
-              </ButtonGroup>
-            </Stack>
+              </Link>
+              <Button
+                onClick={() => addToCart(product)}
+                background='orange.300'
+                borderRadius='2xl'
+                px='12'
+              >
+                Add to Cart
+              </Button>
+            </ButtonGroup>
           </CardFooter>
         </Stack>
       </Card>
