@@ -14,16 +14,10 @@ import {
   Text,
   Image,
   Flex,
-  VStack,
   Divider,
-  Container,
   Stack,
   ButtonGroup,
   Heading,
-  Card,
-  CardBody,
-  CardHeader,
-  CardFooter,
 } from '@chakra-ui/react';
 import { Trash2 } from 'lucide-react';
 
@@ -36,59 +30,96 @@ const steps = [
 
 // Step 1 Component
 function Cart() {
-  const { cart, decreaseQuantity, increaseQuantity } = useCart();
+  const { cart, decreaseQuantity, increaseQuantity, deleteItem } = useCart();
   return (
     <div>
-      <Flex width='100%' justify='space-between'>
+      <Flex width='100%' justify='space-between' fontSize='1rem'>
         <Text>Product</Text>
         <Text>Quantity</Text>
         <Text>Price</Text>
       </Flex>
-      <Divider />
+      <Divider my={4} />
       {cart.length === 0 ? <Text>No items in cart</Text> : null}
       {cart.map((item) => (
-        <Flex key={item.id} width='100%' justify='space-between'>
-          <Flex fontSize='1rem' gap={3}>
-            <Image
-              src={item.images[0]}
-              alt={item.title}
-              width='70px'
-              height='70px'
-              background='white'
-              borderRadius='2xl'
-            />
-            <Stack width='fit-content'>
-              <Text width='16'>{item.title}</Text>
-              <Text>{item.category}</Text>
-              <Trash2 style={{ color: 'red', cursor: 'pointer' }} />
-            </Stack>
+        <>
+          <Flex key={item.id} width='100%' justify='space-between'>
+            <Flex fontSize='1rem' gap={3}>
+              <Image
+                src={item.images[0]}
+                alt={item.title}
+                width='70px'
+                height='70px'
+                background='white'
+                borderRadius='2xl'
+              />
+              <Stack>
+                <Text width='16' lineHeight='shorter'>
+                  {item.title}
+                </Text>
+                <Trash2
+                  style={{ color: 'red', cursor: 'pointer' }}
+                  onClick={() => deleteItem(item.id)}
+                />
+              </Stack>
+            </Flex>
+            <ButtonGroup fontSize='1rem' variant='outline'>
+              <Button
+                background='rgb(17, 28, 45)'
+                color='rgb(124, 143, 172)'
+                borderRight='2px solid rgb(124, 143, 172)'
+                _hover={{ background: 'none' }}
+                onClick={() => decreaseQuantity(item.id)}
+              >
+                -
+              </Button>
+              <Text>{item.quantity}</Text>
+              <Button
+                background='rgb(17, 28, 45)'
+                color='rgb(124, 143, 172)'
+                borderLeft='2px solid rgb(124, 143, 172)'
+                _hover={{ background: 'none' }}
+                onClick={() => increaseQuantity(item.id)}
+              >
+                +
+              </Button>
+            </ButtonGroup>
+            <Text>{item.price}</Text>
           </Flex>
-          <ButtonGroup>
-            <Button onClick={() => decreaseQuantity(item.id)}>-</Button>
-            <Text>{item.quantity}</Text>
-            <Button onClick={() => increaseQuantity(item.id)}>+</Button>
-          </ButtonGroup>
-          <Text>{item.price}</Text>
-        </Flex>
+          <Box
+            mt={6}
+            mb={24}
+            border='1px'
+            borderColor='rgb(124, 143, 172)'
+            borderRadius='2xl'
+            height='96'
+            p={6}
+            display='flex'
+            flexDirection='column'
+            justifyContent='space-between'
+          >
+            <Heading>Order Summary</Heading>
+            <Flex justify='space-between'>
+              <Text>Sub total</Text>
+              <Text>{item.price * item.quantity}</Text>
+            </Flex>
+            <Flex justify='space-between'>
+              <Text>Discount 5%</Text>
+              <Text color='red'>-${item.discountPercentage}</Text>
+            </Flex>
+            <Flex justify='space-between'>
+              <Text>Shipping</Text>
+              <Text>Free</Text>
+            </Flex>
+            <Flex justify='space-between'>
+              <Text>Total</Text>
+              <Text>
+                {' '}
+                ${item.price * item.quantity - item.discountPercentage}
+              </Text>
+            </Flex>
+          </Box>
+        </>
       ))}
-
-      <Box>
-        <Heading>Order Summary</Heading>
-        <Flex justify='space-between'>
-          <Text>Sub total</Text>
-          <Text>all q*p</Text>
-        </Flex>
-        <Flex justify='space-between'>
-          <Text>Discount 5%</Text>
-          <Text>-$price</Text>
-        </Flex>
-        <Flex justify='space-between'>
-          <Text>Shipping</Text>
-          <Text>Free</Text>
-        </Flex>
-
-        <Text>Total</Text>
-      </Box>
     </div>
   );
 }

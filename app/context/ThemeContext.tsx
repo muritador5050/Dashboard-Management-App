@@ -18,6 +18,7 @@ interface CartContextProps {
   addToCart: (product: Product) => void;
   increaseQuantity: (id: number) => void;
   decreaseQuantity: (id: number) => void;
+  deleteItem: (id: number) => void;
 }
 //Createcontext
 export const NavContextProvider = createContext<NavContextType | null>(null);
@@ -93,6 +94,11 @@ export default function NavContext({
     );
   };
 
+  //Delete cartItem
+  const deleteItem = (id: number) => {
+    setCart((prev) => prev.filter((item) => item.id !== id));
+  };
+
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
@@ -118,7 +124,13 @@ export default function NavContext({
       }}
     >
       <CartContext
-        value={{ cart, addToCart, increaseQuantity, decreaseQuantity }}
+        value={{
+          cart,
+          addToCart,
+          increaseQuantity,
+          decreaseQuantity,
+          deleteItem,
+        }}
       >
         {children}
       </CartContext>
