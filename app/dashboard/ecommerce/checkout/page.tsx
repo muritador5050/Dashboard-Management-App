@@ -13,7 +13,19 @@ import {
   Stepper,
   Text,
   Image,
+  Flex,
+  VStack,
+  Divider,
+  Container,
+  Stack,
+  ButtonGroup,
+  Heading,
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
 } from '@chakra-ui/react';
+import { Trash2 } from 'lucide-react';
 
 // Define steps
 const steps = [
@@ -24,26 +36,60 @@ const steps = [
 
 // Step 1 Component
 function Cart() {
-  const { cart } = useCart();
+  const { cart, decreaseQuantity, increaseQuantity } = useCart();
   return (
-    <Box p='4'>
-      <Text fontSize='2xl' fontWeight='bold'>
-        Shopping Cart
-      </Text>
+    <div>
+      <Flex width='100%' justify='space-between'>
+        <Text>Product</Text>
+        <Text>Quantity</Text>
+        <Text>Price</Text>
+      </Flex>
+      <Divider />
       {cart.length === 0 ? <Text>No items in cart</Text> : null}
       {cart.map((item) => (
-        <Box key={item.id} p='4' borderWidth='1px' mb='2'>
-          <Image
-            src={item.images[0]}
-            alt={item.title}
-            width='100px'
-            height='100px'
-          />
-          <Text>{item.title}</Text>
-          <Text>Quantity: {item.quantity}</Text>
-        </Box>
+        <Flex key={item.id} width='100%' justify='space-between'>
+          <Flex fontSize='1rem' gap={3}>
+            <Image
+              src={item.images[0]}
+              alt={item.title}
+              width='70px'
+              height='70px'
+              background='white'
+              borderRadius='2xl'
+            />
+            <Stack width='fit-content'>
+              <Text width='16'>{item.title}</Text>
+              <Text>{item.category}</Text>
+              <Trash2 style={{ color: 'red', cursor: 'pointer' }} />
+            </Stack>
+          </Flex>
+          <ButtonGroup>
+            <Button onClick={() => decreaseQuantity(item.id)}>-</Button>
+            <Text>{item.quantity}</Text>
+            <Button onClick={() => increaseQuantity(item.id)}>+</Button>
+          </ButtonGroup>
+          <Text>{item.price}</Text>
+        </Flex>
       ))}
-    </Box>
+
+      <Box>
+        <Heading>Order Summary</Heading>
+        <Flex justify='space-between'>
+          <Text>Sub total</Text>
+          <Text>all q*p</Text>
+        </Flex>
+        <Flex justify='space-between'>
+          <Text>Discount 5%</Text>
+          <Text>-$price</Text>
+        </Flex>
+        <Flex justify='space-between'>
+          <Text>Shipping</Text>
+          <Text>Free</Text>
+        </Flex>
+
+        <Text>Total</Text>
+      </Box>
+    </div>
   );
 }
 
@@ -99,15 +145,7 @@ export default function StepperWithPages() {
       </Stepper>
 
       {/* Step Page Content */}
-      <Box
-        mt={6}
-        p={5}
-        border='1px solid'
-        borderColor='gray.300'
-        borderRadius='md'
-      >
-        {renderStepPage()}
-      </Box>
+      <div>{renderStepPage()}</div>
 
       {/* Navigation Buttons */}
       <Box mt={6} display='flex' gap={3} float='right'>
