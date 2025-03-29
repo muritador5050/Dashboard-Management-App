@@ -44,6 +44,7 @@ export type CustomersEarning = {
 };
 
 export interface Product {
+  quantity: number;
   id: number;
   title: string;
   description: string;
