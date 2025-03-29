@@ -17,6 +17,7 @@ import {
 import FileDropzone from '@/components/FiledropZone';
 import DiscountSlider from '@/components/Slider';
 import SearchableDropdown from '@/components/Select';
+import RichEditor from '@/components/RichEditor';
 //AddProduct
 function AddProduct() {
   const [selectedValue, setSelectedValue] = useState('no-discount');
@@ -40,6 +41,7 @@ function AddProduct() {
           </FormControl>
           <FormControl>
             <FormLabel>Description</FormLabel>
+            <RichEditor />
             <FormHelperText>
               Set a description to the product for better visibility.
             </FormHelperText>
@@ -196,7 +198,7 @@ function AddProduct() {
           <Heading>Status</Heading>
           <FormControl>
             <Select>
-              <option selected value='option1'>
+              <option defaultValue='Published' value='option1'>
                 Published
               </option>
               <option value='option2'>Draft</option>
@@ -229,7 +231,7 @@ function AddProduct() {
           <FormControl>
             <FormLabel>Select a product template</FormLabel>
             <Select>
-              <option selected value='option2'>
+              <option defaultValue='Default Template' value='option2'>
                 Default Template
               </option>
               <option value='option3'>Fashion</option>
