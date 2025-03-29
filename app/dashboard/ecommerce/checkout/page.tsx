@@ -1,5 +1,7 @@
 'use client';
-import { useCart } from '@/context/ThemeContext';
+import { BillingAndAddress } from '@/components/cartComponents/Address';
+import { Cart } from '@/components/cartComponents/Cart';
+import { Payment } from '@/components/cartComponents/Payment';
 import {
   useSteps,
   Box,
@@ -11,18 +13,7 @@ import {
   StepStatus,
   StepTitle,
   Stepper,
-  Text,
-  Image,
-  Flex,
-  Divider,
-  Stack,
-  ButtonGroup,
-  Heading,
-  Radio,
-  RadioGroup,
-  VStack,
 } from '@chakra-ui/react';
-import { Trash2 } from 'lucide-react';
 
 // Define steps
 const steps = [
@@ -30,192 +21,6 @@ const steps = [
   { title: 'Step 2', description: 'Billing & address' },
   { title: 'Step 3', description: 'Payment' },
 ];
-
-// Step 1 Component
-function Cart() {
-  const { cart, decreaseQuantity, increaseQuantity, deleteItem } = useCart();
-  return (
-    <div>
-      <Flex width='100%' justify='space-between' fontSize='1rem'>
-        <Text>Product</Text>
-        <Text>Quantity</Text>
-        <Text>Price</Text>
-      </Flex>
-      <Divider my={4} />
-      {cart.length === 0 ? <Text>No items in cart</Text> : null}
-      {cart.map((item) => (
-        <>
-          <Flex key={item.id} width='100%' justify='space-between'>
-            <Flex fontSize='1rem' gap={3}>
-              <Image
-                src={item.images[0]}
-                alt={item.title}
-                width='70px'
-                height='70px'
-                background='white'
-                borderRadius='2xl'
-              />
-              <Stack>
-                <Text width='16' lineHeight='shorter'>
-                  {item.title}
-                </Text>
-                <Trash2
-                  style={{ color: 'red', cursor: 'pointer' }}
-                  onClick={() => deleteItem(item.id)}
-                />
-              </Stack>
-            </Flex>
-            <ButtonGroup fontSize='1rem' variant='outline'>
-              <Button
-                background='rgb(17, 28, 45)'
-                color='rgb(124, 143, 172)'
-                borderRight='2px solid rgb(124, 143, 172)'
-                _hover={{ background: 'none' }}
-                onClick={() => decreaseQuantity(item.id)}
-              >
-                -
-              </Button>
-              <Text>{item.quantity}</Text>
-              <Button
-                background='rgb(17, 28, 45)'
-                color='rgb(124, 143, 172)'
-                borderLeft='2px solid rgb(124, 143, 172)'
-                _hover={{ background: 'none' }}
-                onClick={() => increaseQuantity(item.id)}
-              >
-                +
-              </Button>
-            </ButtonGroup>
-            <Text>{item.price}</Text>
-          </Flex>
-          <Box
-            mt={6}
-            mb={24}
-            border='1px'
-            borderColor='rgb(124, 143, 172)'
-            borderRadius='2xl'
-            height='96'
-            p={6}
-            display='flex'
-            flexDirection='column'
-            justifyContent='space-between'
-          >
-            <Heading>Order Summary</Heading>
-            <Flex justify='space-between'>
-              <Text>Sub total</Text>
-              <Text>{item.price * item.quantity}</Text>
-            </Flex>
-            <Flex justify='space-between'>
-              <Text>Discount 5%</Text>
-              <Text color='red'>-${item.discountPercentage}</Text>
-            </Flex>
-            <Flex justify='space-between'>
-              <Text>Shipping</Text>
-              <Text>Free</Text>
-            </Flex>
-            <Flex justify='space-between'>
-              <Text>Total</Text>
-              <Text>
-                {' '}
-                ${item.price * item.quantity - item.discountPercentage}
-              </Text>
-            </Flex>
-          </Box>
-        </>
-      ))}
-    </div>
-  );
-}
-
-// Step 2 Component
-function BillingAndAddress() {
-  const { cart } = useCart();
-  return (
-    <>
-      <Box p={5}>
-        <RadioGroup>
-          <Stack direction='row'>
-            <Radio>
-              <Text>Free Delivery</Text>
-              <Text>Delivered on friday, may 8</Text>
-            </Radio>
-            <Radio>
-              <Text>Fast Delivery($2.00)</Text>
-              <Text>Delivered on friday, may 8</Text>
-            </Radio>
-          </Stack>
-        </RadioGroup>
-      </Box>
-      <Box p={5}>
-        <RadioGroup>
-          <Stack>
-            <Radio>
-              <Text>Pay with Paypal</Text>
-              <Text>
-                You will be redirected to paypal website to complete your
-                purchase securely.
-              </Text>
-            </Radio>
-            <Radio>
-              {/* <Flex> */}
-              <VStack>
-                <Text>Credit/Debit Card</Text>
-                <Text>We support Mastercard, Visa, Discover and Stripe.</Text>
-              </VStack>
-              <Image objectFit='cover' src='/mastercard.png' alt='mastercard' />
-              {/* </Flex> */}
-            </Radio>
-            <Radio>
-              <Text>Cash on Delivery</Text>
-              <Text>Pay with cash when your order Delivered</Text>
-            </Radio>
-          </Stack>
-        </RadioGroup>
-      </Box>
-      {cart.map((item) => (
-        <Box
-          key={item.id}
-          mt={6}
-          mb={24}
-          border='1px'
-          borderColor='rgb(124, 143, 172)'
-          borderRadius='2xl'
-          height='96'
-          p={6}
-          display='flex'
-          flexDirection='column'
-          justifyContent='space-between'
-        >
-          <Heading>Order Summary</Heading>
-          <Flex justify='space-between'>
-            <Text>Sub total</Text>
-            <Text>{item.price * item.quantity}</Text>
-          </Flex>
-          <Flex justify='space-between'>
-            <Text>Discount 5%</Text>
-            <Text color='red'>-${item.discountPercentage}</Text>
-          </Flex>
-          <Flex justify='space-between'>
-            <Text>Shipping</Text>
-            <Text>Free</Text>
-          </Flex>
-          <Flex justify='space-between'>
-            <Text>Total</Text>
-            <Text>
-              {' '}
-              ${item.price * item.quantity - item.discountPercentage}
-            </Text>
-          </Flex>
-        </Box>
-      ))}
-    </>
-  );
-}
-
-// Step 3 Component
-function Payment() {
-  return <Box p={5}>✅ Review and submit your details...</Box>;
-}
 
 // Stepper Component
 export default function StepperWithPages() {
