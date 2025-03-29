@@ -91,7 +91,9 @@ export function BillingAndAddress() {
               flex='1'
               transition='all 0.3s ease'
               cursor='pointer'
-              _hover={{ bg: 'blue.800', borderColor: 'blue.400' }}
+              _hover={
+                selectedDelivery === option.value ? {} : { bg: 'blue.800' }
+              }
               onClick={() => setSelectedDelivery(option.value)}
             >
               <Radio value={option.value}>
@@ -129,18 +131,18 @@ export function BillingAndAddress() {
               p={4}
               border='2px solid'
               borderColor={
-                selectedDelivery === option.value
+                selectedPayment === option.value
                   ? 'blue.500'
                   : 'rgb(124, 143, 172)'
               }
-              bg={
-                selectedDelivery === option.value ? 'blue.900' : 'transparent'
-              }
+              bg={selectedPayment === option.value ? 'blue.900' : 'transparent'}
               borderRadius='lg'
               flex='1'
               transition='all 0.3s ease'
               cursor='pointer'
-              _hover={{ bg: 'blue.800', borderColor: 'blue.400' }}
+              _hover={
+                selectedPayment === option.value ? {} : { bg: 'blue.800' }
+              }
               onClick={() => setSelectedPayment(option.value)}
             >
               <Radio value={option.value}>

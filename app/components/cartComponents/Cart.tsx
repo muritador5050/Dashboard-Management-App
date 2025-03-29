@@ -10,6 +10,7 @@ import {
   Stack,
   ButtonGroup,
   Heading,
+  Center,
 } from '@chakra-ui/react';
 import { Trash2 } from 'lucide-react';
 export function Cart() {
@@ -26,7 +27,7 @@ export function Cart() {
       <Divider my={4} />
 
       {/* If Cart is Empty */}
-      {cart.length === 0 ? <Text>No items in cart</Text> : null}
+      {cart.length === 0 ? <Center>No items in cart</Center> : null}
 
       {/* Loop through cart items */}
       {cart.map((item) => {
