@@ -22,6 +22,18 @@ import RichEditor from '@/components/RichEditor';
 function AddProduct() {
   const [selectedValue, setSelectedValue] = useState('no-discount');
   const [discount, setDiscount] = useState<number>(0);
+  const [addProduct, setAddProduct] = useState({
+    name: '',
+    description: '',
+    status: '',
+    price: '',
+    media: '',
+  });
+  console.log(addProduct);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.name;
+    setAddProduct((prev) => ({ ...prev, [name]: e.target.value }));
+  };
   return (
     <Box width='100%' p={6} display={{ xxl: 'flex' }} gap={{ xxl: '10' }}>
       <Stack flex='1'>
@@ -34,12 +46,12 @@ function AddProduct() {
           <Heading>General</Heading>
           <FormControl isRequired>
             <FormLabel>Product Name</FormLabel>
-            <Input type='email' />
+            <Input type='text' name='name' onChange={handleChange} />
             <FormHelperText>
               A product name is required and recommended to be unique.
             </FormHelperText>
           </FormControl>
-          <FormControl>
+          <FormControl h='max-content'>
             <FormLabel>Description</FormLabel>
             <RichEditor />
             <FormHelperText>
@@ -56,14 +68,7 @@ function AddProduct() {
           <Heading>Media</Heading>
           <FileDropzone />
         </Box>
-        <Box
-          bg='rgb(17, 28, 45)'
-          p={5}
-          borderRadius='xl'
-          color='rgb(124, 143, 172)'
-        >
-          <Heading>Variation</Heading>
-        </Box>
+
         <Box
           bg='rgb(17, 28, 45)'
           p={5}
@@ -76,7 +81,7 @@ function AddProduct() {
           <Heading>Pricing</Heading>
           <FormControl isRequired>
             <FormLabel>Base Price </FormLabel>
-            <Input type='text' />
+            <Input type='text' name='price' onChange={handleChange} />
             <FormHelperText>Set the product price.</FormHelperText>
           </FormControl>
           <RadioGroup onChange={setSelectedValue} value={selectedValue}>
