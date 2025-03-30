@@ -10,8 +10,6 @@ import {
   CardBody,
   CardFooter,
   ButtonGroup,
-  Spinner,
-  Center,
   AbsoluteCenter,
   Tab,
   TabList,
@@ -28,6 +26,7 @@ import { Product } from '@/lib/utils';
 import { UnicodeStarRating } from '@/components/TableComponent';
 import Link from 'next/link';
 import { useCart } from '@/context/ThemeContext';
+import Loading from '@/loading';
 
 //Details
 export default function Details() {
@@ -66,16 +65,7 @@ export default function Details() {
   }, [id]);
 
   if (loading) {
-    return (
-      <Center>
-        <Spinner
-          thickness='4px'
-          emptyColor='gray.200'
-          color='blue.500'
-          size='xl'
-        />
-      </Center>
-    );
+    return <Loading />;
   }
 
   if (error) {
