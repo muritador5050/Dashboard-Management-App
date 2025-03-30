@@ -22,7 +22,7 @@ import {
   type DailyProfitData,
 } from '../lib/utils';
 import { dailyProfitData, yearlyProfit } from '../lib/datas';
-import Image from 'next/image';
+import { Image } from '@chakra-ui/react';
 
 // data
 export function EarningsChart() {
@@ -245,7 +245,13 @@ export function TotalOrders() {
           ))}
         </div>
         <div className='absolute bottom-0 right-0'>
-          <Image src='/man.png' alt='man' priority width={400} height={400} />
+          {/* < src='/man.png' alt='man' priority width={400} height={400} /> */}
+          <Image
+            src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/backgrounds/man-working-on-laptop.png'
+            alt='man'
+            w='355px'
+            h='241px'
+          />
         </div>
       </div>
       <div className='flex flex-col justify-center gap-5 min-h-1/2'>

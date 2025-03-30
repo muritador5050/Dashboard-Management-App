@@ -8,7 +8,7 @@ type NavContextType = {
   isOpen: boolean;
   collapse: boolean;
   isWide: boolean;
-  handleToggle: () => void;
+  handleOpenSiderBar: () => void;
   closeSideBar: () => void;
   handleCollapse: () => void;
   toggleSiderbarWidth: () => void;
@@ -33,14 +33,15 @@ export default function NavContext({
 }: {
   children: React.ReactNode;
 }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [collapse, setCollapse] = useState(false);
   const [isWide, setIsWide] = useState(false);
   const [cart, setCart] = useState<Product[]>([]);
   //toggle function
-  const handleToggle = () => {
-    setIsOpen((prev) => !prev);
+  const handleOpenSiderBar = () => {
+    setIsOpen(true);
   };
+
   //sidebar function
   const closeSideBar = () => {
     setIsOpen(false);
@@ -121,7 +122,7 @@ export default function NavContext({
       value={{
         isWide,
         isOpen,
-        handleToggle,
+        handleOpenSiderBar,
         collapse,
         toggleSiderbarWidth,
         handleCollapse,

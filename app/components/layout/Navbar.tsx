@@ -19,7 +19,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 //Navbar
 export default function Navbar() {
-  const { collapse, handleCollapse, handleToggle, toggleSiderbarWidth } =
+  const { collapse, handleCollapse, handleOpenSiderBar, toggleSiderbarWidth } =
     useNav();
   const [swipeModal, setSwipeModal] = useState(false);
   const [search, setSearch] = useState('');
@@ -28,9 +28,9 @@ export default function Navbar() {
       <nav className=' bg-custom-bg p-5 sticky top-0 right-0 z-1000  text-custom-color rounded-2xl m-[1em] text-2xl cursor-pointer'>
         {/* mobile-view */}
         <div className='px-2 min-[980px]:hidden'>
-          <div className='flex justify-between items-center '>
+          <div className='flex justify-between items-center'>
             <span>
-              <AlignJustify onClick={handleToggle} />
+              <AlignJustify onClick={handleOpenSiderBar} />
             </span>
             <span className='flex gap-4 items-center'>
               <Rocket /> Admin
