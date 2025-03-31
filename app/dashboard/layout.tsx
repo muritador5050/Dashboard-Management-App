@@ -34,7 +34,7 @@ function DasboardLayout({ children }: { children: React.ReactNode }) {
     <div className='flex bg-gray-800 min-h-screen text-white'>
       {/* {isOpen && ( */}
       <div
-        className={`h-screen overflow-y-scroll ${sidebarWidth}  ${minWidth}`}
+        className={` fixed top-0 left-0 h-screen overflow-y-scroll ${sidebarWidth}`}
       >
         <Sidebar />
       </div>
