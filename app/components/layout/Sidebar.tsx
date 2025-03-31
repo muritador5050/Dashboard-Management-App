@@ -3,7 +3,7 @@ import { LogOut, X, Rocket } from 'lucide-react';
 import Link from 'next/link';
 import { routes } from '@/lib/route';
 import { NavigationItemComponent } from '../NavigationItems';
-import { useNav } from '@/context/ThemeContext';
+import { useDrawer, useNav } from '@/context/ThemeContext';
 import { useEffect, useState } from 'react';
 import {
   Drawer,
@@ -18,7 +18,8 @@ import {
 const Sidebar = () => {
   const { isWide, closeSideBar } = useNav();
   const [isMinWidth, setIsMinWidth] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onClose } = useDrawer();
 
   useEffect(() => {
     const checkWidth = () => setIsMinWidth(window.innerWidth >= 980);
@@ -33,19 +34,25 @@ const Sidebar = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
+          <DrawerHeader>
+            <span className='flex justify-between items-center'>
+              <Rocket size={48} />
+              <h2 className='font-bold'>Admin</h2>
+            </span>
+          </DrawerHeader>
           <DrawerBody>
             <aside className='bg-custom-bg text-custom-color w-80 p-4'>
               <span className='flex justify-between items-center'>
-                <span className='flex justify-between items-center'>
+                {/* <span className='flex justify-between items-center'>
                   <Rocket size={48} />
                   {!isWide && <h2 className='font-bold'>Admin</h2>}
-                </span>
-                <span
+                </span> */}
+                {/* <span
                   className='cursor-pointer min-[980px]:hidden'
                   onClick={closeSideBar}
                 >
                   <X />
-                </span>
+                </span> */}
               </span>
               <nav className='mt-5'>
                 {routes.map((item, index) => (

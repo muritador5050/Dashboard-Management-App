@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { createContext } from 'react';
 
 type NavContextType = {
-  isOpen: boolean;
+  // isOpen: boolean;
   collapse: boolean;
   isWide: boolean;
   handleOpenSiderBar: () => void;
@@ -21,11 +21,18 @@ interface CartContextProps {
   deleteItem: (id: number) => void;
   clearCart: () => void;
 }
+interface DrawerContextProps {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
 //Createcontext
 export const NavContextProvider = createContext<NavContextType | null>(null);
 export const CartContext = createContext<CartContextProps | undefined>(
   undefined
 );
+const DrawerContext = createContext<DrawerContextProps | undefined>(undefined);
 
 //Context Api
 export default function NavContext({
@@ -37,6 +44,11 @@ export default function NavContext({
   const [collapse, setCollapse] = useState(false);
   const [isWide, setIsWide] = useState(false);
   const [cart, setCart] = useState<Product[]>([]);
+
+  //Drawer
+  const onOpen = () => setIsOpen(true);
+  const onClose = () => setIsOpen(false);
+
   //toggle function
   const handleOpenSiderBar = () => {
     setIsOpen(true);
@@ -121,7 +133,7 @@ export default function NavContext({
     <NavContextProvider.Provider
       value={{
         isWide,
-        isOpen,
+        // isOpen,
         handleOpenSiderBar,
         collapse,
         toggleSiderbarWidth,
@@ -129,18 +141,20 @@ export default function NavContext({
         closeSideBar,
       }}
     >
-      <CartContext
-        value={{
-          cart,
-          addToCart,
-          increaseQuantity,
-          decreaseQuantity,
-          deleteItem,
-          clearCart,
-        }}
-      >
-        {children}
-      </CartContext>
+      <DrawerContext value={{ isOpen, onOpen, onClose }}>
+        <CartContext
+          value={{
+            cart,
+            addToCart,
+            increaseQuantity,
+            decreaseQuantity,
+            deleteItem,
+            clearCart,
+          }}
+        >
+          {children}
+        </CartContext>
+      </DrawerContext>
     </NavContextProvider.Provider>
   );
 }
@@ -159,4 +173,12 @@ export const useCart = () => {
     throw new Error('it must be used within a Provider');
   }
   return cart;
+};
+
+export const useDrawer = () => {
+  const context = useContext(DrawerContext);
+  if (!context) {
+    throw new Error('useDrawer must be used within a DrawerProvider');
+  }
+  return context;
 };

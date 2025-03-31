@@ -13,7 +13,7 @@ import {
   ArrowUpWideNarrow,
   Rocket,
 } from 'lucide-react';
-import { useNav } from '@/context/ThemeContext';
+import { useDrawer, useNav } from '@/context/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -21,6 +21,7 @@ import Image from 'next/image';
 export default function Navbar() {
   const { collapse, handleCollapse, handleOpenSiderBar, toggleSiderbarWidth } =
     useNav();
+  const { onOpen } = useDrawer();
   const [swipeModal, setSwipeModal] = useState(false);
   const [search, setSearch] = useState('');
   return (
@@ -30,7 +31,7 @@ export default function Navbar() {
         <div className='px-2 min-[980px]:hidden'>
           <div className='flex justify-between items-center'>
             <span>
-              <AlignJustify onClick={handleOpenSiderBar} />
+              <AlignJustify onClick={onOpen} />
             </span>
             <span className='flex gap-4 items-center'>
               <Rocket /> Admin
