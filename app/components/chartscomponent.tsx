@@ -22,7 +22,7 @@ import {
   type DailyProfitData,
 } from '../lib/utils';
 import { dailyProfitData, yearlyProfit } from '../lib/datas';
-import { Image } from '@chakra-ui/react';
+import { Image, Progress } from '@chakra-ui/react';
 
 // data
 export function EarningsChart() {
@@ -59,23 +59,26 @@ export function EarningsChart() {
   };
 
   return (
-    <div className='rounded-xl bg-custom-bg  p-3 text-custom-color'>
-      <span className='flex justify-between items-center'>
-        <small>Latest Deal </small> <small>12,345</small>
-      </span>{' '}
-      <span className='flex justify-between items-center'>
-        <small>Last 7days </small> <small>-32%</small>
-      </span>{' '}
-      <ResponsiveContainer aspect={0.85}>
+    <div className='rounded-xl bg-custom-bg p-3 text-custom-color'>
+      <div className='flex flex-col gap-1'>
+        <span className='flex justify-between items-center text-sm'>
+          <small>Latest Deal</small>
+          <small>12,345</small>
+        </span>
+        <span className='flex justify-between items-center text-sm'>
+          <small>Last 7 Days</small>
+          <small className='text-red-500'>-32%</small>
+        </span>
+      </div>
+
+      <ResponsiveContainer width='100%' aspect={0.9}>
         <BarChart
           data={chartData}
-          margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
+          margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
         >
           <XAxis dataKey='day' domain={[0, 20]} />
           <Tooltip
-            itemStyle={{
-              fontSize: 10,
-            }}
+            itemStyle={{ fontSize: 10 }}
             wrapperStyle={customTooltipStyle}
             contentStyle={customTooltipStyle}
           />
@@ -83,7 +86,7 @@ export function EarningsChart() {
             dataKey='thisYear'
             stackId='a'
             fill='red'
-            radius={[100, 100, 100, 100]}
+            radius={[10, 10, 0, 0]}
             barSize={10}
             style={{ pointerEvents: 'none' }}
           />
@@ -91,7 +94,7 @@ export function EarningsChart() {
             dataKey='lastYear'
             stackId='a'
             fill='#82ca9d'
-            radius={[100, 100, 100, 100]}
+            radius={[10, 10, 0, 0]}
             style={{ pointerEvents: 'none' }}
           />
         </BarChart>
@@ -102,7 +105,7 @@ export function EarningsChart() {
 
 export function LatestDeal() {
   return (
-    <div className='h-96 p-4 rounded-xl bg-custom-bg  p-3 text-custom-color flex flex-col justify-between'>
+    <div className='rounded-xl bg-custom-bg py-10 px-3 text-custom-color flex flex-col '>
       <div>
         <span className='flex justify-between items-center'>
           <small>Earning </small> <small>86.5%</small>
@@ -112,26 +115,42 @@ export function LatestDeal() {
         </span>{' '}
       </div>
       <div>
-        <div className=''>
-          <span className='flex justify-between'>
+        <div className='mt-5'>
+          <div className='flex justify-between'>
             <small>{formatCurrency(98500)}</small>{' '}
             <small>{formatCurrency(122900)}</small>
-          </span>
-          <progress
-            className='[&::-webkit-progress-bar]:h-[10px] [&::-webkit-progress-value]:h-[10px] [&::-webkit-progress-bar]:rounded-3xl [&::-webkit-progress-value]:rounded-3xl [&::-webkit-progress-bar]:bg-slate-300 [&::-webkit-progress-value]:bg-sky-700 [&::-moz-progress-bar]:bg-slate-400'
-            value='70'
-            max='100'
-          ></progress>
-          <small className='-mt-5'>Coupons used:18/22</small>
+          </div>
+          <Progress
+            style={{ borderRadius: '20px' }}
+            value={70}
+            h='1.5'
+            mt='1'
+          />
+          <small className=''>Coupons used:18/22</small>
         </div>
-        <div className=''>
+        <div className='mt-5'>
           <small className=''>Recent purchasers</small>
           <div className='flex items-center mt-10 relative'>
-            <div className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center'></div>
-            <div className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center'></div>
-            <div className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center'></div>
-            <div className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center'></div>
-            <div className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center bg-custom-bg text-sm'>
+            <div
+              style={{ border: '2px solid white' }}
+              className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center'
+            ></div>
+            <div
+              style={{ border: '2px solid white' }}
+              className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center'
+            ></div>
+            <div
+              style={{ border: '2px solid white' }}
+              className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center'
+            ></div>
+            <div
+              style={{ border: '2px solid white' }}
+              className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center'
+            ></div>
+            <div
+              style={{ border: '2px solid white' }}
+              className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center bg-custom-bg text-sm'
+            >
               80+
             </div>
           </div>
@@ -153,23 +172,33 @@ const DailyProfitBreakdownChart: React.FC<{ data: DailyProfitData[] }> = ({
   data,
 }) => {
   return (
-    <ResponsiveContainer height={220}>
+    <ResponsiveContainer width='100%' aspect={2} minWidth={300}>
       <LineChart data={data}>
         <CartesianGrid strokeDasharray='3 3' />
-        <XAxis dataKey='day' fontSize={15} />
-        <YAxis tickFormatter={formatAxisTick} fontSize={20} />
+        <XAxis
+          dataKey='day'
+          fontSize={12} /* Default font size */
+          className='md:text-lg text-sm' /* Responsive font */
+        />
+        <YAxis
+          tickFormatter={formatAxisTick}
+          fontSize={14} /* Default font size */
+          className='md:text-lg text-sm' /* Responsive font */
+        />
         <Tooltip itemStyle={{ fontSize: 10 }} />
         <Line
           type='monotone'
           dataKey='breakdown.productA'
           stroke='#8884d8'
           name='Product A'
+          strokeWidth={2}
         />
         <Line
           type='monotone'
           dataKey='breakdown.productB'
           stroke='#82ca9d'
           name='Product B'
+          strokeWidth={2}
         />
       </LineChart>
     </ResponsiveContainer>
@@ -212,7 +241,7 @@ export function TotalOrders() {
   }, []);
 
   return (
-    <div className='bg-custom-bg rounded-xl p-4 min-h-[850px]'>
+    <div className='bg-custom-bg rounded-xl px-5 py-7 '>
       <div className='flex relative border-b-2 border-indigo-600 mb-10  min-h-1/2'>
         <div className='flex flex-col gap-5'>
           <span>
@@ -274,17 +303,20 @@ export function TotalOrders() {
 
 export function YearlyProfitPieChart() {
   return (
-    <div className='bg-custom-bg rounded-xl p-3'>
-      <span className='flex justify-between'>
+    <div className='bg-custom-bg rounded-xl px-3 py-7.5 w-full max-w-md mx-auto'>
+      {/* Header */}
+      <div className='flex justify-between text-sm md:text-base'>
         <p>Profit</p>
         <small>432</small>
-      </span>
-      <span className='flex justify-between'>
+      </div>
+      <div className='flex justify-between text-sm md:text-base'>
         <p>Years</p>
         <small>32%</small>
-      </span>
-      <div className=''>
-        <ResponsiveContainer aspect={0.95}>
+      </div>
+
+      {/* Chart Container */}
+      <div className='flex justify-center'>
+        <ResponsiveContainer width='100%' aspect={1.2} minWidth={250}>
           <PieChart>
             <Pie
               data={yearlyProfit}
@@ -292,8 +324,8 @@ export function YearlyProfitPieChart() {
               nameKey='name'
               cx='50%'
               cy='50%'
-              innerRadius={120}
-              outerRadius={140}
+              innerRadius='45%' /* Adjust based on screen */
+              outerRadius='60%' /* Adjust based on screen */
               fill='#8884d8'
             >
               {yearlyProfit.map((entry, index) => (
@@ -304,7 +336,11 @@ export function YearlyProfitPieChart() {
           </PieChart>
         </ResponsiveContainer>
       </div>
-      <p className='text-center'>$18k profit more then last year</p>
+
+      {/* Footer Text */}
+      <p className='text-center text-xs md:text-sm mt-2'>
+        $18k profit more than last year
+      </p>
     </div>
   );
 }

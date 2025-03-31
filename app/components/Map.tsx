@@ -1,35 +1,37 @@
 'use client';
-import { Progress } from '@chakra-ui/react';
-import { AspectRatio } from '@chakra-ui/react';
+import { Progress, AspectRatio } from '@chakra-ui/react';
+
 export default function MapComponent() {
   return (
-    <div className=' flex flex-col justify-between  bg-custom-bg rounded-xl h-[650px] p-3 min-[980px]:w-[400px]'>
-      <div className='h-1/2'>
+    <div className='flex flex-col justify-between bg-custom-bg rounded-xl px-3 py-5 mx-auto h-auto min-[980px]:w-[350px] '>
+      {/* Map Section */}
+      <h1 className='text-xxl'>Visit From USA</h1>
+      <div className='h-64 md:h-1/2 mt-3 mb-15'>
         <AspectRatio ratio={3 / 2}>
           <iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.952912260219!2d3.375295414770757!3d6.5276316452784755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8b2ae68280c1%3A0xdc9e87a367c3d9cb!2sLagos!5e0!3m2!1sen!2sng!4v1567723392506!5m2!1sen!2sng' />
         </AspectRatio>
       </div>
-      <div className='h-1/2'>
-        <span className='flex justify-between'>
-          <p>LA</p>
-          <Progress size='sm' value={25} colorScheme='pink' />
-          <p>25%</p>
-        </span>
-        <span className='flex justify-between'>
-          <p>NY</p>
-          <Progress size='sm' value={25} colorScheme='pink' />
-          <p>25%</p>
-        </span>
-        <span className='flex justify-between'>
-          <p>KA</p>
-          <Progress size='sm' value={25} colorScheme='pink' />
-          <p>25%</p>
-        </span>
-        <span className='flex justify-between'>
-          <p>AZ</p>
-          <Progress size='sm' value={25} colorScheme='pink' />
-          <p>25%</p>
-        </span>
+
+      {/* Progress Section */}
+      <div className='flex flex-col gap-4 mt-4'>
+        {[
+          { name: 'LA', value: 25 },
+          { name: 'NY', value: 45 },
+          { name: 'KA', value: 60 },
+          { name: 'AZ', value: 80 },
+        ].map((item, index) => (
+          <div key={index} className='flex items-center justify-between gap-3'>
+            <p className='w-10 text-sm md:text-base'>{item.name}</p>
+            <Progress
+              size='sm'
+              value={item.value}
+              colorScheme='pink'
+              className='flex-1'
+              style={{ borderRadius: '20px' }}
+            />
+            <p className='text-sm md:text-base'>{item.value}%</p>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -1,83 +1,91 @@
 import React, { JSX, useEffect, useState } from 'react';
 import { formatTime, Product } from '../lib/utils';
-import Image from 'next/image';
+import { Image } from '@chakra-ui/react';
 import { Badge, Progress } from '@chakra-ui/react';
+import { UnicodeStarRating } from './StarRating';
 
 //tables
 export default function ProductWithStatusAndPayment() {
   const [products, setProducts] = useState<Product[]>([]);
+
   useEffect(() => {
     fetch('https://dummyjson.com/products?limit=5')
       .then((response) => response.json())
       .then((data: { products: Product[] }) => {
-        const productsWithPaymentAndStatus = data.products.map((product) => ({
+        const updatedProducts: Product[] = data.products.map((product) => ({
           ...product,
-          payment: getPaymentStatus(product.price),
+          payment: getPaymentStatus(product.price), // Ensure JSX output
           status: getOrderStatus(product.stock),
         }));
-        setProducts(productsWithPaymentAndStatus);
+        setProducts(updatedProducts);
       })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
+      .catch((error) => console.error('Error fetching data:', error));
   }, []);
 
+  // Function that returns JSX based on price
   const getPaymentStatus = (price: number): JSX.Element => {
     if (price > 50) {
       return (
         <span className='flex flex-col'>
           <small>Paid</small>
-          <progress max={100} value={100}></progress>
+          <Progress value={100} colorScheme='green' size='sm' />
         </span>
       );
     } else {
       return (
-        <span className='flex flex-col'>
-          <small> pending</small>
-          <Progress size='sm' value={25} />
-        </span>
+        <div className='flex flex-col gap-1'>
+          {[
+            { status: 'Pending', value: 25 },
+            { status: 'Cancelled', value: 45 },
+            { status: 'Confirmed', value: 60 },
+            { status: 'Unpaid', value: 80 },
+          ].map((item, index) => (
+            <div key={index} className='flex flex-col'>
+              <small>{item.status}</small>
+              <Progress value={item.value} colorScheme='red' size='sm' />
+            </div>
+          ))}
+        </div>
       );
     }
   };
 
+  // Determine order status
   const getOrderStatus = (stock: number): string => {
-    if (stock > 0) {
-      return 'confirmed';
-    } else {
-      return 'pending';
-    }
+    return stock > 0 ? 'Confirmed' : 'Pending';
   };
 
   return (
     <div className='w-full overflow-x-auto'>
-      <table className='table-auto min-[980px]:w-full'>
+      <table className='table-auto w-full border-collapse'>
         <thead>
-          <tr className=' text-left h-24'>
-            <th>Products</th>
-            <th></th>
-            <th>Payment</th>
-            <th>Status</th>
+          <tr className='text-left h-16 border-b'>
+            <th className='px-4 py-2'>Products</th>
+            <th className='px-4 py-2'>Payment</th>
+            <th className='px-4 py-2 text-right'>Status</th>
           </tr>
         </thead>
         <tbody>
           {products.map((product) => (
-            <tr key={product.id} className='border-t h-24'>
-              <td className='flex items-center '>
+            <tr key={product.id} className='border-t h-16'>
+              <td className='px-4 py-2 flex items-center gap-4'>
                 <Image
                   src={product.images[0]}
                   alt='product-img'
-                  width={product.dimensions.width * 5}
-                  height={product.dimensions.height * 5}
+                  width={70}
+                  height={70}
+                  className='rounded-full bg-white'
                 />
+                <span className='whitespace-nowrap'>{product.title}</span>
               </td>
-              <td>{product.title}</td>
-              <td>{product.payment}</td>
-              <td>
+              <td className='px-4 py-2'>{product.payment}</td>
+              <td className='px-4 py-2 text-right'>
                 <Badge
                   borderRadius='2xl'
                   p={1}
                   variant='subtle'
                   colorScheme='green'
+                  fontSize='.75rem'
                 >
                   {product.status}
                 </Badge>
@@ -118,39 +126,49 @@ export function ProductWithRewiewAndTime() {
 
   return (
     <div className='w-full overflow-x-auto'>
-      <table className='table-auto min-[980px]:w-full'>
+      <table className='table-auto w-full border-collapse'>
         <thead>
-          <tr className='h-24'>
-            <th className='text-left'>#</th>
-            <th className='text-left '>Products</th>
-            <th></th>
-            <th className='text-left'>Customer</th>
-            <th className='text-left'>Reviews</th>
-            <th className='text-left'>Status</th>
-            <th className='text-left'>Time</th>
+          <tr className='h-16 border-b'>
+            <th className='text-left px-4 py-2'>#</th>
+            <th className='text-left px-4 py-2'>Products</th>
+            <th className='text-left px-4 py-2'>Customer</th>
+            <th className='text-left px-4 py-2'>Reviews</th>
+            <th className='text-left px-4 py-2'>Status</th>
+            <th className='text-left px-4 py-2'>Time</th>
           </tr>
         </thead>
         <tbody>
           {products.map((product) => (
             <tr key={product.id} className='border-t h-24'>
-              <td className='text-left'>
+              <td className='px-4 py-2'>
                 <input type='checkbox' />
               </td>
-              <td className='text-leftflex items-center '>
+              <td className='px-4 py-2 flex items-center gap-4'>
                 <Image
                   src={product.images[0]}
                   alt='product-img'
                   width={product.dimensions.width * 5}
                   height={product.dimensions.height * 5}
+                  className='rounded-md'
                 />
+                <span>{product.title}</span>
               </td>
-              <td>{product.title}</td>
-              <td className='text-left'>{product.warrantyInformation}</td>
-              <td className='text-left'>
-                {<UnicodeStarRating rating={product.rating} />}
+              <td className='px-4 py-2'>{product.warrantyInformation}</td>
+              <td className='px-4 py-2'>
+                <UnicodeStarRating rating={product.rating} />
               </td>
-              <td className='text-left'>{product.status}</td>
-              <td className='text-left'>
+              <td className='px-4 py-2'>
+                <Badge
+                  borderRadius='2xl'
+                  p={1}
+                  variant='subtle'
+                  colorScheme='green'
+                  fontSize='0.75rem'
+                >
+                  {product.status}
+                </Badge>
+              </td>
+              <td className='px-4 py-2'>
                 {formatTime(product.meta?.createdAt)}
               </td>
             </tr>
@@ -158,16 +176,5 @@ export function ProductWithRewiewAndTime() {
         </tbody>
       </table>
     </div>
-  );
-}
-
-export function UnicodeStarRating({ rating }: { rating: number }) {
-  const filledStars = '★'.repeat(rating);
-  const emptyStars = '☆'.repeat(5 - rating);
-  return (
-    <span>
-      {filledStars}
-      {emptyStars}
-    </span>
   );
 }

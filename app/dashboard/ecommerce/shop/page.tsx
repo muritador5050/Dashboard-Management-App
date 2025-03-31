@@ -22,7 +22,7 @@ import {
 import Link from 'next/link';
 import Search from '@/components/Search';
 import { Product } from '@/lib/utils';
-import { UnicodeStarRating } from '@/components/TableComponent';
+import { UnicodeStarRating } from '@/components/StarRating';
 import { useCart } from '@/context/ThemeContext';
 
 //Shop

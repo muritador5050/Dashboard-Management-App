@@ -23,7 +23,7 @@ import {
 } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { Product } from '@/lib/utils';
-import { UnicodeStarRating } from '@/components/TableComponent';
+import { UnicodeStarRating } from '@/components/StarRating';
 import Link from 'next/link';
 import { useCart } from '@/context/ThemeContext';
 import Loading from '@/loading';
