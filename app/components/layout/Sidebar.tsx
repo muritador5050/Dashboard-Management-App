@@ -64,7 +64,7 @@ const Sidebar = () => {
   }
 
   return (
-    <aside className={` bg-custom-bg text-custom-color w-80 p-4`}>
+    <aside className={`bg-custom-bg text-custom-color w-64 py-4 px-2`}>
       <span className='flex justify-between items-center'>
         <span className='flex justify-between items-center'>
           <Rocket size={48} />

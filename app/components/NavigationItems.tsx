@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
+
+//NavigationItem
 export const NavigationItemComponent: React.FC<{
   item: NavigationItem;
   isWide: boolean;
@@ -20,14 +22,12 @@ export const NavigationItemComponent: React.FC<{
       {item.children ? (
         <div
           onClick={() => setIsOpen(!isOpen)}
-          className={`flex items-center justify-between w-full p-2 hover:bg-purple-700  rounded cursor-pointer `}
+          className={`flex items-center justify-between w-full p-2 hover:bg-purple-700 transition duration-300 rounded cursor-pointer `}
         >
           <div className='flex items-center gap-3'>
             {item.icon && <span>{item.icon}</span>}
             {!isWide && (
-              <span className='text-xl'>
-                {item.title && capitalizeFirstLetter(item.title)}
-              </span>
+              <span>{item.title && capitalizeFirstLetter(item.title)}</span>
             )}
           </div>
           {!isWide && (
@@ -39,7 +39,7 @@ export const NavigationItemComponent: React.FC<{
       ) : (
         <Link
           href={`/dashboard/${item.segment}`}
-          className={`flex text-xl items-center gap-3 p-2 hover:bg-red-700 transition duration-500  rounded block`}
+          className={`flex items-center gap-3 p-2 hover:bg-red-700 transition duration-500  rounded block`}
         >
           {item.icon && <span>{item.icon}</span>}
           {!isWide && <span>{item.title}</span>}
@@ -57,7 +57,7 @@ export const NavigationItemComponent: React.FC<{
             {item.children.map((child, idx) => (
               <Link
                 href={`/dashboard/${item.title}/${child.segment}`}
-                className={`flex text-xl items-center gap-2 p-2 rounded block transition `}
+                className={`flex items-center gap-2 p-2 rounded block transition `}
                 key={idx}
               >
                 {child.icon && <span>{child.icon}</span>}

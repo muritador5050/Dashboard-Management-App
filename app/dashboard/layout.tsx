@@ -7,18 +7,16 @@ import { useNav } from '@/context/ThemeContext';
 
 function DasboardLayout({ children }: { children: React.ReactNode }) {
   const { isWide } = useNav();
-  const sidebarWidth = isWide ? 'w-20' : '';
-  const contentMargin = isWide ? 'ml-20' : 'ml-84';
+  const sidebarWidth = isWide ? 'w-20' : 'w-fit-content';
+  const contentMargin = isWide ? 'ml-20' : 'ml-67';
 
   return (
-    <div className='flex bg-gray-800 min-h-screen text-white'>
-      {/* {isOpen && ( */}
+    <div className='flex bg-gray-800 min-h-screen text-custom-color'>
       <div
-        className={` fixed top-0 left-0 h-screen overflow-y-scroll ${sidebarWidth}`}
+        className={`fixed top-0 left-0 h-screen overflow-y-scroll ${sidebarWidth}`}
       >
         <Sidebar />
       </div>
-      {/* // )} */}
       <div className={`${contentMargin} w-full max-[980px]:ml-0`}>
         <Navbar />
         <main className='mx-5'>{children}</main>

@@ -21,8 +21,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <header>
         <h1 className='text-3xl'>{pageTitle}</h1>
         <div className='flex items-center'>
-          <Link href='/dashboard' className='hover:text-blue-500'>
-            Home
+          <Link href='/dashboard'>
+            <span className='hover:text-blue-500'>Home</span>
           </Link>
           <Dot size={28} />
           <small>{pageTitle}</small>
