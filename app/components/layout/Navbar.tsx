@@ -19,8 +19,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 //Navbar
 export default function Navbar() {
-  const { collapse, handleCollapse, handleOpenSiderBar, toggleSiderbarWidth } =
-    useNav();
+  const { collapse, handleCollapse, toggleSiderbarWidth } = useNav();
   const { onOpen } = useDrawer();
   const [swipeModal, setSwipeModal] = useState(false);
   const [search, setSearch] = useState('');
