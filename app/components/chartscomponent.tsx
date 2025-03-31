@@ -245,7 +245,6 @@ export function TotalOrders() {
           ))}
         </div>
         <div className='absolute bottom-0 right-0'>
-          {/* < src='/man.png' alt='man' priority width={400} height={400} /> */}
           <Image
             src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/backgrounds/man-working-on-laptop.png'
             alt='man'

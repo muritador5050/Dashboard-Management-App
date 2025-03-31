@@ -49,42 +49,44 @@ export default function ProductWithStatusAndPayment() {
   };
 
   return (
-    <table className='table-auto min-[980px]:w-full'>
-      <thead>
-        <tr className=' text-left h-24'>
-          <th>Products</th>
-          <th></th>
-          <th>Payment</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {products.map((product) => (
-          <tr key={product.id} className='border-t h-24'>
-            <td className='flex items-center '>
-              <Image
-                src={product.images[0]}
-                alt='product-img'
-                width={product.dimensions.width * 5}
-                height={product.dimensions.height * 5}
-              />
-            </td>
-            <td>{product.title}</td>
-            <td>{product.payment}</td>
-            <td>
-              <Badge
-                borderRadius='2xl'
-                p={1}
-                variant='subtle'
-                colorScheme='green'
-              >
-                {product.status}
-              </Badge>
-            </td>
+    <div className='w-full overflow-x-auto'>
+      <table className='table-auto min-[980px]:w-full'>
+        <thead>
+          <tr className=' text-left h-24'>
+            <th>Products</th>
+            <th></th>
+            <th>Payment</th>
+            <th>Status</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {products.map((product) => (
+            <tr key={product.id} className='border-t h-24'>
+              <td className='flex items-center '>
+                <Image
+                  src={product.images[0]}
+                  alt='product-img'
+                  width={product.dimensions.width * 5}
+                  height={product.dimensions.height * 5}
+                />
+              </td>
+              <td>{product.title}</td>
+              <td>{product.payment}</td>
+              <td>
+                <Badge
+                  borderRadius='2xl'
+                  p={1}
+                  variant='subtle'
+                  colorScheme='green'
+                >
+                  {product.status}
+                </Badge>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -115,43 +117,47 @@ export function ProductWithRewiewAndTime() {
   };
 
   return (
-    <table className='table-auto min-[980px]:w-full'>
-      <thead>
-        <tr className='h-24'>
-          <th className='text-left'>#</th>
-          <th className='text-left '>Products</th>
-          <th></th>
-          <th className='text-left'>Customer</th>
-          <th className='text-left'>Reviews</th>
-          <th className='text-left'>Status</th>
-          <th className='text-left'>Time</th>
-        </tr>
-      </thead>
-      <tbody>
-        {products.map((product) => (
-          <tr key={product.id} className='border-t h-24'>
-            <td className='text-left'>
-              <input type='checkbox' />
-            </td>
-            <td className='text-leftflex items-center '>
-              <Image
-                src={product.images[0]}
-                alt='product-img'
-                width={product.dimensions.width * 5}
-                height={product.dimensions.height * 5}
-              />
-            </td>
-            <td>{product.title}</td>
-            <td className='text-left'>{product.warrantyInformation}</td>
-            <td className='text-left'>
-              {<UnicodeStarRating rating={product.rating} />}
-            </td>
-            <td className='text-left'>{product.status}</td>
-            <td className='text-left'>{formatTime(product.meta?.createdAt)}</td>
+    <div className='w-full overflow-x-auto'>
+      <table className='table-auto min-[980px]:w-full'>
+        <thead>
+          <tr className='h-24'>
+            <th className='text-left'>#</th>
+            <th className='text-left '>Products</th>
+            <th></th>
+            <th className='text-left'>Customer</th>
+            <th className='text-left'>Reviews</th>
+            <th className='text-left'>Status</th>
+            <th className='text-left'>Time</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {products.map((product) => (
+            <tr key={product.id} className='border-t h-24'>
+              <td className='text-left'>
+                <input type='checkbox' />
+              </td>
+              <td className='text-leftflex items-center '>
+                <Image
+                  src={product.images[0]}
+                  alt='product-img'
+                  width={product.dimensions.width * 5}
+                  height={product.dimensions.height * 5}
+                />
+              </td>
+              <td>{product.title}</td>
+              <td className='text-left'>{product.warrantyInformation}</td>
+              <td className='text-left'>
+                {<UnicodeStarRating rating={product.rating} />}
+              </td>
+              <td className='text-left'>{product.status}</td>
+              <td className='text-left'>
+                {formatTime(product.meta?.createdAt)}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
