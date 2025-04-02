@@ -6,6 +6,7 @@ import { NavigationItemComponent } from '../NavigationItems';
 import { useDrawer, useNav } from '@/context/ThemeContext';
 import { useEffect, useState } from 'react';
 import {
+  Box,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -14,6 +15,7 @@ import {
   DrawerHeader,
   DrawerOverlay,
 } from '@chakra-ui/react';
+import { signOutUser } from '@/lib/authentication';
 
 const Sidebar = () => {
   const { isWide, closeSideBar } = useNav();
@@ -85,9 +87,11 @@ const Sidebar = () => {
         {!isWide && (
           <div className='w-[100%] flex justify-between items-center p-3 bg-gray-800 rounded-4xl h-32 sticky left-0 bottom-0'>
             <small>admin</small>
-            <Link href='/auth/login'>
+            {/* <Link href='/auth/login'> */}
+            <Box onClick={signOutUser}>
               <LogOut size={32} className='inline-block mr-2' />
-            </Link>
+            </Box>
+            {/* </Link> */}
           </div>
         )}
       </nav>

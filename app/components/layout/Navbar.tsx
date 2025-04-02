@@ -17,6 +17,7 @@ import { useDrawer, useNav } from '@/context/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
+import Username from '@/lib/username';
 //Navbar
 export default function Navbar() {
   const { collapse, handleCollapse, toggleSiderbarWidth } = useNav();
@@ -134,7 +135,8 @@ export default function Navbar() {
                 width={50}
                 height={50}
               />
-              <small className='wrap-all'>Mike Nelson admin</small>
+              {/* <small className='wrap-all'>Mike Nelson admin</small> */}
+              <Username />
             </li>
           </ul>
         </div>
