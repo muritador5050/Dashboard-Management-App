@@ -18,6 +18,8 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { SignInCredentialProp } from '@/lib/utils';
+import { loginUser, signInGoogle } from '@/lib/authentication';
+import { useRouter } from 'next/navigation';
 
 //Loginpage
 export default function LoginPage() {
@@ -25,10 +27,22 @@ export default function LoginPage() {
     username: '',
     password: '',
   });
+  const router = useRouter();
 
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCredential((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSignIn = async () => {
+    try {
+      const userData = await loginUser(credential);
+      if (userData) {
+        router.push('/dashboard');
+      }
+    } catch (error) {
+      console.error('Sign-in failed:', error);
+    }
   };
 
   return (
@@ -67,7 +81,9 @@ export default function LoginPage() {
               src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/google-icon.svg'
               alt='google'
             />
-            <Text fontSize='xs'>Sign in with Google</Text>
+            <Text fontSize='xs' onClick={signInGoogle}>
+              Sign in with Google
+            </Text>
           </Center>
           <Center
             gap={3}
@@ -113,7 +129,13 @@ export default function LoginPage() {
               <Text color='blue'>Forget password?</Text>
             </Link>{' '}
           </Flex>
-          <Button colorScheme='blue' width='100%' borderRadius='3xl' mt={5}>
+          <Button
+            onClick={handleSignIn}
+            colorScheme='blue'
+            width='100%'
+            borderRadius='3xl'
+            mt={5}
+          >
             Sign In
           </Button>
         </FormControl>

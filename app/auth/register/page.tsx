@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { SignUpCredentialProp } from '@/lib/utils';
+import { registerUserWithUsername } from '@/lib/authentication';
 
 //Loginpage
 export default function SignUp() {
@@ -115,7 +116,13 @@ export default function SignUp() {
             onChange={handleOnchange}
             mb={5}
           />
-          <Button colorScheme='blue' width='100%' borderRadius='3xl' mt={5}>
+          <Button
+            onClick={() => registerUserWithUsername(credential)}
+            colorScheme='blue'
+            width='100%'
+            borderRadius='3xl'
+            mt={5}
+          >
             Sign Up
           </Button>
         </FormControl>
