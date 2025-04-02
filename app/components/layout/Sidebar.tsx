@@ -29,13 +29,14 @@ const Sidebar = () => {
     window.addEventListener('resize', checkWidth);
     return () => window.removeEventListener('resize', checkWidth);
   }, []);
+
+  //signOut
   const handleSignOut = async () => {
     try {
       await signOutUser();
-
       router.push('/auth/login');
     } catch (error) {
-      console.error('Sign-out failed:', error);
+      console.error(error);
     }
   };
 
