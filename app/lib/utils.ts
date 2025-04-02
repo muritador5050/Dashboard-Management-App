@@ -1,5 +1,17 @@
 import { JSX } from 'react';
 
+//Authentication
+export type SignInCredentialProp = {
+  username: string;
+  password: string;
+};
+
+export type SignUpCredentialProp = {
+  name: string;
+  username: string;
+  password: string;
+};
+
 export interface NavigationItem {
   title?: string | null;
   segment?: string;

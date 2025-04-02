@@ -1,6 +1,5 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { ChangeEvent, useState } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -8,7 +7,6 @@ import {
   Box,
   Flex,
   Checkbox,
-  Link,
   Heading,
   Stack,
   Image,
@@ -18,19 +16,23 @@ import {
   Center,
   AbsoluteCenter,
 } from '@chakra-ui/react';
-export default function LoginPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
+import Link from 'next/link';
+import { SignInCredentialProp } from '@/lib/utils';
 
-  const handleLogin = () => {
-    localStorage.setItem('user', JSON.stringify({ email }));
-    router.push('/dashboard');
+//Loginpage
+export default function LoginPage() {
+  const [credential, setCredential] = useState<SignInCredentialProp>({
+    username: '',
+    password: '',
+  });
+
+  const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCredential((prev) => ({ ...prev, [name]: value }));
   };
+
   return (
-    <Box
-      p={7}
-      className='bg-custom-bg text-custom-color rounded-xl flex flex-col items-center min-[980px]:flex-row gap-9 m-auto'
-    >
+    <Box className='bg-custom-bg text-custom-color p-9 rounded-xl flex flex-col items-center min-[980px]:flex-row gap-9 m-auto'>
       <Stack>
         <Flex>
           <Image
@@ -90,20 +92,37 @@ export default function LoginPage() {
         </Box>
         <FormControl>
           <FormLabel>Username </FormLabel>
-          <Input type='email' mb={5} />
+          <Input
+            type='email'
+            name='username'
+            value={credential.username}
+            onChange={handleOnchange}
+            mb={5}
+          />
           <FormLabel>Password</FormLabel>
-          <Input type='password' mb={5} />
+          <Input
+            type='password'
+            name='password'
+            value={credential.password}
+            onChange={handleOnchange}
+            mb={5}
+          />
           <Flex justify='space-between' mb={5}>
             <Checkbox defaultChecked>Remember me</Checkbox>{' '}
-            <Link color='blue'>Forget password?</Link>{' '}
+            <Link href={'/auth/passwordReset'}>
+              <Text color='blue'>Forget password?</Text>
+            </Link>{' '}
           </Flex>
           <Button colorScheme='blue' width='100%' borderRadius='3xl' mt={5}>
-            Sign in
+            Sign In
           </Button>
         </FormControl>
-        <Box>
-          New to Spike? <Link color='blue'>Create an Account</Link>
-        </Box>
+        <Flex gap={3}>
+          New to Spike?{' '}
+          <Link href={'/auth/register'}>
+            <Text color='blue'>Create an Account</Text>
+          </Link>
+        </Flex>
       </Stack>
     </Box>
   );
