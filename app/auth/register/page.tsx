@@ -18,14 +18,25 @@ import {
 import Link from 'next/link';
 import { SignUpCredentialProp } from '@/lib/utils';
 import { registerUserWithUsername } from '@/lib/authentication';
-
+import { useRouter } from 'next/navigation';
 //Loginpage
 export default function SignUp() {
   const [credential, setCredential] = useState<SignUpCredentialProp>({
     name: '',
-    username: '',
+    email: '',
     password: '',
   });
+  const router = useRouter();
+  const handleSignUp = async () => {
+    try {
+      const signUp = await registerUserWithUsername(credential);
+      if (signUp?.user) {
+        router.push('/auth/login');
+      }
+    } catch (error) {
+      console.error('Sign-in failed:', error);
+    }
+  };
 
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -103,8 +114,8 @@ export default function SignUp() {
           <FormLabel>Username </FormLabel>
           <Input
             type='email'
-            name='username'
-            value={credential.username}
+            name='email'
+            value={credential.email}
             onChange={handleOnchange}
             mb={5}
           />
@@ -117,7 +128,7 @@ export default function SignUp() {
             mb={5}
           />
           <Button
-            onClick={() => registerUserWithUsername(credential)}
+            onClick={handleSignUp}
             colorScheme='blue'
             width='100%'
             borderRadius='3xl'

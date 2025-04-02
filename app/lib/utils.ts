@@ -2,13 +2,13 @@ import { JSX } from 'react';
 
 //Authentication
 export type SignInCredentialProp = {
-  username: string;
+  email: string;
   password: string;
 };
 
 export type SignUpCredentialProp = {
   name: string;
-  username: string;
+  email: string;
   password: string;
 };
 

@@ -16,18 +16,28 @@ import {
   DrawerOverlay,
 } from '@chakra-ui/react';
 import { signOutUser } from '@/lib/authentication';
+import { useRouter } from 'next/navigation';
 
 const Sidebar = () => {
   const { isWide, closeSideBar } = useNav();
   const [isMinWidth, setIsMinWidth] = useState(false);
   const { isOpen, onClose } = useDrawer();
-
+  const router = useRouter();
   useEffect(() => {
     const checkWidth = () => setIsMinWidth(window.innerWidth >= 980);
     checkWidth(); // Run initially
     window.addEventListener('resize', checkWidth);
     return () => window.removeEventListener('resize', checkWidth);
   }, []);
+  const handleSignOut = async () => {
+    try {
+      await signOutUser();
+
+      router.push('/auth/login');
+    } catch (error) {
+      console.error('Sign-out failed:', error);
+    }
+  };
 
   if (!isMinWidth) {
     return isOpen ? (
@@ -88,7 +98,7 @@ const Sidebar = () => {
           <div className='w-[100%] flex justify-between items-center p-3 bg-gray-800 rounded-4xl h-32 sticky left-0 bottom-0'>
             <small>admin</small>
             {/* <Link href='/auth/login'> */}
-            <Box onClick={signOutUser}>
+            <Box onClick={handleSignOut}>
               <LogOut size={32} className='inline-block mr-2' />
             </Box>
             {/* </Link> */}

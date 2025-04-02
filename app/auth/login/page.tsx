@@ -24,7 +24,7 @@ import { useRouter } from 'next/navigation';
 //Loginpage
 export default function LoginPage() {
   const [credential, setCredential] = useState<SignInCredentialProp>({
-    username: '',
+    email: '',
     password: '',
   });
   const router = useRouter();
@@ -45,6 +45,16 @@ export default function LoginPage() {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const user = await signInGoogle();
+      if (user) {
+        router.push('/dashboard');
+      }
+    } catch (error) {
+      console.error('Sign-in failed:', error);
+    }
+  };
   return (
     <Box className='bg-custom-bg text-custom-color p-9 rounded-xl flex flex-col items-center min-[980px]:flex-row gap-9 m-auto'>
       <Stack>
@@ -81,7 +91,7 @@ export default function LoginPage() {
               src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/google-icon.svg'
               alt='google'
             />
-            <Text fontSize='xs' onClick={signInGoogle}>
+            <Text fontSize='xs' onClick={handleGoogleSignIn}>
               Sign in with Google
             </Text>
           </Center>
@@ -110,8 +120,8 @@ export default function LoginPage() {
           <FormLabel>Username </FormLabel>
           <Input
             type='email'
-            name='username'
-            value={credential.username}
+            name='email'
+            value={credential.email}
             onChange={handleOnchange}
             mb={5}
           />
