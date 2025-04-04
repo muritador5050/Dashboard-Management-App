@@ -27,7 +27,12 @@ export default function Details() {
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
-
+  const generateImageUrl = (tagOrTitle: string, id: number): string => {
+    const seed = encodeURIComponent(
+      tagOrTitle.toLowerCase().replace(/\s+/g, '-')
+    );
+    return `https://picsum.photos/seed/${seed + id}/600/400`;
+  };
   //Effect
   useEffect(() => {
     if (!id) {
@@ -35,24 +40,31 @@ export default function Details() {
       return;
     }
 
-    async function fetchProduct() {
+    async function fetchPost(): Promise<void> {
       setLoading(true);
       setError(null);
       try {
         const request = await fetch(`https://dummyjson.com/posts/${id}`);
         if (!request.ok) {
-          throw new Error('Failed to fetch product data');
+          throw new Error('Failed to fetch post data');
         }
         const response: PostProps = await request.json();
-        setPost(response);
+        const keyword = response.tags.length
+          ? response.tags[0]
+          : response.title;
+        const enrichedPost: PostProps & { imageUrl: string } = {
+          ...response,
+          imageUrl: generateImageUrl(keyword, response.id),
+        };
+        setPost(enrichedPost);
       } catch (err) {
-        setError(err + 'An error occurred');
+        setError(err + ' An error occurred');
       } finally {
         setLoading(false);
       }
     }
 
-    fetchProduct();
+    fetchPost();
   }, [id]);
 
   if (loading) {
@@ -80,15 +92,11 @@ export default function Details() {
       bg='rgb(17,28,45)'
       color='rgb(124, 143, 172)'
       cursor='pointer'
-      sx={{
-        transition: 'transform 0.2s ease-in-out',
-        _hover: { transform: 'translateY(-10px)' },
-      }}
     >
       <Image
         src={post.imageUrl}
         alt={post.title}
-        height='200px'
+        height='500px'
         objectFit='cover'
       />
 
