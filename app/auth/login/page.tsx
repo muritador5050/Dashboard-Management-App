@@ -20,6 +20,7 @@ import Link from 'next/link';
 import { SignInCredentialProp } from '@/lib/utils';
 import { loginUser, signInGoogle } from '@/lib/authentication';
 import { useRouter } from 'next/navigation';
+import useAuthRedirect from '@/lib/useAuthRedirect';
 
 //Loginpage
 export default function LoginPage() {
@@ -28,7 +29,7 @@ export default function LoginPage() {
     password: '',
   });
   const router = useRouter();
-
+  useAuthRedirect(false);
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCredential((prev) => ({ ...prev, [name]: value }));

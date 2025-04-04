@@ -11,6 +11,7 @@ import dynamic from 'next/dynamic';
 import ProductWithStatusAndPayment, {
   ProductWithRewiewAndTime,
 } from '../components/TableComponent';
+import useAuthRedirect from '@/lib/useAuthRedirect';
 
 const Dashboard = () => {
   const MyMap = useMemo(
@@ -21,7 +22,7 @@ const Dashboard = () => {
       }),
     []
   );
-
+  useAuthRedirect(false);
   return (
     <main className='min-h-screen'>
       <section className='min-[980px]:flex gap-7 mb-9'>
