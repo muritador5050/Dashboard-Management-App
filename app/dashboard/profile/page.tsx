@@ -1,9 +1,27 @@
 import React from 'react';
-
-export default function page() {
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+export default function Profile() {
   return (
     <div>
-      <h1>Profile</h1>
+      <Tabs>
+        <TabList justifyContent='flex-end'>
+          <Tab>Profile</Tab>
+          <Tab>Followers</Tab>
+          <Tab>Freinds</Tab>
+          <Tab>Gallery</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <p>one!</p>
+          </TabPanel>
+          <TabPanel>
+            <p>two!</p>
+          </TabPanel>
+          <TabPanel>
+            <p>three!</p>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </div>
   );
 }
