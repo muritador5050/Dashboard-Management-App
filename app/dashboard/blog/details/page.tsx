@@ -19,6 +19,7 @@ import { useSearchParams } from 'next/navigation';
 import { PostProps } from '@/lib/utils';
 import Loading from '@/loading';
 import { Eye, ThumbsUp } from 'lucide-react';
+import PageTitle from '@/components/pageTitle';
 
 //Details
 export default function Details() {
@@ -84,51 +85,54 @@ export default function Details() {
   }
 
   return (
-    <Card
-      key={post.id}
-      shadow='lg'
-      borderRadius='xl'
-      overflow='hidden'
-      bg='rgb(17,28,45)'
-      color='rgb(124, 143, 172)'
-      cursor='pointer'
-    >
-      <Image
-        src={post.imageUrl}
-        alt={post.title}
-        height='500px'
-        objectFit='cover'
-      />
+    <>
+      <PageTitle />
+      <Card
+        key={post.id}
+        shadow='lg'
+        borderRadius='xl'
+        overflow='hidden'
+        bg='rgb(17,28,45)'
+        color='rgb(124, 143, 172)'
+        cursor='pointer'
+      >
+        <Image
+          src={post.imageUrl}
+          alt={post.title}
+          height='500px'
+          objectFit='cover'
+        />
 
-      <CardHeader>
-        <Heading size='md'>{post.title}</Heading>
-      </CardHeader>
+        <CardHeader>
+          <Heading size='md'>{post.title}</Heading>
+        </CardHeader>
 
-      <CardBody>
-        <Text noOfLines={3}>{post.body}</Text>
-        <Wrap mt={3}>
-          {post.tags.map((tag) => (
-            <WrapItem key={tag}>
-              <Tag variant='subtle' colorScheme='blue'>
-                {tag}
-              </Tag>
-            </WrapItem>
-          ))}
-        </Wrap>
-      </CardBody>
+        <CardBody>
+          <Text noOfLines={3}>{post.body}</Text>
+          <Wrap mt={3}>
+            {post.tags.map((tag) => (
+              <WrapItem key={tag}>
+                <Tag variant='subtle' colorScheme='blue'>
+                  {tag}
+                </Tag>
+              </WrapItem>
+            ))}
+          </Wrap>
+        </CardBody>
 
-      <CardFooter>
-        <Flex gap={9}>
-          <Center gap={1}>
-            <Eye size={16} />
-            <Text fontSize='sm'>{post.views} views</Text>
-          </Center>
-          <Center gap={1}>
-            <ThumbsUp size={16} />
-            <Text fontSize='sm'>{post.reactions.likes} likes</Text>
-          </Center>
-        </Flex>
-      </CardFooter>
-    </Card>
+        <CardFooter>
+          <Flex gap={9}>
+            <Center gap={1}>
+              <Eye size={16} />
+              <Text fontSize='sm'>{post.views} views</Text>
+            </Center>
+            <Center gap={1}>
+              <ThumbsUp size={16} />
+              <Text fontSize='sm'>{post.reactions.likes} likes</Text>
+            </Center>
+          </Flex>
+        </CardFooter>
+      </Card>
+    </>
   );
 }

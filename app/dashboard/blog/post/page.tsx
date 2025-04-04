@@ -1,4 +1,5 @@
 'use client';
+import PageTitle from '@/components/pageTitle';
 import { PostProps } from '@/lib/utils';
 import {
   Card,
@@ -53,66 +54,69 @@ export default function PostPage() {
   }, []);
 
   return (
-    <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={5} p={5}>
-      {posts.map((post) => (
-        <Card
-          key={post.id}
-          shadow='lg'
-          borderRadius='xl'
-          overflow='hidden'
-          bg='rgb(17,28,45)'
-          color='rgb(124, 143, 172)'
-          cursor='pointer'
-          sx={{
-            transition: 'transform 0.2s ease-in-out',
-            _hover: { transform: 'translateY(-10px)' },
-          }}
-        >
-          <Link
-            href={{
-              pathname: `/dashboard/blog/details`,
-              query: { id: post.id },
+    <>
+      <PageTitle />
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={5} p={5}>
+        {posts.map((post) => (
+          <Card
+            key={post.id}
+            shadow='lg'
+            borderRadius='xl'
+            overflow='hidden'
+            bg='rgb(17,28,45)'
+            color='rgb(124, 143, 172)'
+            cursor='pointer'
+            sx={{
+              transition: 'transform 0.2s ease-in-out',
+              _hover: { transform: 'translateY(-10px)' },
             }}
           >
-            <Image
-              src={post.imageUrl}
-              alt={post.title}
-              height='200px'
-              objectFit='cover'
-            />
+            <Link
+              href={{
+                pathname: `/dashboard/blog/details`,
+                query: { id: post.id },
+              }}
+            >
+              <Image
+                src={post.imageUrl}
+                alt={post.title}
+                height='200px'
+                objectFit='cover'
+              />
 
-            <CardHeader>
-              <Heading size='md'>{post.title}</Heading>
-            </CardHeader>
+              <CardHeader>
+                <Heading size='md'>{post.title}</Heading>
+              </CardHeader>
 
-            <CardBody>
-              <Text noOfLines={3}>{post.body}</Text>
-              <Wrap mt={3}>
-                {post.tags.map((tag) => (
-                  <WrapItem key={tag}>
-                    <Tag variant='subtle' colorScheme='blue'>
-                      {tag}
-                    </Tag>
-                  </WrapItem>
-                ))}
-              </Wrap>
-            </CardBody>
+              <CardBody>
+                <Text noOfLines={3}>{post.body}</Text>
+                <Wrap mt={3}>
+                  {post.tags.map((tag) => (
+                    <WrapItem key={tag}>
+                      <Tag variant='subtle' colorScheme='blue'>
+                        {tag}
+                      </Tag>
+                    </WrapItem>
+                  ))}
+                </Wrap>
+              </CardBody>
 
-            <CardFooter>
-              <Flex gap={9}>
-                <Center gap={1}>
-                  <Eye size={16} />
-                  <Text fontSize='sm'>{post.views} views</Text>
-                </Center>
-                <Center gap={1}>
-                  <ThumbsUp size={16} />
-                  <Text fontSize='sm'>{post.reactions.likes} likes</Text>
-                </Center>
-              </Flex>
-            </CardFooter>
-          </Link>
-        </Card>
-      ))}
-    </SimpleGrid>
+              <CardFooter>
+                <Flex gap={9}>
+                  <Center gap={1}>
+                    <Eye size={16} />
+                    <Text fontSize='sm'>{post.views} views</Text>
+                  </Center>
+                  <Center gap={1}>
+                    <ThumbsUp size={16} />
+                    <Text fontSize='sm'>{post.reactions.likes} likes</Text>
+                  </Center>
+                </Flex>
+              </CardFooter>
+            </Link>
+          </Card>
+        ))}
+      </SimpleGrid>
+    </>
   );
 }
