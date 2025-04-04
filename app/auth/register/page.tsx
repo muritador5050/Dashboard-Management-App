@@ -73,6 +73,7 @@ export default function SignUp() {
             borderColor='rgb(124, 143, 172)'
             borderRadius='xl'
             p={3}
+            cursor='pointer'
             width={200}
           >
             <Image
@@ -87,6 +88,7 @@ export default function SignUp() {
             borderColor='rgb(124, 143, 172)'
             borderRadius='xl'
             p={3}
+            cursor='pointer'
             width={200}
           >
             <Image

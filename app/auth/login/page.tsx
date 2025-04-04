@@ -28,6 +28,7 @@ export default function LoginPage() {
     email: '',
     password: '',
   });
+  const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
   useAuthRedirect(false);
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +38,7 @@ export default function LoginPage() {
 
   const handleSignIn = async () => {
     try {
-      const userData = await loginUser(credential);
+      const userData = await loginUser(credential, rememberMe);
       if (userData) {
         router.push('/dashboard');
       }
@@ -48,7 +49,7 @@ export default function LoginPage() {
 
   const handleGoogleSignIn = async () => {
     try {
-      const user = await signInGoogle();
+      const user = await signInGoogle(rememberMe);
       if (user) {
         router.push('/dashboard');
       }
@@ -86,6 +87,7 @@ export default function LoginPage() {
             borderColor='rgb(124, 143, 172)'
             borderRadius='xl'
             p={3}
+            cursor='pointer'
             width={200}
           >
             <Image
@@ -102,6 +104,7 @@ export default function LoginPage() {
             borderColor='rgb(124, 143, 172)'
             borderRadius='xl'
             p={3}
+            cursor='pointer'
             width={200}
           >
             <Image
@@ -135,7 +138,12 @@ export default function LoginPage() {
             mb={5}
           />
           <Flex justify='space-between' mb={5}>
-            <Checkbox defaultChecked>Remember me</Checkbox>{' '}
+            <Checkbox
+              isChecked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            >
+              Remember me
+            </Checkbox>{' '}
             <Link href={'/auth/passwordReset'}>
               <Text color='blue'>Forget password?</Text>
             </Link>{' '}

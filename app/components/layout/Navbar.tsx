@@ -128,14 +128,13 @@ export default function Navbar() {
               <Layers2 />
             </li>
             <li className='flex gap-4 items-center '>
-              <Image
+              {/* <Image
                 className='border-3 border-white-400 rounded-full'
                 src='/user-11.jpg'
                 alt='A'
                 width={50}
                 height={50}
-              />
-              {/* <small className='wrap-all'>Mike Nelson admin</small> */}
+              /> */}
               <Username />
             </li>
           </ul>

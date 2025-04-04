@@ -1,6 +1,5 @@
 'use client';
 import { LogOut, X, Rocket } from 'lucide-react';
-import Link from 'next/link';
 import { routes } from '@/lib/route';
 import { NavigationItemComponent } from '../NavigationItems';
 import { useDrawer, useNav } from '@/context/ThemeContext';
@@ -17,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { signOutUser } from '@/lib/authentication';
 import { useRouter } from 'next/navigation';
+import Username from '@/lib/username';
 
 const Sidebar = () => {
   const { isWide, closeSideBar } = useNav();
@@ -65,10 +65,15 @@ const Sidebar = () => {
           </DrawerBody>
           <DrawerFooter>
             <div className='w-full flex justify-between items-center p-3 bg-gray-800 rounded-4xl h-32 sticky left-0 bottom-0'>
-              <small>admin</small>
-              <Link href='/auth/login'>
-                <LogOut size={32} className='inline-block mr-2' />
-              </Link>
+              <Box>
+                Admin
+                <Username />{' '}
+              </Box>
+              <LogOut
+                onClick={handleSignOut}
+                size={32}
+                className='cursor-pointer'
+              />
             </div>
           </DrawerFooter>
         </DrawerContent>
@@ -97,12 +102,15 @@ const Sidebar = () => {
 
         {!isWide && (
           <div className='w-[100%] flex justify-between items-center p-3 bg-gray-800 rounded-4xl h-32 sticky left-0 bottom-0'>
-            <small>admin</small>
-            {/* <Link href='/auth/login'> */}
-            <Box onClick={handleSignOut}>
-              <LogOut size={32} className='inline-block mr-2' />
+            <Box>
+              Admin
+              <Username />{' '}
             </Box>
-            {/* </Link> */}
+            <LogOut
+              onClick={handleSignOut}
+              size={32}
+              className='cursor-pointer'
+            />
           </div>
         )}
       </nav>
