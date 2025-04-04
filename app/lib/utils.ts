@@ -75,6 +75,20 @@ export interface Product {
   warrantyInformation?: string;
 }
 
+export interface PostProps {
+  id: number;
+  title: string;
+  body: string;
+  tags: string[];
+  reactions: {
+    likes: number;
+    dislikes: number;
+  };
+  views: number;
+  userId: number;
+  imageUrl?: string; // 👈 new field
+}
+
 export function formatCurrency(number: number) {
   const currency = new Intl.NumberFormat('en-US', {
     style: 'currency',

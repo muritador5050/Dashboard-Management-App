@@ -16,7 +16,6 @@ import {
 import { useDrawer, useNav } from '@/context/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-import Image from 'next/image';
 import Username from '@/lib/username';
 //Navbar
 export default function Navbar() {
@@ -70,17 +69,7 @@ export default function Navbar() {
                   <Layers2 size={32} />
                 </li>
                 <li className='flex gap-4 items-center'>
-                  <Image
-                    className='border-3 border-white-400 rounded-full'
-                    src='/user-11.jpg'
-                    alt='A'
-                    width={50}
-                    height={50}
-                  />
-                  <small>
-                    Mike Nelson <br />
-                    admin
-                  </small>
+                  <Username />
                 </li>
               </ul>
             </div>
@@ -128,13 +117,6 @@ export default function Navbar() {
               <Layers2 />
             </li>
             <li className='flex gap-4 items-center '>
-              {/* <Image
-                className='border-3 border-white-400 rounded-full'
-                src='/user-11.jpg'
-                alt='A'
-                width={50}
-                height={50}
-              /> */}
               <Username />
             </li>
           </ul>
