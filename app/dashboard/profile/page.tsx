@@ -1,57 +1,5 @@
-// 'use client';
-// import React from 'react';
-// import {
-//   Tabs,
-//   TabList,
-//   TabPanels,
-//   Tab,
-//   TabPanel,
-//   Box,
-//   Image,
-// } from '@chakra-ui/react';
-
-// import PageTitle from '@/components/pageTitle';
-
-// //Profile
-// export default function Profile() {
-//   return (
-//     <div>
-//       <Box>
-//         <PageTitle />
-//         <Image
-//           src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/backgrounds/profilebg.jpg'
-//           alt='profile-bg'
-//         />
-//       </Box>
-//       <Tabs>
-//         <TabList justifyContent='flex-end'>
-//           <Tab>Profile</Tab>
-//           <Tab>Followers</Tab>
-//           <Tab>Freinds</Tab>
-//           <Tab>Gallery</Tab>
-//         </TabList>
-//         <TabPanels>
-//           <TabPanel>
-//             <p>one!</p>
-//           </TabPanel>
-//           <TabPanel>
-//             <p>two!</p>
-//           </TabPanel>
-//           <TabPanel>
-//             <p>three!</p>
-//           </TabPanel>
-//           <TabPanel>
-//             <p>four!</p>
-//           </TabPanel>
-//         </TabPanels>
-//       </Tabs>
-//     </div>
-//   );
-// }
-
 'use client';
 import React, { useEffect, useState } from 'react';
-
 import {
   Tabs,
   TabList,
@@ -67,8 +15,19 @@ import {
   SimpleGrid,
   Flex,
   Center,
+  AbsoluteCenter,
+  Button,
 } from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
+import { auth } from '@/config/firebase';
+import {
+  CircleUserRound,
+  Facebook,
+  Globe,
+  StickyNote,
+  UserRoundCheck,
+  Youtube,
+} from 'lucide-react';
 interface UserProfile {
   id: number;
   name: string;
@@ -95,10 +54,14 @@ interface GalleryImage {
 
 export default function ProfileTabs() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
-
+  const userProfile = auth.currentUser?.photoURL;
+  const userEmail = auth.currentUser?.email;
+  console.log(userEmail);
+  const userName = auth.currentUser?.displayName;
+  console.log(userName);
   useEffect(() => {
     async function fetchProfile() {
-      const res = await fetch('/mockProfile.json'); // replace with your hosted URL
+      const res = await fetch('/mockProfile.json');
       const data = await res.json();
       setProfile(data);
     }
@@ -108,17 +71,54 @@ export default function ProfileTabs() {
   if (!profile) return <Text>Loading...</Text>;
 
   return (
-    <Box maxW='5xl' mx='auto' p={5}>
-      <Box>
-        <PageTitle />
+    <>
+      <PageTitle />
+      <Box bg='rgb(17, 28, 45)' borderTopRadius='xl'>
         <Image
           src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/backgrounds/profilebg.jpg'
           alt='al'
+          borderTopRadius='xl'
         />
-        <Stack>
-          <Text>Friends</Text>
-          <Text>Friends</Text>
-          <Text>Friends</Text>
+        <Box position='relative' mb={{ base: '24', xxl: '12' }}>
+          <AbsoluteCenter>
+            <Avatar
+              size='xl'
+              src={userProfile ?? profile.avatar}
+              border='4px'
+            />
+            <Text textAlign='center'>{userName}</Text>
+            <Text textAlign='center'>Admin</Text>
+          </AbsoluteCenter>
+        </Box>
+        <Stack
+          direction={{ base: 'column', xxl: 'row' }}
+          justifyContent={{ base: 'center', xxl: 'space-between' }}
+          alignItems='center'
+          pb='8'
+        >
+          <Flex gap={5} pl='4' mb={{ base: '8' }}>
+            <Center display='flex' flexDirection='column'>
+              <StickyNote />
+              <Text>Post</Text>
+            </Center>
+            <Center display='flex' flexDirection='column'>
+              <CircleUserRound />
+              <Text>Follower</Text>
+            </Center>
+            <Center display='flex' flexDirection='column'>
+              <UserRoundCheck />
+              <Text>Following</Text>
+            </Center>
+          </Flex>
+
+          <Flex gap={5} align='center' pr='4'>
+            <Facebook />
+            <Globe />
+            <Youtube />
+            <Button borderRadius='2xl' colorScheme='blue'>
+              Add to Story
+            </Button>
+          </Flex>
         </Stack>
       </Box>
       <Tabs>
@@ -179,6 +179,6 @@ export default function ProfileTabs() {
           </TabPanel>
         </TabPanels>
       </Tabs>
-    </Box>
+    </>
   );
 }
