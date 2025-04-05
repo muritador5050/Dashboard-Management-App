@@ -26,16 +26,21 @@ import {
   Heading,
   CardBody,
   Textarea,
+  Tag,
 } from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
 import { auth } from '@/config/firebase';
 import {
+  Apple,
   CircleUserRound,
   Facebook,
   Globe,
+  Instagram,
   Mail,
+  MapPin,
   PictureInPicture2,
   StickyNote,
+  Twitter,
   UserRoundCheck,
   Youtube,
 } from 'lucide-react';
@@ -50,9 +55,39 @@ type CommentType = {
   name: string;
   createdAt: Date;
 };
+
+interface UserProfile {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  avatar: string;
+  bio: string;
+  followers: FollowerFriend[];
+  friends: FollowerFriend[];
+  gallery: GalleryImage[];
+}
+
+interface FollowerFriend {
+  id: number;
+  name: string;
+  avatar: string;
+  status?: string;
+  country?: string;
+  proffession?: string;
+}
+
+interface GalleryImage {
+  id: number;
+  image: string;
+  caption: string;
+  date: string;
+}
+
 export default function ProfileTabs() {
   const [commentText, setCommentText] = useState('');
   const [comment, setComment] = useState<CommentType[]>([]);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
 
   const userDetail = auth.currentUser;
   const userField = [
@@ -94,7 +129,7 @@ export default function ProfileTabs() {
             id: doc.id,
             comment: docData.comment,
             name: docData.name,
-            createdAt: docData.createdAt?.toDate?.() || new Date(), // convert Firestore Timestamp to JS Date
+            createdAt: docData.createdAt?.toDate?.() || new Date(),
           };
         });
 
@@ -105,6 +140,13 @@ export default function ProfileTabs() {
     }
 
     fetchComments();
+
+    async function fetchProfile() {
+      const res = await fetch('/mockProfile.json'); // replace with your hosted URL
+      const data = await res.json();
+      setProfile(data);
+    }
+    fetchProfile();
   }, []);
 
   return (
@@ -266,15 +308,107 @@ export default function ProfileTabs() {
           </TabPanel>
 
           <TabPanel>
-            <SimpleGrid columns={[1, 2, 3]} spacing={5}></SimpleGrid>
+            <SimpleGrid columns={{ base: 1, md: 2, xxl: 3 }} spacing={5}>
+              {profile?.followers.map((follower) => (
+                <Box
+                  key={follower.id}
+                  display='flex'
+                  justifyContent='space-between'
+                  alignItems='center'
+                  bg='rgb(17, 28, 45)'
+                  borderRadius='xl'
+                  p={7}
+                >
+                  <Flex align='center' gap={3}>
+                    <Avatar src={follower.avatar} size='md' mb={2} />
+                    <Stack gap={0}>
+                      <Text>{follower.name}</Text>
+                      <Flex align='center'>
+                        <MapPin size={12} />
+                        <Text fontSize='xs'>{follower.country}</Text>
+                      </Flex>
+                    </Stack>
+                  </Flex>
+                  <Tag
+                    colorScheme='blue'
+                    borderRadius='xl'
+                    cursor='pointer'
+                    variant={`${
+                      follower.status === 'Follow' ? 'outline' : 'solid'
+                    }`}
+                  >
+                    {follower.status}
+                  </Tag>
+                </Box>
+              ))}
+            </SimpleGrid>
           </TabPanel>
 
           <TabPanel>
-            <SimpleGrid columns={[1, 2, 3]} spacing={5}></SimpleGrid>
+            <SimpleGrid columns={{ base: 1, md: 2, xxl: 3 }} spacing={5}>
+              {profile?.friends.map((friend) => (
+                <Box
+                  key={friend.id}
+                  bg='rgb(17, 28, 45)'
+                  borderRadius='xl'
+                  pt={7}
+                  cursor='pointer'
+                  sx={{
+                    transition: 'transform 0.2s ease-in-out',
+                    _hover: { transform: 'translateY(-10px)' },
+                  }}
+                >
+                  <Center mb={16}>
+                    <Stack align='center' gap={0}>
+                      <Avatar src={friend.avatar} size='md' mb={2} />
+                      <Text>{friend.name}</Text>
+                      <Text fontSize='xs'>{friend.proffession}</Text>
+                    </Stack>
+                  </Center>
+                  <Flex
+                    bg='whiteAlpha.400'
+                    justifyContent='center'
+                    gap={3}
+                    py={4}
+                  >
+                    <Facebook color='blue' size={20} />
+                    <Instagram size={20} color='orange' />
+                    <Apple size={20} color='purple' />
+                    <Twitter size={20} color='cyan' />
+                  </Flex>
+                </Box>
+              ))}
+            </SimpleGrid>
           </TabPanel>
 
           <TabPanel>
-            <SimpleGrid columns={[1, 2, 3]} spacing={5}></SimpleGrid>
+            <SimpleGrid columns={{ base: 1, md: 2, xxl: 3 }} spacing={5}>
+              {profile?.gallery.map((img) => (
+                <Box
+                  key={img.id}
+                  bg='rgb(17, 28, 45)'
+                  borderRadius='xl'
+                  pb={5}
+                  cursor='pointer'
+                  sx={{
+                    transition: 'transform 0.2s ease-in-out',
+                    _hover: { transform: 'translateY(-10px)' },
+                  }}
+                >
+                  <Image
+                    width='100%'
+                    src={img.image}
+                    borderTopRadius='xl'
+                    alt='img'
+                    bg='white'
+                  />
+                  <Text mt={2} ml={3}>
+                    {img.caption}
+                  </Text>
+                  <Text ml={3}>{img.date}</Text>
+                </Box>
+              ))}
+            </SimpleGrid>
           </TabPanel>
         </TabPanels>
       </Tabs>
