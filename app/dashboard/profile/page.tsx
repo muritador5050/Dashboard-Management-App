@@ -8,7 +8,6 @@ import {
   TabPanel,
   Avatar,
   Text,
-  Heading,
   Stack,
   Box,
   Image,
@@ -17,6 +16,16 @@ import {
   Center,
   AbsoluteCenter,
   Button,
+  Circle,
+  Stat,
+  StatNumber,
+  StatHelpText,
+  StatGroup,
+  Card,
+  CardHeader,
+  Heading,
+  CardBody,
+  Textarea,
 } from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
 import { auth } from '@/config/firebase';
@@ -24,51 +33,79 @@ import {
   CircleUserRound,
   Facebook,
   Globe,
+  Mail,
+  PictureInPicture2,
   StickyNote,
   UserRoundCheck,
   Youtube,
 } from 'lucide-react';
-interface UserProfile {
-  id: number;
+import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { db } from '@/config/firebase';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
+type CommentType = {
+  id: string;
+  comment: string;
   name: string;
-  username: string;
-  email: string;
-  avatar: string;
-  bio: string;
-  followers: FollowerFriend[];
-  friends: FollowerFriend[];
-  gallery: GalleryImage[];
-}
-
-interface FollowerFriend {
-  id: number;
-  name: string;
-  avatar: string;
-}
-
-interface GalleryImage {
-  id: number;
-  image: string;
-  caption: string;
-}
-
+  createdAt: Date;
+};
 export default function ProfileTabs() {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const userProfile = auth.currentUser?.photoURL;
-  const userEmail = auth.currentUser?.email;
-  console.log(userEmail);
-  const userName = auth.currentUser?.displayName;
-  console.log(userName);
-  useEffect(() => {
-    async function fetchProfile() {
-      const res = await fetch('/mockProfile.json');
-      const data = await res.json();
-      setProfile(data);
-    }
-    fetchProfile();
-  }, []);
+  const [commentText, setCommentText] = useState('');
+  const [comment, setComment] = useState<CommentType[]>([]);
 
-  if (!profile) return <Text>Loading...</Text>;
+  const userDetail = auth.currentUser;
+  const userField = [
+    { label: <PictureInPicture2 />, value: userDetail?.displayName },
+    { label: <Mail />, value: userDetail?.email },
+  ];
+
+  const handlePost = async () => {
+    if (!commentText.trim()) return;
+
+    const docRef = await addDoc(collection(db, 'comments'), {
+      comment: commentText,
+      name: auth.currentUser?.displayName || 'Anonymous',
+      createdAt: new Date(),
+    });
+
+    setComment((prev) => [
+      ...prev,
+      {
+        id: docRef.id,
+        comment: commentText,
+        name: auth.currentUser?.displayName || 'Anonymous',
+        createdAt: new Date(),
+      },
+    ]);
+
+    setCommentText('');
+  };
+
+  useEffect(() => {
+    async function fetchComments() {
+      try {
+        const data = await getDocs(collection(db, 'comments'));
+
+        const response: CommentType[] = data.docs.map((doc) => {
+          const docData = doc.data();
+
+          return {
+            id: doc.id,
+            comment: docData.comment,
+            name: docData.name,
+            createdAt: docData.createdAt?.toDate?.() || new Date(), // convert Firestore Timestamp to JS Date
+          };
+        });
+
+        setComment(response);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+    }
+
+    fetchComments();
+  }, []);
 
   return (
     <>
@@ -83,10 +120,10 @@ export default function ProfileTabs() {
           <AbsoluteCenter>
             <Avatar
               size='xl'
-              src={userProfile ?? profile.avatar}
+              src={auth.currentUser?.photoURL ?? '../user'}
               border='4px'
             />
-            <Text textAlign='center'>{userName}</Text>
+            <Text textAlign='center'>{auth.currentUser?.displayName}</Text>
             <Text textAlign='center'>Admin</Text>
           </AbsoluteCenter>
         </Box>
@@ -96,29 +133,50 @@ export default function ProfileTabs() {
           alignItems='center'
           pb='8'
         >
-          <Flex gap={5} pl='4' mb={{ base: '8' }}>
-            <Center display='flex' flexDirection='column'>
-              <StickyNote />
-              <Text>Post</Text>
-            </Center>
-            <Center display='flex' flexDirection='column'>
-              <CircleUserRound />
-              <Text>Follower</Text>
-            </Center>
-            <Center display='flex' flexDirection='column'>
-              <UserRoundCheck />
-              <Text>Following</Text>
-            </Center>
-          </Flex>
+          <StatGroup gap={5} pl='4' mb={{ base: '8' }}>
+            <Stat>
+              <Center>
+                <StickyNote size={20} />
+              </Center>
+              <StatNumber fontSize='xl' color='white'>
+                23,6477
+              </StatNumber>
+              <StatHelpText>Posts</StatHelpText>
+            </Stat>
+            <Stat>
+              <Center>
+                <CircleUserRound size={20} />
+              </Center>
+              <StatNumber fontSize='xl' color='white'>
+                23,6477
+              </StatNumber>
+              <StatHelpText>Followers</StatHelpText>
+            </Stat>
+            <Stat>
+              <Center>
+                <UserRoundCheck size={20} />
+              </Center>
+              <StatNumber fontSize='xl' color='white'>
+                23,6477
+              </StatNumber>
+              <StatHelpText>Followers</StatHelpText>
+            </Stat>
+          </StatGroup>
 
-          <Flex gap={5} align='center' pr='4'>
-            <Facebook />
-            <Globe />
-            <Youtube />
+          <Stack direction='row' gap={5} align='center' pr='4'>
+            <Circle size='40px' bg='blue' cursor='pointer'>
+              <Facebook />
+            </Circle>
+            <Circle size='40px' bg='cyan' cursor='pointer'>
+              <Globe />
+            </Circle>
+            <Circle size='40px' bg='tomato' cursor='pointer'>
+              <Youtube />
+            </Circle>
             <Button borderRadius='2xl' colorScheme='blue'>
               Add to Story
             </Button>
-          </Flex>
+          </Stack>
         </Stack>
       </Box>
       <Tabs>
@@ -132,50 +190,91 @@ export default function ProfileTabs() {
         </Flex>
         <TabPanels>
           <TabPanel>
-            <Stack direction='row' spacing={5} align='center'>
-              <Avatar size='xl' src={profile.avatar} />
-              <Box>
-                <Heading size='md'>{profile.name}</Heading>
-                <Text>@{profile.username}</Text>
-                <Text>{profile.bio}</Text>
-                <Text fontSize='sm' color='gray.400'>
-                  {profile.email}
+            <Stack direction={{ base: 'column', xxl: 'row' }} gap={7}>
+              <Card
+                bg='rgb(17, 28, 45)'
+                color='white'
+                border='1px'
+                borderRadius='xl'
+                pl='5'
+                width={{ xxl: '500px' }}
+              >
+                <CardHeader>
+                  <Heading> Introduction</Heading>
+                </CardHeader>
+                <Text>
+                  Hello, I am {auth.currentUser?.displayName}. I love making
+                  websites and graphics. Lorem ipsum dolor sit amet, consectetur
+                  adipiscing elit.{' '}
                 </Text>
+
+                {userField.map(({ label, value }, i) => (
+                  <CardBody key={i}>
+                    <Flex gap='3' key={i}>
+                      <>{label}</>
+                      <Text>{value}</Text>
+                    </Flex>
+                  </CardBody>
+                ))}
+              </Card>
+              <Box
+                bg='rgb(17, 28, 45)'
+                color='white'
+                border='1px'
+                borderRadius='xl'
+                px='4'
+                py='12'
+                width={{ xxl: '100%' }}
+              >
+                <Textarea
+                  placeholder='Leave a comment here'
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                />
+                <Button
+                  bg='blue'
+                  borderRadius='xl'
+                  float='right'
+                  mt='5px'
+                  onClick={handlePost}
+                >
+                  Post
+                </Button>
               </Box>
             </Stack>
+            <Box
+              minH='2xl'
+              mt={8}
+              bg='rgb(17, 28, 45)'
+              border='1px'
+              borderRadius='xl'
+              p={5}
+            >
+              <Stack direction='row' gap={3}>
+                <Avatar src={auth.currentUser?.photoURL ?? ''} />
+                <Text>{auth.currentUser?.displayName}</Text>
+              </Stack>
+              {comment.map((cm, i) => (
+                <Stack key={i}>
+                  <Text> {cm.comment}</Text>
+                  <Text fontSize='sm' color='gray.400'>
+                    {dayjs(cm.createdAt).fromNow()}
+                  </Text>
+                </Stack>
+              ))}
+            </Box>
           </TabPanel>
 
           <TabPanel>
-            <SimpleGrid columns={[1, 2, 3]} spacing={5}>
-              {profile.followers.map((follower) => (
-                <Center key={follower.id} flexDir='column'>
-                  <Avatar src={follower.avatar} size='lg' mb={2} />
-                  <Text>{follower.name}</Text>
-                </Center>
-              ))}
-            </SimpleGrid>
+            <SimpleGrid columns={[1, 2, 3]} spacing={5}></SimpleGrid>
           </TabPanel>
 
           <TabPanel>
-            <SimpleGrid columns={[1, 2, 3]} spacing={5}>
-              {profile.friends.map((friend) => (
-                <Center key={friend.id} flexDir='column'>
-                  <Avatar src={friend.avatar} size='lg' mb={2} />
-                  <Text>{friend.name}</Text>
-                </Center>
-              ))}
-            </SimpleGrid>
+            <SimpleGrid columns={[1, 2, 3]} spacing={5}></SimpleGrid>
           </TabPanel>
 
           <TabPanel>
-            <SimpleGrid columns={[1, 2, 3]} spacing={5}>
-              {profile.gallery.map((img) => (
-                <Box key={img.id}>
-                  <Image src={img.image} borderRadius='lg' alt='al' />
-                  <Text mt={2}>{img.caption}</Text>
-                </Box>
-              ))}
-            </SimpleGrid>
+            <SimpleGrid columns={[1, 2, 3]} spacing={5}></SimpleGrid>
           </TabPanel>
         </TabPanels>
       </Tabs>
