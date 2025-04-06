@@ -61,3 +61,15 @@ body {
   /* font-size: clamp(1.3rem, 2vw, 18px); */
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.fc-addEventButton-button {
+  background-color: #3182ce; /* Chakra blue.500 */
+  border-radius: 9999px;
+  font-weight: 600;
+  color: white;
+  padding: 0 1rem;
+}
+
+.fc-addEventButton-button:hover {
+  background-color: #2b6cb0; /* Chakra blue.600 */
+}
