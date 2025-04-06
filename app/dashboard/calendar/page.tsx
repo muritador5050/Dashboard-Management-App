@@ -26,6 +26,7 @@ import {
   FormLabel,
   ButtonGroup,
 } from '@chakra-ui/react';
+import PageTitle from '@/components/pageTitle';
 
 //calendar
 export default function Calendar() {
@@ -62,6 +63,7 @@ export default function Calendar() {
   };
   return (
     <Box>
+      <PageTitle />
       <Box p={5} bg='gray.800' borderRadius='xl' boxShadow='lg'>
         <FullCalendar
           ref={calendarRef}
