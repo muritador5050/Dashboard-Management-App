@@ -1,0 +1,163 @@
+{
+  "id": 1,
+  "followers": [
+    {
+      "id": 1,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Follow",
+      "country": "Tunisia"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Followed",
+      "country": "Tunisia"
+    },
+    {
+      "id": 3,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Followed",
+      "country": "Tunisia"
+    },
+    {
+      "id": 4,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Follow",
+      "country": "Tunisia"
+    },
+    {
+      "id": 5,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Followed",
+      "country": "Tunisia"
+    },
+    {
+      "id": 6,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Follow",
+      "country": "Tunisia"
+    },
+    {
+      "id": 7,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Follow",
+      "country": "Tunisia"
+    },
+    {
+      "id": 8,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Follow",
+      "country": "Tunisia"
+    }
+  ],
+  "friends": [
+    {
+      "id": 1,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Follow",
+      "proffession": "Medical Technician"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Followed",
+      "proffession": "Medical Technician"
+    },
+    {
+      "id": 3,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Followed",
+      "proffession": "Medical Technician"
+    },
+    {
+      "id": 4,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Follow",
+      "proffession": "Medical Technician"
+    },
+    {
+      "id": 5,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Followed",
+      "proffession": "Medical Technician"
+    },
+    {
+      "id": 6,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Follow",
+      "proffession": "Medical Technician"
+    },
+    {
+      "id": 7,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Follow",
+      "proffession": "Medical Technician"
+    },
+    {
+      "id": 8,
+      "name": "Jane Smith",
+      "avatar": "https://i.pravatar.cc/150?img=20",
+      "status": "Follow",
+      "proffession": "Medical Technician"
+    }
+  ],
+  "gallery": [
+    {
+      "id": 1,
+      "image": "https://i.pravatar.cc/150?img=21",
+      "caption": "Chilling in the city",
+      "date": "wed, Oct24, 2023"
+    },
+    {
+      "id": 2,
+      "image": "https://i.pravatar.cc/150?img=23",
+      "caption": "Chilling in the city",
+      "date": "wed, Oct24, 2023"
+    },
+    {
+      "id": 3,
+      "image": "https://i.pravatar.cc/150?img=25",
+      "caption": "Chilling in the city",
+      "date": "wed, Oct24, 2023"
+    },
+    {
+      "id": 4,
+      "image": "https://i.pravatar.cc/150?img=19",
+      "caption": "Chilling in the city",
+      "date": "wed, Oct24, 2023"
+    },
+    {
+      "id": 5,
+      "image": "https://i.pravatar.cc/150?img=15",
+      "caption": "Chilling in the city",
+      "date": "wed, Oct24, 2023"
+    },
+    {
+      "id": 6,
+      "image": "https://i.pravatar.cc/150?img=18",
+      "caption": "Chilling in the city",
+      "date": "wed, Oct24, 2023"
+    },
+    {
+      "id": 7,
+      "image": "https://i.pravatar.cc/150?img=17",
+      "caption": "Chilling in the city",
+      "date": "wed, Oct24, 2023"
+    }
+  ]
+}
