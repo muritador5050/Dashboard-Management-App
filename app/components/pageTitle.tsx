@@ -22,6 +22,7 @@ export default function PageTitle() {
     '/dashboard/kanban': 'Kanban',
     '/dashboard/chat': 'Chat',
     '/dashboard/pricing': 'Pricing',
+    '/dashboard/fag': 'FAQ',
   };
 
   const pageTitle = pageRoutes[pathname] || '';

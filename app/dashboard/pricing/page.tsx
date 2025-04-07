@@ -23,17 +23,21 @@ export default function Pricing() {
   return (
     <Box>
       <PageTitle />
-      <Stack alignItems='center' my={7}>
-        <Heading maxW={600}>
+      <Stack alignItems='center' my={5}>
+        <Heading textAlign='center' color='white' maxW={600}>
           Flexible Plans Tailored to Fit Your Community&apos;s Unique Needs!
         </Heading>
-        <Flex alignItems='center' gap={2}>
-          <Text>monthly</Text>
-          <Switch id='email-alerts' />
-          <Text>yearly</Text>
+        <Flex alignItems='center' mt={3} gap={2}>
+          <Text fontWeight='bold'>Monthly</Text>
+          <Switch />
+          <Text fontWeight='bold'>Yearly</Text>
         </Flex>
       </Stack>
-      <Stack direction={{ base: 'column', xxl: 'row' }} gap={9}>
+      <Stack
+        direction={{ base: 'column', xxl: 'row' }}
+        justifyContent='center'
+        gap={9}
+      >
         <Box
           display='flex'
           flexDirection='column'
@@ -41,8 +45,6 @@ export default function Pricing() {
           bg='rgb(17, 28, 45)'
           p={5}
           borderRadius='3xl'
-          width='80%'
-          alignSelf={{ base: 'center' }}
         >
           <Text fontWeight='medium'>SILVER</Text>
           <Image
@@ -76,7 +78,11 @@ export default function Pricing() {
               Permissions & workflows
             </ListItem>
           </List>
-          <Button colorScheme='blue' borderRadius='3xl'>
+          <Button
+            width={{ base: 'full', xxl: 300 }}
+            colorScheme='blue'
+            borderRadius='3xl'
+          >
             Choose Silver
           </Button>
         </Box>
@@ -87,8 +93,6 @@ export default function Pricing() {
           bg='rgb(17, 28, 45)'
           p={5}
           borderRadius='3xl'
-          maxW='fit-content'
-          alignSelf={{ base: 'center' }}
         >
           <Flex justifyContent='space-between' w='full'>
             <Text fontWeight='medium'>BRONZE</Text>
@@ -130,7 +134,11 @@ export default function Pricing() {
               Permissions & workflows
             </ListItem>
           </List>
-          <Button colorScheme='blue' borderRadius='3xl'>
+          <Button
+            width={{ base: 'full', xxl: 300 }}
+            colorScheme='blue'
+            borderRadius='3xl'
+          >
             Choose Bronze
           </Button>
         </Box>
@@ -141,8 +149,6 @@ export default function Pricing() {
           bg='rgb(17, 28, 45)'
           p={5}
           borderRadius='3xl'
-          maxW='fit-content'
-          alignSelf={{ base: 'center' }}
         >
           <Text fontWeight='medium'>GOLD</Text>
           <Image
@@ -179,7 +185,11 @@ export default function Pricing() {
               Permissions & workflows
             </ListItem>
           </List>
-          <Button colorScheme='blue' borderRadius='3xl'>
+          <Button
+            width={{ base: 'full', xxl: 300 }}
+            colorScheme='blue'
+            borderRadius='3xl'
+          >
             Choose Gold
           </Button>
         </Box>

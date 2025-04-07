@@ -1,4 +1,3 @@
-'use client';
 import { auth, db, googleProvider } from '@/config/firebase';
 import {
   createUserWithEmailAndPassword,
