@@ -1,9 +1,9 @@
+'use client';
 import React, { JSX, useEffect, useState } from 'react';
 import { formatTime, Product } from '../lib/utils';
 import { Image } from '@chakra-ui/react';
 import { Badge, Progress } from '@chakra-ui/react';
-import { UnicodeStarRating } from './StarRating';
-
+import { UnicodeStarRating } from '@/components/StarRating';
 //tables
 export default function ProductWithStatusAndPayment() {
   const [products, setProducts] = useState<Product[]>([]);
