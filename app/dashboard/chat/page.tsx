@@ -15,8 +15,16 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import { ImagePlus, Mic, Paperclip, Phone, Smile, Video } from 'lucide-react';
-
+import {
+  ImagePlus,
+  Mic,
+  Paperclip,
+  Phone,
+  Smile,
+  Square,
+  Video,
+} from 'lucide-react';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
   addDoc,
   serverTimestamp,
@@ -27,7 +35,7 @@ import {
   limit,
   Timestamp,
 } from 'firebase/firestore';
-import { auth, db } from '@/config/firebase';
+import { auth, db, storage } from '@/config/firebase';
 import CallModal from '@/components/call';
 
 interface Message {
@@ -46,6 +54,8 @@ export default function Chat() {
   const [callOpen, setCallOpen] = useState(false);
   const [callType, setCallType] = useState<'video' | 'voice' | null>(null);
   const [roomId, setRoomId] = useState<string>('');
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
 
   // Function to handle call
   const handleCall = (type: 'video' | 'voice') => {
@@ -56,6 +66,44 @@ export default function Chat() {
     setCallType(type);
     setCallOpen(true);
   };
+
+  const handleToggleRecording = async () => {
+    if (!isRecording) {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+
+      const chunks: Blob[] = [];
+      mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(chunks, { type: 'audio/webm' });
+        const audioFileName = `voice_notes/${Date.now()}-${
+          auth.currentUser?.uid
+        }.webm`;
+        console.log('Audio Blob:', audioBlob);
+        const audioRef = ref(storage, audioFileName);
+        await uploadBytes(audioRef, audioBlob);
+        const downloadURL = await getDownloadURL(audioRef);
+
+        await addDoc(collection(db, 'chats'), {
+          type: 'voice',
+          audioUrl: downloadURL,
+          name: auth.currentUser?.displayName || 'Anonymous',
+          avatar: auth.currentUser?.photoURL || '',
+          uid: auth.currentUser?.uid,
+          createdAt: serverTimestamp(),
+        });
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } else {
+      mediaRecorderRef.current?.stop();
+      setIsRecording(false);
+    }
+  };
+
   //handlemessage
   async function handleSendMessage() {
     if (message.trim() === '') return;
@@ -197,10 +245,13 @@ export default function Chat() {
                   size='sm'
                 />
                 <IconButton
-                  icon={<Mic size={18} />}
+                  // icon={<Mic size={18} />}
+                  icon={isRecording ? <Square /> : <Mic size={18} />}
                   aria-label='Voice message'
                   variant='ghost'
                   size='sm'
+                  onClick={handleToggleRecording}
+                  colorScheme={isRecording ? 'red' : 'gray'}
                 />
               </Flex>
             </InputRightAddon>
