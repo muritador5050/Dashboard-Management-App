@@ -28,6 +28,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { auth, db } from '@/config/firebase';
+import CallModal from '@/components/call';
 
 interface Message {
   id: string;
@@ -42,8 +43,21 @@ export default function Chat() {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [callOpen, setCallOpen] = useState(false);
+  const [callType, setCallType] = useState<'video' | 'voice' | null>(null);
+  const [roomId, setRoomId] = useState<string>('');
 
-  const handleSendMessage = async () => {
+  // Function to handle call
+  const handleCall = (type: 'video' | 'voice') => {
+    const user = auth.currentUser;
+    if (!user) return;
+    const id = `room-${user.uid}`;
+    setRoomId(id);
+    setCallType(type);
+    setCallOpen(true);
+  };
+  //handlemessage
+  async function handleSendMessage() {
     if (message.trim() === '') return;
     const user = auth.currentUser;
 
@@ -59,7 +73,7 @@ export default function Chat() {
       uid,
     });
     setMessage('');
-  };
+  }
 
   useEffect(() => {
     const q = query(
@@ -98,8 +112,22 @@ export default function Chat() {
           <Flex justifyContent='space-between' alignItems='center' pb={2}>
             <Avatar size='sm' />
             <Center gap={3}>
-              <Phone color='white' />
-              <Video color='white' />
+              {/* Phone icon for initiating voice call */}
+              <IconButton
+                icon={<Phone color={'blue'} />}
+                aria-label='Voice Call'
+                variant='ghost'
+                size='sm'
+                onClick={() => handleCall('voice')}
+              />
+              {/* Video icon for initiating video call */}
+              <IconButton
+                icon={<Video color={'blue'} />}
+                aria-label='Video Call'
+                variant='ghost'
+                size='sm'
+                onClick={() => handleCall('video')}
+              />
             </Center>
           </Flex>
 
@@ -179,6 +207,14 @@ export default function Chat() {
           </InputGroup>
         </Box>
       </Stack>
+      {callType && (
+        <CallModal
+          isOpen={callOpen}
+          onClose={() => setCallOpen(false)}
+          type={callType}
+          roomId={roomId}
+        />
+      )}
     </Box>
   );
 }
