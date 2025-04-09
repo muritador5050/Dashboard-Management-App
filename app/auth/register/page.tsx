@@ -95,10 +95,10 @@ export default function SignUp() {
         email,
         uid: user.uid,
       });
-      await setDoc(doc(db, 'userChat', user.uid), {});
       await updateProfile(user, {
         displayName,
       });
+      await setDoc(doc(db, 'userChats', user.uid), {});
       showToast({
         title: 'Success',
         description: 'User registered successfully',

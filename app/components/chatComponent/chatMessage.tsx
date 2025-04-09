@@ -13,8 +13,8 @@ import {
 interface Message {
   id: string;
   text: string;
-  name?: string;
-  avatar?: string;
+  displayName?: string;
+  photoURL?: string;
   createdAt: Timestamp;
   uid: string;
 }
@@ -63,7 +63,7 @@ export default function ChatMessages({ scrollRef }: ChatMessagesProps) {
           py={2}
           borderTopRightRadius='2xl'
           borderBottomLeftRadius='2xl'
-          minW='50%'
+          minW='40%'
         >
           <Text>{msg.text}</Text>
           {msg.createdAt?.seconds && (

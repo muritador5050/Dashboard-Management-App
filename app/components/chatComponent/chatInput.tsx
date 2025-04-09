@@ -26,8 +26,8 @@ export default function ChatInput({ scrollRef }: ChatInputProps) {
       message.trim();
       await addDoc(collection(db, 'chats'), {
         text: message,
-        name: user.displayName || 'Anonymous',
-        avatar: user.photoURL || '',
+        displayName: user.displayName || 'Anonymous',
+        photoURL: user.photoURL || '',
         uid: user.uid,
         createdAt: serverTimestamp(),
       });
@@ -57,8 +57,8 @@ export default function ChatInput({ scrollRef }: ChatInputProps) {
         await addDoc(collection(db, 'chats'), {
           type: 'voice',
           audioUrl: url,
-          name: auth.currentUser?.displayName || 'Anonymous',
-          avatar: auth.currentUser?.photoURL || '',
+          displayName: auth.currentUser?.displayName || 'Anonymous',
+          photoURL: auth.currentUser?.photoURL || '',
           uid: auth.currentUser?.uid,
           createdAt: serverTimestamp(),
         });
