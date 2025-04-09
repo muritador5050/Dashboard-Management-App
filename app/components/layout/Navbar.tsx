@@ -17,12 +17,15 @@ import { useDrawer, useNav } from '@/context/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import Username from '@/lib/username';
+import ThemeToggleButton from '../themeToggleButton';
+
 //Navbar
 export default function Navbar() {
   const { collapse, handleCollapse, toggleSiderbarWidth } = useNav();
   const { onOpen } = useDrawer();
   const [swipeModal, setSwipeModal] = useState(false);
   const [search, setSearch] = useState('');
+
   return (
     <>
       <nav className=' bg-custom-bg p-5 sticky top-0 right-0 z-1000  text-custom-color rounded-2xl m-[1em]  cursor-pointer'>
@@ -63,6 +66,7 @@ export default function Navbar() {
                   <BlinkingIcon />
                 </li>
                 <li>
+                  <ThemeToggleButton />
                   <SunMoon size={32} />
                 </li>
                 <li>
@@ -111,7 +115,8 @@ export default function Navbar() {
               <BlinkingIcon />
             </li>
             <li>
-              <SunMoon />
+              {/* <SunMoon /> */}
+              <ThemeToggleButton />
             </li>
             <li>
               <Layers2 />

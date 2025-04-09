@@ -1,63 +1,92 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Avatar, Box, Flex, Stack, Text, VStack } from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
-import {
-  Avatar,
-  Box,
-  Center,
-  Flex,
-  IconButton,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  InputRightAddon,
-  Stack,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
-import {
-  ImagePlus,
-  Mic,
-  Paperclip,
-  Phone,
-  Smile,
-  Square,
-  Video,
-} from 'lucide-react';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import {
-  addDoc,
-  serverTimestamp,
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
-  limit,
-  Timestamp,
-} from 'firebase/firestore';
-import { auth, db, storage } from '@/config/firebase';
-import CallModal from '@/components/call';
+import Search from '@/components/Search';
+import ChatHeader from '@/components/chatComponent/chatHeader';
+import ChatMessages from '@/components/chatComponent/chatMessage';
+import ChatInput from '@/components/chatComponent/chatInput';
+import { auth, db } from '@/config/firebase';
+import dynamic from 'next/dynamic';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
-interface Message {
-  id: string;
-  text: string;
-  name: string;
-  avatar: string;
-  createdAt: Timestamp;
+const CallModal = dynamic(() => import('@/components/call'), {
+  ssr: false,
+});
+
+// Define the User type
+type User = {
   uid: string;
-}
+  displayName: string;
+  photoUrl: string;
+};
 
 export default function Chat() {
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
-  const scrollRef = useRef<HTMLDivElement>(null);
   const [callOpen, setCallOpen] = useState(false);
   const [callType, setCallType] = useState<'video' | 'voice' | null>(null);
   const [roomId, setRoomId] = useState<string>('');
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const [isRecording, setIsRecording] = useState(false);
+  const [userName, setUserName] = useState('');
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [users, setUsers] = useState<User[]>([]); // Users state is now an array
 
-  // Function to handle call
+  // Fetch users from Firestore
+  const fetchUsers = async () => {
+    const q = query(collection(db, 'users'));
+    const querySnapshot = await getDocs(q);
+    const usersList: User[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      if (data.displayName && data.photoUrl) {
+        usersList.push({
+          uid: doc.id,
+          displayName: data.displayName,
+          photoUrl: data.photoUrl,
+        });
+      }
+    });
+    setUsers(usersList);
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  // const handleSelect = async () => {
+  //   const currentUser = auth.currentUser;
+  //   const combinedId =
+  //     currentUser?.uid > users?.uid
+  //       ? currentUser?.uid + users?.uid
+  //       : users?.uid + currentUser?.uid;
+  //   const res = await getDocs(collection(db, 'chats', combinedId));
+
+  // };
+
+  // Handle user search
+  const handleSearch = async () => {
+    const q = query(
+      collection(db, 'users'),
+      where('displayName', '>=', userName),
+      where('displayName', '<=', userName + '\uf8ff') // Allows for partial search
+    );
+    const querySnapshot = await getDocs(q);
+    const usersList: User[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      if (data.displayName && data.photoUrl) {
+        usersList.push({
+          uid: doc.id,
+          displayName: data.displayName,
+          photoUrl: data.photoUrl,
+        });
+      }
+    });
+    setUsers(usersList);
+  };
+
+  const handleKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    return event.code === 'Enter' && handleSearch();
+  };
+
   const handleCall = (type: 'video' | 'voice') => {
     const user = auth.currentUser;
     if (!user) return;
@@ -67,195 +96,44 @@ export default function Chat() {
     setCallOpen(true);
   };
 
-  const handleToggleRecording = async () => {
-    if (!isRecording) {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-
-      const chunks: Blob[] = [];
-      mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
-
-      mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(chunks, { type: 'audio/webm' });
-        const audioFileName = `voice_notes/${Date.now()}-${
-          auth.currentUser?.uid
-        }.webm`;
-        console.log('Audio Blob:', audioBlob);
-        const audioRef = ref(storage, audioFileName);
-        await uploadBytes(audioRef, audioBlob);
-        const downloadURL = await getDownloadURL(audioRef);
-
-        await addDoc(collection(db, 'chats'), {
-          type: 'voice',
-          audioUrl: downloadURL,
-          name: auth.currentUser?.displayName || 'Anonymous',
-          avatar: auth.currentUser?.photoURL || '',
-          uid: auth.currentUser?.uid,
-          createdAt: serverTimestamp(),
-        });
-      };
-
-      mediaRecorder.start();
-      setIsRecording(true);
-    } else {
-      mediaRecorderRef.current?.stop();
-      setIsRecording(false);
-    }
-  };
-
-  //handlemessage
-  async function handleSendMessage() {
-    if (message.trim() === '') return;
-    const user = auth.currentUser;
-
-    if (!user) return;
-
-    const { uid, displayName, photoURL } = user;
-
-    await addDoc(collection(db, 'chats'), {
-      text: message,
-      name: displayName || 'Anonymous',
-      avatar: photoURL || '',
-      createdAt: serverTimestamp(),
-      uid,
-    });
-    setMessage('');
-  }
-
-  useEffect(() => {
-    const q = query(
-      collection(db, 'chats'),
-      orderBy('createdAt', 'desc'),
-      limit(50)
-    );
-    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
-      const fetchedMessages: Message[] = [];
-      QuerySnapshot.forEach((doc) => {
-        fetchedMessages.push({ ...doc.data(), id: doc.id } as Message);
-      });
-      const sortedMessages = fetchedMessages.sort((a, b) => {
-        if (!a.createdAt || !b.createdAt) return 0;
-        return a.createdAt.toMillis() - b.createdAt.toMillis();
-      });
-      setMessages(sortedMessages);
-      setTimeout(
-        () => scrollRef.current?.scrollIntoView({ behavior: 'smooth' }),
-        100
-      );
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const identity = auth.currentUser;
 
   return (
     <Box p={4}>
       <PageTitle />
       <Stack direction='row' bg='gray.800' borderRadius='3xl' p={4}>
         <Box borderRight='2px solid gray' flexBasis={300} pr={4}>
-          <Avatar mb={2} />
-          <Text color='white'>Sidebar</Text>
+          <Search
+            placeholder='Search user'
+            value={userName}
+            onKeyDown={handleKey}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+          <VStack spacing={2} mt={4}>
+            {users && (
+              <VStack spacing={2}>
+                {users.map((user) => (
+                  <Flex
+                    key={user.uid}
+                    bg='gray.700'
+                    p={2}
+                    borderRadius='lg'
+                    minW={200}
+                    align='center'
+                    gap={3}
+                  >
+                    <Avatar src={user.photoUrl} />
+                    <Text color='white'>{user.displayName}</Text>
+                  </Flex>
+                ))}
+              </VStack>
+            )}
+          </VStack>
         </Box>
         <Box flex='1' display='flex' flexDirection='column'>
-          <Flex justifyContent='space-between' alignItems='center' pb={2}>
-            <Avatar size='sm' />
-            <Center gap={3}>
-              {/* Phone icon for initiating voice call */}
-              <IconButton
-                icon={<Phone color={'blue'} />}
-                aria-label='Voice Call'
-                variant='ghost'
-                size='sm'
-                onClick={() => handleCall('voice')}
-              />
-              {/* Video icon for initiating video call */}
-              <IconButton
-                icon={<Video color={'blue'} />}
-                aria-label='Video Call'
-                variant='ghost'
-                size='sm'
-                onClick={() => handleCall('video')}
-              />
-            </Center>
-          </Flex>
-
-          <VStack
-            spacing={3}
-            align='stretch'
-            flex='1'
-            overflowY='scroll'
-            bg='gray.700'
-            p={3}
-            borderRadius='lg'
-          >
-            {messages.map((msg) => (
-              <Box
-                key={msg.id}
-                alignSelf={
-                  msg.uid === auth.currentUser?.uid ? 'flex-end' : 'flex-start'
-                }
-                bg={msg.uid === auth.currentUser?.uid ? 'blue.500' : 'gray.600'}
-                color='white'
-                px={4}
-                py={2}
-                borderRadius='xl'
-                maxW='70%'
-              >
-                <Text fontSize='sm' fontWeight='bold'>
-                  {msg.name}
-                </Text>
-                <Text>{msg.text}</Text>
-                {msg.createdAt?.seconds && (
-                  <Text fontSize='xs' color='gray.300' mt={1}>
-                    {new Date(
-                      msg.createdAt.seconds * 1000
-                    ).toLocaleTimeString()}
-                  </Text>
-                )}
-              </Box>
-            ))}
-            <div ref={scrollRef} />
-          </VStack>
-
-          <InputGroup size='md' mt={3}>
-            <InputLeftAddon bg='gray.600' border='none' cursor='pointer'>
-              <Smile size={18} />
-            </InputLeftAddon>
-            <Input
-              placeholder='Type a message...'
-              border='none'
-              bg='gray.600'
-              color='white'
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-            />
-            <InputRightAddon bg='gray.600' border='none'>
-              <Flex gap={2}>
-                <IconButton
-                  icon={<ImagePlus size={18} />}
-                  aria-label='Attach image'
-                  variant='ghost'
-                  size='sm'
-                />
-                <IconButton
-                  icon={<Paperclip size={18} />}
-                  aria-label='Attach file'
-                  variant='ghost'
-                  size='sm'
-                />
-                <IconButton
-                  // icon={<Mic size={18} />}
-                  icon={isRecording ? <Square /> : <Mic size={18} />}
-                  aria-label='Voice message'
-                  variant='ghost'
-                  size='sm'
-                  onClick={handleToggleRecording}
-                  colorScheme={isRecording ? 'red' : 'gray'}
-                />
-              </Flex>
-            </InputRightAddon>
-          </InputGroup>
+          <ChatHeader identity={identity} onCall={handleCall} />
+          <ChatMessages scrollRef={scrollRef} />
+          <ChatInput scrollRef={scrollRef} />
         </Box>
       </Stack>
       {callType && (

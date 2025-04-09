@@ -14,9 +14,11 @@ import {
   DrawerHeader,
   DrawerOverlay,
 } from '@chakra-ui/react';
-import { signOutUser } from '@/lib/authentication';
 import { useRouter } from 'next/navigation';
 import Username from '@/lib/username';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/config/firebase';
+import { showToast } from '@/lib/toastService';
 
 const Sidebar = () => {
   const { isWide, closeSideBar } = useNav();
@@ -30,13 +32,17 @@ const Sidebar = () => {
     return () => window.removeEventListener('resize', checkWidth);
   }, []);
 
-  //signOut
   const handleSignOut = async () => {
     try {
-      await signOutUser();
+      await signOut(auth);
       router.push('/auth/login');
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error('Sign-out error:', err);
+      showToast({
+        title: 'Sign-out failed',
+        description: 'Error signing out',
+        status: 'error',
+      });
     }
   };
 

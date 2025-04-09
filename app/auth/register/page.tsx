@@ -17,32 +17,104 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { SignUpCredentialProp } from '@/lib/utils';
-import { registerUserWithUsername } from '@/lib/authentication';
 import { useRouter } from 'next/navigation';
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from 'firebase/firestore';
+import { showToast } from '@/lib/toastService';
+import {
+  createUserWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from 'firebase/auth';
+import { auth, db } from '@/config/firebase';
 //Loginpage
 export default function SignUp() {
   const [credential, setCredential] = useState<SignUpCredentialProp>({
-    name: '',
+    displayName: '',
     email: '',
     password: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const handleSignUp = async () => {
-    try {
-      const signUp = await registerUserWithUsername(credential);
-      if (signUp?.user) {
-        router.push('/auth/login');
-      }
-    } catch (error) {
-      console.error('Sign-in failed:', error);
-    }
-  };
 
-  const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
+  //handleInput
+  const handleOnchange = (
+    e: ChangeEvent<HTMLInputElement | HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
     setCredential((prev) => ({ ...prev, [name]: value }));
   };
 
+  //handleSignUp
+  const handleSignUp = async () => {
+    try {
+      setIsLoading(true);
+      const signUpResult = await registerUserWithUsername(credential);
+      await signOut(auth);
+      if (signUpResult) {
+        router.push('/auth/login');
+      }
+    } catch (error) {
+      console.error('Sign-up failed:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const registerUserWithUsername = async ({
+    displayName,
+    email,
+    password,
+  }: SignUpCredentialProp) => {
+    try {
+      const usersRef = collection(db, 'users');
+      const emailQuery = query(usersRef, where('email', '==', email));
+      const emailSnapshot = await getDocs(emailQuery);
+      if (!emailSnapshot.empty) {
+        showToast({
+          title: 'Signup Info',
+          description: 'Email already exists!',
+          status: 'warning',
+        });
+        return null;
+      }
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      await setDoc(doc(db, 'users', user.uid), {
+        displayName,
+        email,
+        uid: user.uid,
+      });
+      await setDoc(doc(db, 'userChat', user.uid), {});
+      await updateProfile(user, {
+        displayName,
+      });
+      showToast({
+        title: 'Success',
+        description: 'User registered successfully',
+        status: 'success',
+      });
+      return { user, displayName };
+    } catch (error) {
+      console.error('Error registering user:', error);
+      showToast({
+        title: 'Error registering',
+        description: 'Failed to register user',
+        status: 'error',
+      });
+      throw error;
+    }
+  };
   return (
     <Box className='bg-custom-bg text-custom-color p-9 rounded-xl flex flex-col items-center min-[980px]:flex-row gap-9 m-auto'>
       <Stack>
@@ -54,7 +126,7 @@ export default function SignUp() {
         </Flex>
         <Box className='max-[980px]:hidden'>
           <Image
-            src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/backgrounds/login-security.png'
+            src=' https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/backgrounds/login-security.png'
             alt='big-img'
             width={600}
             height={400}
@@ -77,7 +149,7 @@ export default function SignUp() {
             width={200}
           >
             <Image
-              src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/google-icon.svg'
+              src=' https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/google-icon.svg'
               alt='google'
             />
             <Text fontSize='xs'>Sign in with Google</Text>
@@ -92,7 +164,7 @@ export default function SignUp() {
             width={200}
           >
             <Image
-              src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/icon-facebook.svg'
+              src=' https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/icon-facebook.svg'
               alt='facebook'
             />
             <Text fontSize='xs'>Sign in with FB</Text>
@@ -108,8 +180,8 @@ export default function SignUp() {
           <FormLabel>Name </FormLabel>
           <Input
             type='text'
-            name='name'
-            value={credential.name}
+            name='displayName'
+            value={credential.displayName}
             onChange={handleOnchange}
             mb={5}
           />
@@ -131,6 +203,7 @@ export default function SignUp() {
           />
           <Button
             onClick={handleSignUp}
+            isLoading={isLoading}
             colorScheme='blue'
             width='100%'
             borderRadius='3xl'
@@ -140,7 +213,7 @@ export default function SignUp() {
           </Button>
         </FormControl>
         <Flex gap={3}>
-          Already have an Account?{' '}
+          Already have an Account?
           <Link href={'/auth/login'}>
             <Text color='blue'>Sign In</Text>
           </Link>

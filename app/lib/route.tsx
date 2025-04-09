@@ -10,13 +10,8 @@ import {
   CalendarFold,
   SquareKanban,
   MessageCircleCode,
-  Notebook,
-  Phone,
-  FileCode,
-  NotebookTabs,
   BadgePercent,
   TableOfContents,
-  ShieldEllipsis,
 } from 'lucide-react';
 export const routes: NavigationItem[] = [
   {
@@ -74,13 +69,13 @@ export const routes: NavigationItem[] = [
     icon: <Rss />,
     children: [
       {
-        title: 'Details',
-        segment: 'details',
+        title: 'Post',
+        segment: 'post',
         icon: <Dot />,
       },
       {
-        title: 'Post',
-        segment: 'post',
+        title: 'Details',
+        segment: 'details',
         icon: <Dot />,
       },
     ],
@@ -112,26 +107,7 @@ export const routes: NavigationItem[] = [
     segment: 'chat',
     icon: <MessageCircleCode />,
   },
-  {
-    title: 'notes',
-    segment: 'notes',
-    icon: <Notebook />,
-  },
-  {
-    title: 'contact Table',
-    segment: 'contactTable',
-    icon: <Phone />,
-  },
-  {
-    title: 'contact List',
-    segment: 'contactList',
-    icon: <FileCode />,
-  },
-  {
-    title: 'invoices',
-    segment: 'invoices',
-    icon: <NotebookTabs />,
-  },
+
   {
     kind: 'header',
     title: 'PAGES',
@@ -145,36 +121,5 @@ export const routes: NavigationItem[] = [
     title: 'FAQ',
     segment: 'faq',
     icon: <TableOfContents />,
-  },
-  {
-    title: 'widgets',
-    icon: <ShieldEllipsis />,
-    children: [
-      {
-        title: 'Appswidgets',
-        segment: 'appsWidgets',
-        icon: <Dot />,
-      },
-      {
-        title: 'Banners',
-        segment: 'banners',
-        icon: <Dot />,
-      },
-      {
-        title: 'Cards',
-        segment: 'cards',
-        icon: <Dot />,
-      },
-      {
-        title: 'DataWidgets',
-        segment: 'dataWidgets',
-        icon: <Dot />,
-      },
-      {
-        title: 'Feedwidgets',
-        segment: 'feedWidgets',
-        icon: <Dot />,
-      },
-    ],
   },
 ];

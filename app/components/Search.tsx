@@ -1,11 +1,17 @@
 import React from 'react';
 import { SearchX } from 'lucide-react';
-type OnchangeProp = {
-  value: string;
-  placeholder: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+type OnChangeProps = {
+  value?: string; // Make value optional if it's not strictly required
+  placeholder?: string; // Same for placeholder
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
-export default function Search({ value, placeholder, onChange }: OnchangeProp) {
+export default function Search({
+  value,
+  placeholder,
+  onChange,
+  onKeyDown,
+}: OnChangeProps) {
   return (
     <div
       style={{ border: '2px solid rgb(124, 143, 172)' }}
@@ -20,6 +26,7 @@ export default function Search({ value, placeholder, onChange }: OnchangeProp) {
         className='outline-none'
         value={value}
         onChange={onChange}
+        onKeyDown={onKeyDown}
       />
     </div>
   );

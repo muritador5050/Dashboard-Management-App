@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import React from 'react';
 
 //Authentication
 export type SignInCredentialProp = {
@@ -7,7 +7,7 @@ export type SignInCredentialProp = {
 };
 
 export type SignUpCredentialProp = {
-  name: string;
+  displayName: string;
   email: string;
   password: string;
 };
@@ -69,8 +69,8 @@ export interface Product {
   thumbnail: string;
   images: string[];
   dimensions: { width: number; height: number };
-  payment?: JSX.Element;
-  status?: string;
+  payment?: React.ReactNode;
+  status?: React.ReactNode;
   meta?: { createdAt: string };
   warrantyInformation?: string;
 }

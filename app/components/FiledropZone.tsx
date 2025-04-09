@@ -2,13 +2,18 @@
 import { useDropzone } from 'react-dropzone';
 import { useState } from 'react';
 
-export default function FileDropzone() {
+type FileDropzoneProps = {
+  onFilesChange: (files: File[]) => void;
+};
+
+export default function FileDropzone({ onFilesChange }: FileDropzoneProps) {
   const [files, setFiles] = useState<File[]>([]);
 
   const onDrop = (acceptedFiles: File[]) => {
-    setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+    const updatedFiles = [...files, ...acceptedFiles];
+    setFiles(updatedFiles);
+    onFilesChange(updatedFiles);
   };
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {

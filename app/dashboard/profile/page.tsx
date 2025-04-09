@@ -91,8 +91,11 @@ export default function ProfileTabs() {
 
   const userDetail = auth.currentUser;
   const userField = [
-    { label: <PictureInPicture2 />, value: userDetail?.displayName },
-    { label: <Mail />, value: userDetail?.email },
+    {
+      label: <PictureInPicture2 />,
+      value: userDetail?.displayName?.toUpperCase(),
+    },
+    { label: <Mail />, value: userDetail?.email?.toUpperCase() },
   ];
 
   const handlePost = async () => {
@@ -165,8 +168,10 @@ export default function ProfileTabs() {
               src={auth.currentUser?.photoURL ?? '../user'}
               border='4px'
             />
-            <Text textAlign='center'>{auth.currentUser?.displayName}</Text>
             <Text textAlign='center'>Admin</Text>
+            <Text textAlign='center' fontSize='2xl'>
+              {auth.currentUser?.displayName?.toUpperCase()}
+            </Text>
           </AbsoluteCenter>
         </Box>
         <Stack
@@ -224,10 +229,18 @@ export default function ProfileTabs() {
       <Tabs>
         <Flex justify='flex-end'>
           <TabList>
-            <Tab>Profile</Tab>
-            <Tab>Followers</Tab>
-            <Tab>Friends</Tab>
-            <Tab>Gallery</Tab>
+            <Tab fontSize='2xl' color='white'>
+              Profile
+            </Tab>
+            <Tab fontSize='2xl' color='white'>
+              Followers
+            </Tab>
+            <Tab fontSize='2xl' color='white'>
+              Friends
+            </Tab>
+            <Tab fontSize='2xl' color='white'>
+              Gallery
+            </Tab>
           </TabList>
         </Flex>
         <TabPanels>
@@ -245,9 +258,10 @@ export default function ProfileTabs() {
                   <Heading> Introduction</Heading>
                 </CardHeader>
                 <Text>
-                  Hello, I am {auth.currentUser?.displayName}. I love making
-                  websites and graphics. Lorem ipsum dolor sit amet, consectetur
-                  adipiscing elit.{' '}
+                  Hello, I am{' '}
+                  <Tag>{auth.currentUser?.displayName?.toUpperCase()}</Tag>. I
+                  love making websites and graphics. Lorem ipsum dolor sit amet,
+                  consectetur adipiscing elit.{' '}
                 </Text>
 
                 {userField.map(({ label, value }, i) => (
@@ -285,19 +299,31 @@ export default function ProfileTabs() {
               </Box>
             </Stack>
             <Box
-              minH='2xl'
+              maxH='96'
+              overflowY='scroll'
+              position='static'
               mt={8}
               bg='rgb(17, 28, 45)'
               border='1px'
               borderRadius='xl'
               p={5}
             >
-              <Stack direction='row' gap={3}>
+              <Flex align='center' gap={3}>
                 <Avatar src={auth.currentUser?.photoURL ?? ''} />
-                <Text>{auth.currentUser?.displayName}</Text>
-              </Stack>
+                <Text color='white' fontWeight='bold'>
+                  {auth.currentUser?.displayName?.toUpperCase()}
+                </Text>
+              </Flex>
               {comment.map((cm, i) => (
-                <Stack key={i}>
+                <Stack
+                  bg='rgb(17, 45, 78)'
+                  w={400}
+                  borderTopRightRadius='3xl'
+                  borderBottomLeftRadius='3xl'
+                  p={3}
+                  my={5}
+                  key={i}
+                >
                   <Text> {cm.comment}</Text>
                   <Text fontSize='sm' color='gray.400'>
                     {dayjs(cm.createdAt).fromNow()}

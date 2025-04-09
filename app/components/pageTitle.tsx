@@ -3,6 +3,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import { Dot } from 'lucide-react';
 import Link from 'next/link';
+import { Box, Heading } from '@chakra-ui/react';
 
 //pageTitle
 export default function PageTitle() {
@@ -22,21 +23,23 @@ export default function PageTitle() {
     '/dashboard/kanban': 'Kanban',
     '/dashboard/chat': 'Chat',
     '/dashboard/pricing': 'Pricing',
-    '/dashboard/fag': 'FAQ',
+    '/dashboard/faq': 'FAQ',
   };
 
   const pageTitle = pageRoutes[pathname] || '';
 
   return (
     <header>
-      <h1 className='text-3xl'>{pageTitle}</h1>
-      <div className='flex items-center'>
+      <Heading color='white' fontSize='2xl'>
+        {pageTitle}
+      </Heading>
+      <Box className='flex items-center'>
         <Link href='/dashboard'>
           <span className='hover:text-blue-500'>Home</span>
         </Link>
         <Dot size={28} />
         <small>{pageTitle}</small>
-      </div>
+      </Box>
     </header>
   );
 }

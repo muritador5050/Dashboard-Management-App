@@ -27,13 +27,56 @@ function AddProduct() {
     description: '',
     status: '',
     price: '',
-    media: '',
+    discountPercentage: discount,
+    image: [] as File[],
+    thumbNail: [] as File[],
+    productTemplate: '',
+    productDetails: '',
   });
-  console.log(addProduct);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     setAddProduct((prev) => ({ ...prev, [name]: e.target.value }));
   };
+
+  const handleRichChange = (value: string, name: string) => {
+    setAddProduct((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (files: File[], field: string) => {
+    setAddProduct((prev) => ({
+      ...prev,
+      [field]: files,
+    }));
+  };
+   const handleAddProduct = async () => {
+     const formData = new FormData();
+     formData.append('title', addProduct.name);
+     formData.append('description', addProduct.description);
+     formData.append('status', addProduct.status);
+     formData.append('price', addProduct.price);
+     formData.append(
+       'discountPercentage',
+       addProduct.discountPercentage.toString()
+     );
+
+     // Append files
+     if (addProduct.image.length > 0)
+       formData.append('image', addProduct.image[0]);
+     if (addProduct.thumbNail.length > 0)
+       formData.append('thumbNail', addProduct.thumbNail[0]);
+
+     formData.append('productTemplate', addProduct.productTemplate);
+     formData.append('productDetails', addProduct.productDetails);
+
+     const request = await fetch('https://dummyjson.com/products/add', {
+       method: 'POST',
+       body: formData,
+     });
+
+     const response = await request.json();
+     console.log(response);
+   };
   return (
     <Box width='100%' p={6} display={{ xxl: 'flex' }} gap={{ xxl: '10' }}>
       <Stack flex='1'>
@@ -46,15 +89,24 @@ function AddProduct() {
           <Heading>General</Heading>
           <FormControl isRequired>
             <FormLabel>Product Name</FormLabel>
-            <Input type='text' name='name' onChange={handleChange} />
+            <Input
+              type='text'
+              name='name'
+              value={addProduct.name}
+              onChange={handleChange}
+            />
             <FormHelperText>
               A product name is required and recommended to be unique.
             </FormHelperText>
           </FormControl>
           <FormControl h='max-content'>
             <FormLabel>Description</FormLabel>
-            <RichEditor />
-            <FormHelperText>
+            <RichEditor
+              name='description'
+              onChange={handleRichChange}
+              value={addProduct.description}
+            />
+            <FormHelperText mt={7}>
               Set a description to the product for better visibility.
             </FormHelperText>
           </FormControl>
@@ -66,7 +118,9 @@ function AddProduct() {
           color='rgb(124, 143, 172)'
         >
           <Heading>Media</Heading>
-          <FileDropzone />
+          <FileDropzone
+            onFilesChange={(files) => handleFileChange(files, 'image')}
+          />
         </Box>
 
         <Box
@@ -81,7 +135,12 @@ function AddProduct() {
           <Heading>Pricing</Heading>
           <FormControl isRequired>
             <FormLabel>Base Price </FormLabel>
-            <Input type='text' name='price' onChange={handleChange} />
+            <Input
+              type='number'
+              name='price'
+              value={addProduct.price}
+              onChange={handleChange}
+            />
             <FormHelperText>Set the product price.</FormHelperText>
           </FormControl>
           <RadioGroup onChange={setSelectedValue} value={selectedValue}>
@@ -164,7 +223,12 @@ function AddProduct() {
           </Stack>
         </Box>
         <ButtonGroup mt={6} gap={5}>
-          <Button colorScheme='blue' px={12} borderRadius='3xl'>
+          <Button
+            onClick={handleAddProduct}
+            colorScheme='blue'
+            px={12}
+            borderRadius='3xl'
+          >
             Save changes
           </Button>
           <Button
@@ -187,7 +251,9 @@ function AddProduct() {
         >
           <Heading>Thumbnail</Heading>
           <FormControl>
-            <FileDropzone />
+            <FileDropzone
+              onFilesChange={(files) => handleFileChange(files, 'image')}
+            />
             <FormHelperText textAlign='center'>
               Set the product thumbnail image. <br />
               Only *.png, *.jpg and *.jpeg image files are accepted.

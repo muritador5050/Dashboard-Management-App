@@ -36,6 +36,7 @@ export default function Emails() {
   const [message, setMessage] = useState('');
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   useEffect(() => {
     async function fetchEmails() {
       setLoading(true);
@@ -54,15 +55,14 @@ export default function Emails() {
     if (!to || !subject || !message) return;
 
     // Replace this with your webhook.site URL
-    const webhookUrl =
-      '	https://webhook.site/e19c92ed-689e-4789-8a34-b7c7669385d3';
-
-    await fetch(webhookUrl, {
+    const fakeEmailApi = 'https://jsonplaceholder.typicode.com/posts';
+    setLoading(true);
+    await fetch(fakeEmailApi, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ to, subject, message }),
     });
-
+    setLoading(false);
     toast({
       title: 'Email sent!',
       description: 'This is a mock send using webhook.site.',
@@ -74,6 +74,7 @@ export default function Emails() {
     setTo('');
     setSubject('');
     setMessage('');
+    onClose();
   };
 
   return (
@@ -136,7 +137,11 @@ export default function Emails() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
               />
-              <Button colorScheme='blue' onClick={handleSend}>
+              <Button
+                isLoading={loading}
+                colorScheme='blue'
+                onClick={handleSend}
+              >
                 Send
               </Button>
             </VStack>

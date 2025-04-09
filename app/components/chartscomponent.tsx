@@ -85,7 +85,7 @@ export function EarningsChart() {
           <Bar
             dataKey='thisYear'
             stackId='a'
-            fill='red'
+            fill='blue'
             radius={[10, 10, 0, 0]}
             barSize={10}
             style={{ pointerEvents: 'none' }}
@@ -93,7 +93,7 @@ export function EarningsChart() {
           <Bar
             dataKey='lastYear'
             stackId='a'
-            fill='#82ca9d'
+            fill='rgb(124, 143, 172)'
             radius={[10, 10, 0, 0]}
             style={{ pointerEvents: 'none' }}
           />

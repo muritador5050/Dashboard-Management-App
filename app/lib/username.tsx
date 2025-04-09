@@ -24,7 +24,7 @@ export default function Username() {
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
-          setUserName(userSnap.data().name);
+          setUserName(userSnap.data().displayName);
         } else {
           console.error('User data not found');
         }

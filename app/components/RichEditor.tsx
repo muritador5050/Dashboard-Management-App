@@ -1,12 +1,16 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import dynamic from 'next/dynamic';
 import 'react-quill-new/dist/quill.snow.css';
 //dynamic
 const QuillEditor = dynamic(() => import('react-quill-new'), { ssr: false });
-export default function RichEditor() {
-  const [content, setContent] = useState('');
 
+type RichEditorProps = {
+  name: string;
+  value: string;
+  onChange: (value: string, name: string) => void;
+};
+export default function RichEditor({ name, value, onChange }: RichEditorProps) {
   const quillModules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
@@ -37,13 +41,12 @@ export default function RichEditor() {
   ];
 
   const handleEditorChange = (newContent: string) => {
-    setContent(newContent);
+    onChange(newContent, name);
   };
-
   return (
     <div className='h-60'>
       <QuillEditor
-        value={content}
+        value={value}
         onChange={handleEditorChange}
         modules={quillModules}
         formats={quillFormats}

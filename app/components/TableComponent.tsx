@@ -1,7 +1,7 @@
 'use client';
-import React, { JSX, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { formatTime, Product } from '../lib/utils';
-import { Image } from '@chakra-ui/react';
+import { Image, Tag } from '@chakra-ui/react';
 import { Badge, Progress } from '@chakra-ui/react';
 import { UnicodeStarRating } from '@/components/StarRating';
 //tables
@@ -14,7 +14,7 @@ export default function ProductWithStatusAndPayment() {
       .then((data: { products: Product[] }) => {
         const updatedProducts: Product[] = data.products.map((product) => ({
           ...product,
-          payment: getPaymentStatus(product.price), // Ensure JSX output
+          payment: getPaymentStatus(product.stock),
           status: getOrderStatus(product.stock),
         }));
         setProducts(updatedProducts);
@@ -23,36 +23,109 @@ export default function ProductWithStatusAndPayment() {
   }, []);
 
   // Function that returns JSX based on price
-  const getPaymentStatus = (price: number): JSX.Element => {
-    if (price > 50) {
+  const getPaymentStatus = (stock: number) => {
+    if (stock <= 5) {
       return (
-        <span className='flex flex-col'>
+        <div className='flex flex-col'>
+          <small>Cancelled</small>
+          <Progress
+            value={stock}
+            colorScheme='red'
+            borderRadius='3xl'
+            size='sm'
+          />
+        </div>
+      );
+    } else if (stock >= 10 && stock <= 25) {
+      return (
+        <div className='flex flex-col'>
           <small>Paid</small>
-          <Progress value={100} colorScheme='green' size='sm' />
-        </span>
+          <Progress
+            value={stock}
+            colorScheme='yellow'
+            borderRadius='3xl'
+            size='sm'
+          />
+        </div>
+      );
+    } else if (stock >= 30 && stock <= 45) {
+      return (
+        <div className='flex flex-col'>
+          <small>Pending</small>
+          <Progress
+            value={stock}
+            colorScheme='gray'
+            borderRadius='3xl'
+            size='sm'
+          />
+        </div>
       );
     } else {
       return (
-        <div className='flex flex-col gap-1'>
-          {[
-            { status: 'Pending', value: 25 },
-            { status: 'Cancelled', value: 45 },
-            { status: 'Confirmed', value: 60 },
-            { status: 'Unpaid', value: 80 },
-          ].map((item, index) => (
-            <div key={index} className='flex flex-col'>
-              <small>{item.status}</small>
-              <Progress value={item.value} colorScheme='red' size='sm' />
-            </div>
-          ))}
+        <div className='flex flex-col'>
+          <small>Paid</small>
+          <Progress
+            value={stock}
+            colorScheme='green'
+            borderRadius='3xl'
+            size='sm'
+          />
         </div>
       );
     }
   };
 
   // Determine order status
-  const getOrderStatus = (stock: number): string => {
-    return stock > 0 ? 'Confirmed' : 'Pending';
+  const getOrderStatus = (stock: number) => {
+    if (stock <= 5) {
+      return (
+        <Tag
+          borderRadius='2xl'
+          p={1}
+          variant='subtle'
+          colorScheme='red'
+          fontSize='.75rem'
+        >
+          Cancelled
+        </Tag>
+      );
+    } else if (stock >= 10 && stock <= 25) {
+      return (
+        <Tag
+          borderRadius='2xl'
+          p={1}
+          variant='subtle'
+          colorScheme='yellow'
+          fontSize='.75rem'
+        >
+          Pending
+        </Tag>
+      );
+    } else if (stock >= 30 && stock <= 45) {
+      return (
+        <Tag
+          borderRadius='2xl'
+          p={1}
+          variant='subtle'
+          colorScheme='green'
+          fontSize='.75rem'
+        >
+          Processing
+        </Tag>
+      );
+    } else {
+      return (
+        <Tag
+          borderRadius='2xl'
+          p={1}
+          variant='subtle'
+          colorScheme='gray'
+          fontSize='.75rem'
+        >
+          Delivered
+        </Tag>
+      );
+    }
   };
 
   return (
@@ -80,7 +153,7 @@ export default function ProductWithStatusAndPayment() {
               </td>
               <td className='px-4 py-2'>{product.payment}</td>
               <td className='px-4 py-2 text-right'>
-                <Badge
+                <Tag
                   borderRadius='2xl'
                   p={1}
                   variant='subtle'
@@ -88,7 +161,7 @@ export default function ProductWithStatusAndPayment() {
                   fontSize='.75rem'
                 >
                   {product.status}
-                </Badge>
+                </Tag>
               </td>
             </tr>
           ))}
@@ -116,11 +189,55 @@ export function ProductWithRewiewAndTime() {
       });
   }, []);
 
-  const getOrderStatus = (stock: number): string => {
-    if (stock > 0) {
-      return 'confirmed';
+  const getOrderStatus = (stock: number) => {
+    if (stock <= 5) {
+      return (
+        <Tag
+          borderRadius='2xl'
+          p={1}
+          variant='subtle'
+          colorScheme='red'
+          fontSize='.75rem'
+        >
+          Cancelled
+        </Tag>
+      );
+    } else if (stock >= 10 && stock <= 25) {
+      return (
+        <Tag
+          borderRadius='2xl'
+          p={1}
+          variant='subtle'
+          colorScheme='yellow'
+          fontSize='.75rem'
+        >
+          Pending
+        </Tag>
+      );
+    } else if (stock >= 30 && stock <= 45) {
+      return (
+        <Tag
+          borderRadius='2xl'
+          p={1}
+          variant='subtle'
+          colorScheme='green'
+          fontSize='.75rem'
+        >
+          Processing
+        </Tag>
+      );
     } else {
-      return 'pending';
+      return (
+        <Tag
+          borderRadius='2xl'
+          p={1}
+          variant='subtle'
+          colorScheme='gray'
+          fontSize='.75rem'
+        >
+          Delivered
+        </Tag>
+      );
     }
   };
 
@@ -131,7 +248,7 @@ export function ProductWithRewiewAndTime() {
           <tr className='h-16 border-b'>
             <th className='text-left px-4 py-2'>#</th>
             <th className='text-left px-4 py-2'>Products</th>
-            <th className='text-left px-4 py-2'>Customer</th>
+            <th className='text-left px-4 py-2'>Brand</th>
             <th className='text-left px-4 py-2'>Reviews</th>
             <th className='text-left px-4 py-2'>Status</th>
             <th className='text-left px-4 py-2'>Time</th>
@@ -153,7 +270,7 @@ export function ProductWithRewiewAndTime() {
                 />
                 <span>{product.title}</span>
               </td>
-              <td className='px-4 py-2'>{product.warrantyInformation}</td>
+              <td className='px-4 py-2'>{product.brand}</td>
               <td className='px-4 py-2'>
                 <UnicodeStarRating rating={product.rating} />
               </td>
