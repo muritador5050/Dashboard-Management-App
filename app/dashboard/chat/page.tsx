@@ -7,7 +7,6 @@ import {
   Drawer,
   DrawerBody,
   DrawerContent,
-  DrawerHeader,
   DrawerOverlay,
   Flex,
   Stack,
@@ -169,8 +168,7 @@ export default function Chat() {
       <PageTitle />
       <Drawer placement='left' onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
-        <DrawerContent>
-          <DrawerHeader borderBottomWidth='1px'>Basic Drawer</DrawerHeader>
+        <DrawerContent bg=' rgb(17, 28, 45)'>
           <DrawerBody>
             <Box borderRight='2px solid gray' flexBasis={300} pr={4}>
               <Search
@@ -234,7 +232,12 @@ export default function Chat() {
           </Box>
         </Box>
         <Box flex='1' p={4} display='flex' flexDirection='column'>
-          <Flex gap={5} align='center' mb={5} className='min-[980px]:hidden'>
+          <Flex
+            gap={5}
+            align='center'
+            mb={5}
+            display={{ base: 'flex', xxl: 'none' }}
+          >
             <Center bg='blue.500' p={3} borderRadius='3xl'>
               <AlignJustify color='white' onClick={onOpen} />
             </Center>
