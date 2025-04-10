@@ -8,18 +8,19 @@ import {
   Ellipsis,
   X,
   SearchX,
-  Layers2,
   ArrowUpWideNarrow,
   Rocket,
 } from 'lucide-react';
-import { useDrawer, useNav } from '@/context/ThemeContext';
+import { useCart, useDrawer, useNav } from '@/context/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import Username from '@/lib/username';
 import ThemeToggleButton from '../themeToggleButton';
+import { CartWithBadge } from '../cartComponents/cartWithBadge';
 
 //Navbar
 export default function Navbar() {
+  const { cart } = useCart();
   const { collapse, handleCollapse, toggleSiderbarWidth } = useNav();
   const { onOpen } = useDrawer();
   const [swipeModal, setSwipeModal] = useState(false);
@@ -68,7 +69,9 @@ export default function Navbar() {
                   <ThemeToggleButton />
                 </li>
                 <li>
-                  <Layers2 size={32} />
+                  <Link href='/dashboard/ecommerce/checkout'>
+                    <CartWithBadge cartLength={cart.length} />
+                  </Link>
                 </li>
                 <li className='flex gap-4 items-center'>
                   <Username />
@@ -115,8 +118,10 @@ export default function Navbar() {
             <li>
               <ThemeToggleButton />
             </li>
-            <li>
-              <Layers2 />
+            <li className='relative'>
+              <Link href='/dashboard/ecommerce/checkout'>
+                <CartWithBadge cartLength={cart.length} />
+              </Link>
             </li>
             <li className='flex gap-4 items-center '>
               <Username />
