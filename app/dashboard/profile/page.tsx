@@ -178,7 +178,7 @@ export default function ProfileTabs() {
           direction={{ base: 'column', xxl: 'row' }}
           justifyContent={{ base: 'center', xxl: 'space-between' }}
           alignItems='center'
-          pb='8'
+          // pb='8'
         >
           <StatGroup gap={5} pl='4' mb={{ base: '8' }}>
             <Stat>
@@ -229,22 +229,14 @@ export default function ProfileTabs() {
       <Tabs>
         <Flex justify='flex-end'>
           <TabList>
-            <Tab fontSize='2xl' color='white'>
-              Profile
-            </Tab>
-            <Tab fontSize='2xl' color='white'>
-              Followers
-            </Tab>
-            <Tab fontSize='2xl' color='white'>
-              Friends
-            </Tab>
-            <Tab fontSize='2xl' color='white'>
-              Gallery
-            </Tab>
+            <Tab color='white'>Profile</Tab>
+            <Tab color='white'>Followers</Tab>
+            <Tab color='white'>Friends</Tab>
+            <Tab color='white'>Gallery</Tab>
           </TabList>
         </Flex>
         <TabPanels>
-          <TabPanel>
+          <TabPanel mt={5} p={0}>
             <Stack direction={{ base: 'column', xxl: 'row' }} gap={7}>
               <Card
                 bg='rgb(17, 28, 45)'
@@ -333,7 +325,7 @@ export default function ProfileTabs() {
             </Box>
           </TabPanel>
 
-          <TabPanel>
+          <TabPanel mt={5} p={0}>
             <SimpleGrid columns={{ base: 1, md: 2, xxl: 3 }} spacing={5}>
               {profile?.followers.map((follower) => (
                 <Box
@@ -370,7 +362,7 @@ export default function ProfileTabs() {
             </SimpleGrid>
           </TabPanel>
 
-          <TabPanel>
+          <TabPanel mt={5} p={0}>
             <SimpleGrid columns={{ base: 1, md: 2, xxl: 3 }} spacing={5}>
               {profile?.friends.map((friend) => (
                 <Box
@@ -407,7 +399,7 @@ export default function ProfileTabs() {
             </SimpleGrid>
           </TabPanel>
 
-          <TabPanel>
+          <TabPanel mt={5} p={0}>
             <SimpleGrid columns={{ base: 1, md: 2, xxl: 3 }} spacing={5}>
               {profile?.gallery.map((img) => (
                 <Box

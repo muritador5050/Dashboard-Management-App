@@ -17,8 +17,6 @@ import {
   TabIndicator,
   TabPanels,
   TabPanel,
-  Flex,
-  Box,
   Divider,
 } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
@@ -27,6 +25,7 @@ import { UnicodeStarRating } from '@/components/StarRating';
 import Link from 'next/link';
 import { useCart } from '@/context/ThemeContext';
 import Loading from '@/loading';
+import { ArrowLeft } from 'lucide-react';
 
 //Details
 export default function Details() {
@@ -82,6 +81,9 @@ export default function Details() {
 
   return (
     <>
+      <Link href='/dashboard/ecommerce/shop'>
+        <ArrowLeft className='my-3' />
+      </Link>
       <Card
         direction={{ base: 'column', xxl: 'row' }}
         background='rgb(17, 28, 45)'
@@ -97,7 +99,7 @@ export default function Details() {
           borderRadius='2xl'
           background='whitesmoke'
         />
-        <Stack px={3}>
+        <Stack>
           <CardBody>
             <Stack>
               <Heading>{product.title}</Heading>
@@ -110,7 +112,10 @@ export default function Details() {
           </CardBody>
           <Divider />
           <CardFooter>
-            <ButtonGroup spacing='20px' mt='12'>
+            <ButtonGroup
+              spacing='20px'
+              className='max-sm:flex-col items-center gap-7'
+            >
               <Link href='/dashboard/ecommerce/checkout'>
                 <Button background='skyblue' borderRadius='2xl' px='12'>
                   Buy Now
@@ -151,11 +156,8 @@ export default function Details() {
             <Heading>{product.description}</Heading>
           </TabPanel>
           <TabPanel>
-            <Flex>
-              <Box>1</Box>
-              <Box>2</Box>
-              <Box>3</Box>
-            </Flex>
+            {' '}
+            <UnicodeStarRating rating={product.rating} />
           </TabPanel>
         </TabPanels>
       </Tabs>

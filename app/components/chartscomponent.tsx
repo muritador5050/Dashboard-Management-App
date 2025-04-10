@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useState } from 'react';
 import {
   XAxis,
@@ -172,7 +173,12 @@ const DailyProfitBreakdownChart: React.FC<{ data: DailyProfitData[] }> = ({
   data,
 }) => {
   return (
-    <ResponsiveContainer width='100%' aspect={2} minWidth={300}>
+    <ResponsiveContainer
+      className='-ml-7!'
+      width='100%'
+      aspect={2}
+      minWidth={300}
+    >
       <LineChart data={data}>
         <CartesianGrid strokeDasharray='3 3' />
         <XAxis
@@ -303,7 +309,7 @@ export function TotalOrders() {
 
 export function YearlyProfitPieChart() {
   return (
-    <div className='bg-custom-bg rounded-xl px-3 py-7.5 w-full  mx-auto'>
+    <div className='bg-custom-bg rounded-xl px-3 py-7.5 w-full mx-auto'>
       {/* Header */}
       <div className='flex justify-between text-sm md:text-base'>
         <p>Profit</p>

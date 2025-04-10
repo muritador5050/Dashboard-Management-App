@@ -47,7 +47,7 @@ export default function ChatMessages({ scrollRef }: ChatMessagesProps) {
       flex='1'
       overflowY='scroll'
       bg='rgb(10, 28, 49)'
-      p={3}
+      // p={3}
       borderRadius='lg'
       maxH={500}
     >
@@ -59,7 +59,7 @@ export default function ChatMessages({ scrollRef }: ChatMessagesProps) {
           }
           bg={msg.uid === auth.currentUser?.uid ? 'purple.500' : 'gray.600'}
           color='white'
-          px={4}
+          px={2}
           py={2}
           borderTopRightRadius='2xl'
           borderBottomLeftRadius='2xl'

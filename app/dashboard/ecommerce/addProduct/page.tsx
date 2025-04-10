@@ -18,10 +18,14 @@ import FileDropzone from '@/components/FiledropZone';
 import DiscountSlider from '@/components/Slider';
 import SearchableDropdown from '@/components/Select';
 import RichEditor from '@/components/RichEditor';
+import { Product } from '@/lib/utils';
+import { showToast } from '@/lib/toastService';
 //AddProduct
 function AddProduct() {
   const [selectedValue, setSelectedValue] = useState('no-discount');
   const [discount, setDiscount] = useState<number>(0);
+  const [product, setProduct] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [addProduct, setAddProduct] = useState({
     name: '',
     description: '',
@@ -49,36 +53,64 @@ function AddProduct() {
       [field]: files,
     }));
   };
-   const handleAddProduct = async () => {
-     const formData = new FormData();
-     formData.append('title', addProduct.name);
-     formData.append('description', addProduct.description);
-     formData.append('status', addProduct.status);
-     formData.append('price', addProduct.price);
-     formData.append(
-       'discountPercentage',
-       addProduct.discountPercentage.toString()
-     );
+  const handleAddProduct = async () => {
+    const formData = new FormData();
+    formData.append('title', addProduct.name);
+    formData.append('description', addProduct.description);
+    formData.append('status', addProduct.status);
+    formData.append('price', addProduct.price);
+    formData.append(
+      'discountPercentage',
+      addProduct.discountPercentage.toString()
+    );
 
-     // Append files
-     if (addProduct.image.length > 0)
-       formData.append('image', addProduct.image[0]);
-     if (addProduct.thumbNail.length > 0)
-       formData.append('thumbNail', addProduct.thumbNail[0]);
+    // Append files
+    if (addProduct.image.length > 0)
+      formData.append('image', addProduct.image[0]);
+    if (addProduct.thumbNail.length > 0)
+      formData.append('thumbNail', addProduct.thumbNail[0]);
 
-     formData.append('productTemplate', addProduct.productTemplate);
-     formData.append('productDetails', addProduct.productDetails);
+    formData.append('productTemplate', addProduct.productTemplate);
+    formData.append('productDetails', addProduct.productDetails);
 
-     const request = await fetch('https://dummyjson.com/products/add', {
-       method: 'POST',
-       body: formData,
-     });
+    try {
+      setIsLoading(true);
+      const request = await fetch('https://dummyjson.com/products/add', {
+        method: 'POST',
+        body: formData,
+      });
 
-     const response = await request.json();
-     console.log(response);
-   };
+      const response = await request.json();
+      setProduct(response);
+      console.log(product);
+      setIsLoading(false);
+      setAddProduct({
+        name: '',
+        description: '',
+        status: '',
+        price: '',
+        discountPercentage: discount,
+        image: [] as File[],
+        thumbNail: [] as File[],
+        productTemplate: '',
+        productDetails: '',
+      });
+      showToast({
+        title: 'Post product',
+        description: 'Item successfully post',
+        status: 'success',
+      });
+    } catch (err) {
+      console.log(err);
+      showToast({
+        title: 'Post error',
+        description: 'Something went wrong',
+        status: 'error',
+      });
+    }
+  };
   return (
-    <Box width='100%' p={6} display={{ xxl: 'flex' }} gap={{ xxl: '10' }}>
+    <Box width='100%' display={{ xxl: 'flex' }} gap={{ xxl: '10' }}>
       <Stack flex='1'>
         <Box
           bg='rgb(17, 28, 45)'
@@ -144,7 +176,7 @@ function AddProduct() {
             <FormHelperText>Set the product price.</FormHelperText>
           </FormControl>
           <RadioGroup onChange={setSelectedValue} value={selectedValue}>
-            <Stack direction='row'>
+            <Stack direction={{ base: 'column', xxl: 'row' }} gap={3}>
               <Box
                 border={
                   selectedValue === 'no-discount'
@@ -222,8 +254,9 @@ function AddProduct() {
             </FormControl>
           </Stack>
         </Box>
-        <ButtonGroup mt={6} gap={5}>
+        <ButtonGroup my={7} gap={5}>
           <Button
+            isLoading={isLoading}
             onClick={handleAddProduct}
             colorScheme='blue'
             px={12}
@@ -295,6 +328,7 @@ function AddProduct() {
         <Box
           bg='rgb(17, 28, 45)'
           p={5}
+          mb={3}
           borderRadius='xl'
           color='rgb(124, 143, 172)'
         >

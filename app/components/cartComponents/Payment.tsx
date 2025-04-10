@@ -61,7 +61,12 @@ export function Payment() {
         </Center>
       )}
 
-      <ButtonGroup display='flex' justifyContent='space-between' mt='12'>
+      <ButtonGroup
+        display='flex'
+        justifyContent='space-between'
+        mt='12'
+        className='max-sm:flex-col items-center gap-5'
+      >
         <Link href='/dashboard/ecommerce/shop'>
           <Button
             onClick={clearCart}

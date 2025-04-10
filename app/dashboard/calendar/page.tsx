@@ -27,7 +27,36 @@ import {
   ButtonGroup,
 } from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
+import styled from '@emotion/styled';
 
+const FullCalendarWrapper = styled.div`
+  .fc-button {
+    border-radius: 20px;
+    background-color: rgb(17, 28, 45);
+  }
+  .fc-button:hover {
+    background-color: white;
+    color: rgb(17, 28, 45);
+  }
+  @media (max-width: 980px) {
+    .fc-header-toolbar {
+      flex-direction: column;
+      gap: 5px;
+    }
+  }
+  .fc-toolbar-title {
+    color: blue;
+  }
+  .fc-addEventButton-button {
+    background-color: #3182ce;
+    border-radius: 20px;
+    font-weight: 600;
+    color: white;
+  }
+  .fc-addEventButton-button:hover {
+    background-color: #2b6cb0;
+  }
+`;
 //calendar
 export default function Calendar() {
   const [eventTitle, setEventTitle] = useState('');
@@ -64,32 +93,41 @@ export default function Calendar() {
   return (
     <Box>
       <PageTitle />
-      <Box p={5} bg='gray.800' borderRadius='xl' boxShadow='lg'>
-        <FullCalendar
-          ref={calendarRef}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          initialView='dayGridMonth'
-          weekends={true}
-          headerToolbar={{
-            left: 'prev,next addEventButton',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay',
-          }}
-          customButtons={{
-            addEventButton: {
-              text: 'Add Event',
-              themeIcon: 'red',
-              click: onOpen,
-            },
-          }}
-          buttonText={{
-            today: 'Today',
-            month: 'Month',
-            week: 'Week',
-            day: 'Day',
-          }}
-          events={[]}
-        />
+      <Box
+        bg='rgb(17, 28, 45)'
+        borderRadius='xl'
+        boxShadow='lg'
+        // display={{ base: 'block', md: 'flex' }}
+        p={3}
+        w='100%'
+      >
+        <FullCalendarWrapper>
+          <FullCalendar
+            ref={calendarRef}
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            initialView='dayGridMonth'
+            weekends={true}
+            headerToolbar={{
+              left: 'prev,next addEventButton',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay',
+            }}
+            customButtons={{
+              addEventButton: {
+                text: 'Add Event',
+                themeIcon: 'red',
+                click: onOpen,
+              },
+            }}
+            buttonText={{
+              // today: 'Today',
+              month: 'Month',
+              week: 'Week',
+              day: 'Day',
+            }}
+            events={[]}
+          />
+        </FullCalendarWrapper>
       </Box>
       <Modal isOpen={isOpen} onClose={onClose} size='xl'>
         <ModalOverlay />

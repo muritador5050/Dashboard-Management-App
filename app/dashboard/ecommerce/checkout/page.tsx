@@ -44,9 +44,9 @@ export default function StepperWithPages() {
   };
 
   return (
-    <Box p={5}>
+    <Box>
       {/* Stepper Navigation */}
-      <Stepper size='lg' index={activeStep} colorScheme='blue'>
+      <Stepper index={activeStep} colorScheme='blue'>
         {steps.map((step, index) => (
           <Step key={index}>
             <StepIndicator>

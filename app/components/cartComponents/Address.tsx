@@ -72,6 +72,7 @@ export function BillingAndAddress() {
           onChange={setSelectedDelivery}
           value={selectedDelivery}
           display='flex'
+          className='max-sm:flex-col'
           gap={5}
         >
           {deliveryAddress.map((option) => (
@@ -112,8 +113,8 @@ export function BillingAndAddress() {
         border='1px'
         borderColor='gray.200'
         borderRadius='lg'
-        display={{ xxl: 'flex' }}
-        alignItems={{ xxl: 'center' }}
+        // display={{ xxl: 'flex' }}
+        // alignItems={{ xxl: 'center' }}
         gap={{ xxl: '10' }}
         minW='xxl'
       >

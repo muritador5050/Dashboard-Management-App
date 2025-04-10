@@ -56,7 +56,7 @@ export default function PostPage() {
   return (
     <>
       <PageTitle />
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={5} p={5}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={5} mt={3}>
         {posts.map((post) => (
           <Card
             key={post.id}

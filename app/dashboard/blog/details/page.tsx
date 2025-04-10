@@ -18,8 +18,9 @@ import {
 import { useSearchParams } from 'next/navigation';
 import { PostProps } from '@/lib/utils';
 import Loading from '@/loading';
-import { Eye, ThumbsUp } from 'lucide-react';
+import { ArrowLeft, Eye, ThumbsUp } from 'lucide-react';
 import PageTitle from '@/components/pageTitle';
+import Link from 'next/link';
 
 //Details
 export default function Details() {
@@ -87,6 +88,9 @@ export default function Details() {
   return (
     <>
       <PageTitle />
+      <Link href='/dashboard/blog/post'>
+        <ArrowLeft />
+      </Link>
       <Card
         key={post.id}
         shadow='lg'

@@ -7,7 +7,6 @@ import {
   Image,
   Flex,
   Divider,
-  Stack,
   ButtonGroup,
   Heading,
   Center,
@@ -45,25 +44,30 @@ export function Cart() {
             borderRadius='lg'
           >
             {/* Product Info */}
-            <Flex width='100%' justify='space-between' align='center'>
+            <Flex
+              width='100%'
+              justify='space-between'
+              align='center'
+              className='max-sm:flex-col gap-5 '
+            >
               <Flex align='center' gap={3}>
                 <Image
                   src={item.images[0]}
                   alt={item.title}
-                  width='70px'
-                  height='70px'
+                  width='100px'
+                  height='100px'
                   background='white'
                   borderRadius='2xl'
                 />
-                <Stack>
-                  <Text width='16' lineHeight='shorter'>
+                <Box ml={3}>
+                  <Text mb={3} width='16' lineHeight='shorter'>
                     {item.title}
                   </Text>
                   <Trash2
                     style={{ color: 'red', cursor: 'pointer' }}
                     onClick={() => deleteItem(item.id)}
                   />
-                </Stack>
+                </Box>
               </Flex>
 
               {/* Quantity Buttons */}

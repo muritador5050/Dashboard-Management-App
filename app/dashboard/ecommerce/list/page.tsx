@@ -1,4 +1,5 @@
 'use client';
+import Search from '@/components/Search';
 import { Product } from '@/lib/utils';
 import {
   Checkbox,
@@ -17,7 +18,12 @@ import {
   Button,
   Select,
 } from '@chakra-ui/react';
-import { ChevronLeft, ChevronRight, EllipsisVertical } from 'lucide-react';
+import {
+  // AwardIcon,
+  ChevronLeft,
+  ChevronRight,
+  EllipsisVertical,
+} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 export default function List() {
@@ -25,29 +31,56 @@ export default function List() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10); // Rows per page
   const [totalProducts, setTotalProducts] = useState(100);
-  useEffect(() => {
-    const fetchProductList = async () => {
-      try {
-        const skip = (page - 1) * limit;
-        const request = await fetch(
-          `https://dummyjson.com/products?limit=${limit}&skip=${skip}`
-        );
-        const response: { products: Product[]; total: number } =
-          await request.json();
-        setProductList(response.products);
-        setTotalProducts(response.total);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchProductList();
-  }, [page, limit]);
+  const [searchItem, setSearchItem] = useState('');
+
   const totalPages = Math.ceil(totalProducts / limit);
+  const handlesearch = async (query: string) => {
+    try {
+      const res = await fetch('https://dummyjson.com/products');
+      const data = await res.json();
+
+      const filtered = data.products.filter((product: Product) =>
+        product.title.toLowerCase().includes(query.toLowerCase())
+      );
+
+      setProductList(filtered);
+      setTotalProducts(filtered.length); // For UI consistency
+    } catch (error) {
+      console.error('Search error:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (searchItem.trim() !== '') {
+      handlesearch(searchItem);
+    } else {
+      const fetchProductList = async () => {
+        try {
+          const skip = (page - 1) * limit;
+          const request = await fetch(
+            `https://dummyjson.com/products?limit=${limit}&skip=${skip}`
+          );
+          const response: { products: Product[]; total: number } =
+            await request.json();
+          setProductList(response.products);
+          setTotalProducts(response.total);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchProductList();
+    }
+  }, [searchItem, page, limit]);
+
   return (
     <TableContainer>
       <div className='flex justify-between w-full my-5'>
-        <p>search</p>
-        <p>filter</p>
+        <Search
+          placeholder='Try search...'
+          onChange={(e) => {
+            setSearchItem(e.target.value);
+          }}
+        />
       </div>
       <Table>
         <Thead>

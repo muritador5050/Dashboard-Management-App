@@ -1,6 +1,19 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { Avatar, Box, Flex, Stack, Text } from '@chakra-ui/react';
+import {
+  Avatar,
+  Box,
+  Center,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  Stack,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
 import Search from '@/components/Search';
 import ChatHeader from '@/components/chatComponent/chatHeader';
@@ -19,6 +32,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
+import { AlignJustify } from 'lucide-react';
 
 const CallModal = dynamic(() => import('@/components/call'), {
   ssr: false,
@@ -38,7 +52,7 @@ export default function Chat() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState<User[] | null>([]);
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   // Fetch users from Firestore
 
   const handleSelect = async (selectedUser: User) => {
@@ -153,8 +167,47 @@ export default function Chat() {
   return (
     <Box p={4}>
       <PageTitle />
-      <Stack direction='row' bg='gray.800' borderRadius='3xl' p={4} minH={600}>
-        <Box borderRight='2px solid gray' flexBasis={300} pr={4}>
+      <Drawer placement='left' onClose={onClose} isOpen={isOpen}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerHeader borderBottomWidth='1px'>Basic Drawer</DrawerHeader>
+          <DrawerBody>
+            <Box borderRight='2px solid gray' flexBasis={300} pr={4}>
+              <Search
+                placeholder='Search user'
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <Box mt={9}>
+                {user &&
+                  user.map((u) => (
+                    <Flex
+                      key={u.uid}
+                      _hover={{ bg: 'blue.300' }}
+                      my={3}
+                      p={2}
+                      borderRadius='lg'
+                      align='center'
+                      gap={3}
+                      cursor='pointer'
+                      onClick={() => handleSelect(u)}
+                    >
+                      <Avatar src={u.photoURL} />
+                      <Text color='white'>{u.displayName}</Text>
+                    </Flex>
+                  ))}
+              </Box>
+            </Box>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+      <Stack direction='row' bg='gray.800' borderRadius='3xl' minH={600}>
+        <Box
+          borderRight='2px solid gray'
+          flexBasis={300}
+          p={4}
+          className='max-[980px]:hidden'
+        >
           <Search
             placeholder='Search user'
             value={searchQuery}
@@ -180,7 +233,17 @@ export default function Chat() {
               ))}
           </Box>
         </Box>
-        <Box flex='1' display='flex' flexDirection='column'>
+        <Box flex='1' p={4} display='flex' flexDirection='column'>
+          <Flex gap={5} align='center' mb={5} className='min-[980px]:hidden'>
+            <Center bg='blue.500' p={3} borderRadius='3xl'>
+              <AlignJustify color='white' onClick={onOpen} />
+            </Center>
+            <Search
+              placeholder='Search user'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </Flex>
           <ChatHeader identity={identity} onCall={handleCall} />
           <ChatMessages scrollRef={scrollRef} />
           <ChatInput scrollRef={scrollRef} />
