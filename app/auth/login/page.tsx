@@ -28,7 +28,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from 'firebase/auth';
-import { auth, db, googleProvider } from '@/config/firebase';
+import { auth, db, facebookProvider, googleProvider } from '@/config/firebase';
 import { showToast } from '@/lib/toastService';
 import {
   collection,
@@ -148,6 +148,53 @@ export default function LoginPage() {
         description: 'Error signing in with Google',
         status: 'error',
       });
+    }
+  };
+
+  // async function handleFacebookSignIn() {
+  //   try {
+  //     const result = await signInWithPopup(auth, facebookProvider);
+  //     const user = result.user;
+  //     // Store user data in Firestore (optional)
+  //     await setDoc(doc(db, 'users', user.uid), {
+  //       displayName: user.displayName,
+  //       email: user.email,
+  //       uid: user.uid,
+  //       photoURL: user.photoURL,
+  //     });
+
+  //     showToast({
+  //       title: 'Google Sign-in',
+  //       description: 'SignIn successful!',
+  //       status: 'success',
+  //     });
+
+  //     return { user, displayName: user.displayName }; // Return user data
+  //   } catch (err) {
+  //     console.error('Google sign-in error:', err);
+  //     showToast({
+  //       title: 'Google Sign-in failed',
+  //       description: 'Error signing in with Google',
+  //       status: 'error',
+  //     });
+  //   }
+  // }
+  const signInWithFacebook = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      // The signed-in user info
+      const user = result.user;
+      console.log('Facebook User:', user);
+
+      // Optional: Get Facebook Access Token if needed
+      const credential = facebookProvider.credentialFromResult(result);
+      const accessToken = credential?.accessToken;
+      console.log('Access Token:', accessToken);
+
+      return user;
+    } catch (error) {
+      console.error('Facebook Login Error:', error);
+      // You can handle errors here
     }
   };
 
