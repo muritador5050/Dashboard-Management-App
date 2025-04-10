@@ -8,7 +8,6 @@ import {
   Ellipsis,
   X,
   SearchX,
-  SunMoon,
   Layers2,
   ArrowUpWideNarrow,
   Rocket,
@@ -67,7 +66,6 @@ export default function Navbar() {
                 </li>
                 <li>
                   <ThemeToggleButton />
-                  <SunMoon size={32} />
                 </li>
                 <li>
                   <Layers2 size={32} />
@@ -115,7 +113,6 @@ export default function Navbar() {
               <BlinkingIcon />
             </li>
             <li>
-              {/* <SunMoon /> */}
               <ThemeToggleButton />
             </li>
             <li>

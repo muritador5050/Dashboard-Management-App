@@ -1,6 +1,6 @@
 'use client';
 import { IconButton, useColorMode } from '@chakra-ui/react';
-import { Moon, Sun } from 'lucide-react'; // or use Chakra icons
+import { Moon, Sun } from 'lucide-react';
 
 export default function ThemeToggleButton() {
   const { colorMode, toggleColorMode } = useColorMode();

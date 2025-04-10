@@ -36,26 +36,12 @@ body {
   }
 }
 
-/* ::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--dash-color);
-  border-radius: 10px;
-  min-height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  display: none;
-} */
-
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   /* font-size: clamp(1.3rem, 2vw, 18px); */

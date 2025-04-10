@@ -30,7 +30,7 @@ const Dashboard = () => {
           <EarningsChart />
           <LatestDeal />
         </div>
-        <div className='rounded-xl min-[980px]:basis-3/3'>
+        <div className='max-[980px]:my-5 rounded-xl min-[980px]:basis-3/3'>
           <TotalOrders />
         </div>
 
@@ -39,11 +39,11 @@ const Dashboard = () => {
           <Customers />
         </div>
       </section>
-      <section className='min-[980px]:flex gap-10 mb-9'>
-        <div className=''>
+      <section className='min-[980px]:flex gap-7 mb-7'>
+        <div className='max-[980px]:mb-7'>
           <MyMap />
         </div>
-        <div className='w-full h-fit bg-custom-bg px-5 py-2 rounded-xl'>
+        <div className='w-full h-fit bg-custom-bg px-5 py-2 rounded-xl max-[980px]:mb-7'>
           <ProductWithStatusAndPayment />
         </div>
       </section>

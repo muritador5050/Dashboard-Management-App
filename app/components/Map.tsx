@@ -3,7 +3,7 @@ import { Progress, AspectRatio } from '@chakra-ui/react';
 
 export default function MapComponent() {
   return (
-    <div className='flex flex-col justify-between bg-custom-bg rounded-xl px-3 py-5 mx-auto h-auto min-[980px]:w-[350px] '>
+    <div className='flex flex-col justify-between bg-custom-bg rounded-xl px-3 py-5 mx-auto h-auto min-[980px]:w-[350px]'>
       {/* Map Section */}
       <h1 className='text-xxl'>Visit From USA</h1>
       <div className='h-64 md:h-1/2 mt-3 mb-15'>

@@ -303,7 +303,7 @@ export function TotalOrders() {
 
 export function YearlyProfitPieChart() {
   return (
-    <div className='bg-custom-bg rounded-xl px-3 py-7.5 w-full max-w-md mx-auto'>
+    <div className='bg-custom-bg rounded-xl px-3 py-7.5 w-full  mx-auto'>
       {/* Header */}
       <div className='flex justify-between text-sm md:text-base'>
         <p>Profit</p>

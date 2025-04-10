@@ -264,9 +264,9 @@ export function ProductWithRewiewAndTime() {
                 <Image
                   src={product.images[0]}
                   alt='product-img'
-                  width={product.dimensions.width * 5}
-                  height={product.dimensions.height * 5}
-                  className='rounded-md'
+                  width={70}
+                  height={70}
+                  className='rounded-full bg-white'
                 />
                 <span>{product.title}</span>
               </td>

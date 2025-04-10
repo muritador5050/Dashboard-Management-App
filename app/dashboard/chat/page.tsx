@@ -130,7 +130,7 @@ export default function Chat() {
         });
       }
     });
-    setUser(usersList); // changed from setUser to setUsers
+    setUser(usersList);
   };
   useEffect(() => {
     fetchUsers();
@@ -165,7 +165,7 @@ export default function Chat() {
               user.map((u) => (
                 <Flex
                   key={u.uid}
-                  // bg='gray.700'
+                  _hover={{ bg: 'blue.300' }}
                   my={3}
                   p={2}
                   borderRadius='lg'
