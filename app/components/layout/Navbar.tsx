@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import Search from '../Search';
 import BlinkingIcon from '../BlinkingIcon';
 import {
   ChevronDown,
@@ -10,13 +9,31 @@ import {
   SearchX,
   ArrowUpWideNarrow,
   Rocket,
+  MessagesSquare,
+  Mails,
+  UserPen,
+  CalendarDays,
 } from 'lucide-react';
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuGroup,
+  MenuDivider,
+  Button,
+  Box,
+  Text,
+  Divider,
+  Center,
+} from '@chakra-ui/react';
 import { useCart, useDrawer, useNav } from '@/context/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import Username from '@/lib/username';
 import ThemeToggleButton from '../themeToggleButton';
 import { CartWithBadge } from '../cartComponents/cartWithBadge';
+import { SearchDropdown } from '../searchDropdown';
 
 //Navbar
 export default function Navbar() {
@@ -24,7 +41,6 @@ export default function Navbar() {
   const { collapse, handleCollapse, toggleSiderbarWidth } = useNav();
   const { onOpen } = useDrawer();
   const [swipeModal, setSwipeModal] = useState(false);
-  const [search, setSearch] = useState('');
 
   return (
     <>
@@ -87,8 +103,93 @@ export default function Navbar() {
               <ArrowUpWideNarrow onClick={toggleSiderbarWidth} />
             </li>
             <li className='flex items-center'>
-              Apps
-              <ChevronDown />
+              <Menu>
+                <MenuButton
+                  bg='transparent'
+                  color='rgb(124, 143, 172)'
+                  _hover={{ bg: 'transparent' }}
+                  as={Button}
+                  rightIcon={<ChevronDown />}
+                >
+                  Apps
+                </MenuButton>
+
+                <MenuList
+                  display='flex'
+                  gap={5}
+                  bg='rgb(17,28,45)'
+                  borderRadius='2xl'
+                  border='none'
+                  p={3}
+                >
+                  <MenuGroup>
+                    <MenuItem
+                      as='a'
+                      href='/dashboard/chat'
+                      display='flex'
+                      alignItems='center'
+                      gap={3}
+                      bg='rgb(17,28,45)'
+                      _hover={{ color: 'blue.500' }}
+                    >
+                      {' '}
+                      <MessagesSquare /> Chat App
+                    </MenuItem>
+                    <MenuItem
+                      as='a'
+                      href='/dashboard/email'
+                      display='flex'
+                      alignItems='center'
+                      gap={3}
+                      bg='rgb(17,28,45)'
+                      _hover={{ color: 'blue.500' }}
+                    >
+                      <Mails /> Email App{' '}
+                    </MenuItem>
+                  </MenuGroup>
+                  <MenuDivider />
+                  <MenuGroup>
+                    <MenuItem
+                      as='a'
+                      href='/dashboard/profile'
+                      display='flex'
+                      alignItems='center'
+                      gap={3}
+                      bg='rgb(17,28,45)'
+                      _hover={{ color: 'blue.500' }}
+                    >
+                      {' '}
+                      <UserPen /> User Profile
+                    </MenuItem>
+                    <MenuItem
+                      as='a'
+                      href='/dashboard/calendar'
+                      display='flex'
+                      alignItems='center'
+                      gap={3}
+                      bg='rgb(17,28,45)'
+                      _hover={{ color: 'blue.500' }}
+                    >
+                      {' '}
+                      <CalendarDays /> Calendar
+                    </MenuItem>
+                  </MenuGroup>
+                  <Center height='100px'>
+                    <Divider orientation='vertical' />
+                  </Center>
+                  <Box>
+                    <Text fontWeight='bold'>Quick links</Text>
+                    <Link href='/dashboard/pricing'>
+                      <Text _hover={{ color: 'blue.500' }}>Pricing page</Text>
+                    </Link>
+                    <Link href='/dashboard/pricing'>
+                      <Text _hover={{ color: 'blue.500' }}>
+                        Account setting
+                      </Text>
+                    </Link>
+                  </Box>
+                </MenuList>
+              </Menu>
             </li>
             <li>
               {' '}
@@ -103,13 +204,14 @@ export default function Navbar() {
           </ul>
           <ul className='flex gap-3 items-center'>
             <li>
-              <span className=''>
+              {/* <span className=''>
                 <Search
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder='Try search here..'
                 />
-              </span>
+              </span> */}
+              <SearchDropdown />
             </li>
             <li>
               {' '}
