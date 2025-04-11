@@ -9,11 +9,15 @@ import {
   Box,
   Text,
   Stack,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
+import { useThemeColor } from '@/lib/themeUtil';
 
 //Faq
 export default function Faq() {
+  const { childBgColor } = useThemeColor();
+  const faqColor = useColorModeValue('black', 'white');
   return (
     <>
       <PageTitle />
@@ -24,7 +28,7 @@ export default function Faq() {
         alignItems='center'
       >
         <Stack textAlign='center'>
-          <Heading color='white'>Frequently asked questions</Heading>
+          <Heading color={faqColor}>Frequently asked questions</Heading>
           <Text fontSize='xl'>
             Get to know more about ready-to-use admin dashboard templates
           </Text>
@@ -33,7 +37,7 @@ export default function Faq() {
           allowToggle
           allowMultiple
           // maxW={900}
-          bg='rgb(17, 28, 45)'
+          bg={childBgColor}
           borderRadius='2xl'
           mt={9}
           p={5}
@@ -48,7 +52,7 @@ export default function Faq() {
                   as='span'
                   flex='1'
                   textAlign='left'
-                  color='white'
+                  color={faqColor}
                 >
                   What&apos;s Admin Dashboard?
                 </Text>
@@ -72,7 +76,7 @@ export default function Faq() {
                   as='span'
                   flex='1'
                   textAlign='left'
-                  color='white'
+                  color={faqColor}
                 >
                   What should an admin dashboard template should include?
                 </Text>
@@ -96,7 +100,7 @@ export default function Faq() {
                   as='span'
                   flex='1'
                   textAlign='left'
-                  color='white'
+                  color={faqColor}
                 >
                   Why should i buy admin dashboard template from Wrappixe?
                 </Text>
@@ -119,7 +123,7 @@ export default function Faq() {
                   as='span'
                   flex='1'
                   textAlign='left'
-                  color='white'
+                  color={faqColor}
                 >
                   Do wrappixel offers a money back gurantees
                 </Text>

@@ -13,13 +13,14 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import Username from '@/lib/username';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import { showToast } from '@/lib/toastService';
-import { useThemeColor } from '../theme';
+import { useThemeColor } from '@/lib/themeUtil';
 
 const Sidebar = () => {
   const { isWide, closeSideBar } = useNav();
@@ -27,6 +28,7 @@ const Sidebar = () => {
   const { isOpen, onClose } = useDrawer();
   const router = useRouter();
   const { childBgColor, textColor } = useThemeColor();
+  const signOutColor = useColorModeValue('black', 'rgb(31, 41, 55)');
   useEffect(() => {
     const checkWidth = () => setIsMinWidth(window.innerWidth >= 980);
     checkWidth(); // Run initially
@@ -112,7 +114,10 @@ const Sidebar = () => {
         ))}
 
         {!isWide && (
-          <div className='w-[100%] flex justify-between items-center p-3 bg-gray-800 rounded-4xl h-32 sticky left-0 bottom-0'>
+          <div
+            style={{ backgroundColor: signOutColor }}
+            className='w-[100%] flex justify-between items-center p-3  rounded-4xl h-32 sticky left-0 bottom-0'
+          >
             <Box>
               <Username />
             </Box>

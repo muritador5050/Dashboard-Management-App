@@ -1,6 +1,6 @@
 'use client';
 import PageTitle from '@/components/pageTitle';
-import { useThemeColor } from '@/components/theme';
+import { useThemeColor } from '@/lib/themeUtil';
 import { Box } from '@chakra-ui/react';
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -20,8 +20,10 @@ import SearchableDropdown from '@/components/Select';
 import RichEditor from '@/components/RichEditor';
 import { Product } from '@/lib/utils';
 import { showToast } from '@/lib/toastService';
+import { useThemeColor } from '@/lib/themeUtil';
 //AddProduct
 function AddProduct() {
+  const { childBgColor, textColor } = useThemeColor();
   const [selectedValue, setSelectedValue] = useState('no-discount');
   const [discount, setDiscount] = useState<number>(0);
   const [product, setProduct] = useState<Product[]>([]);
@@ -112,12 +114,7 @@ function AddProduct() {
   return (
     <Box width='100%' display={{ xxl: 'flex' }} gap={{ xxl: '10' }}>
       <Stack flex='1'>
-        <Box
-          bg='rgb(17, 28, 45)'
-          p={5}
-          borderRadius='xl'
-          color='rgb(124, 143, 172)'
-        >
+        <Box bg={childBgColor} color={textColor} p={5} borderRadius='xl'>
           <Heading>General</Heading>
           <FormControl isRequired>
             <FormLabel>Product Name</FormLabel>
@@ -143,12 +140,7 @@ function AddProduct() {
             </FormHelperText>
           </FormControl>
         </Box>
-        <Box
-          bg='rgb(17, 28, 45)'
-          p={5}
-          borderRadius='xl'
-          color='rgb(124, 143, 172)'
-        >
+        <Box bg={childBgColor} color={textColor} p={5} borderRadius='xl'>
           <Heading>Media</Heading>
           <FileDropzone
             onFilesChange={(files) => handleFileChange(files, 'image')}
@@ -156,10 +148,10 @@ function AddProduct() {
         </Box>
 
         <Box
-          bg='rgb(17, 28, 45)'
+          bg={childBgColor}
+          color={textColor}
           p={5}
           borderRadius='xl'
-          color='rgb(124, 143, 172)'
           display='flex'
           flexDirection='column'
           gap={7}
@@ -276,12 +268,7 @@ function AddProduct() {
         </ButtonGroup>
       </Stack>
       <Stack>
-        <Box
-          bg='rgb(17, 28, 45)'
-          p={5}
-          borderRadius='xl'
-          color='rgb(124, 143, 172)'
-        >
+        <Box bg={childBgColor} color={textColor} p={5} borderRadius='xl'>
           <Heading>Thumbnail</Heading>
           <FormControl>
             <FileDropzone
@@ -293,12 +280,7 @@ function AddProduct() {
             </FormHelperText>
           </FormControl>
         </Box>
-        <Box
-          bg='rgb(17, 28, 45)'
-          p={5}
-          borderRadius='xl'
-          color='rgb(124, 143, 172)'
-        >
+        <Box bg={childBgColor} color={textColor} p={5} borderRadius='xl'>
           <Heading>Status</Heading>
           <FormControl>
             <Select>
@@ -312,12 +294,7 @@ function AddProduct() {
             <FormHelperText>Set the product status.</FormHelperText>
           </FormControl>
         </Box>
-        <Box
-          bg='rgb(17, 28, 45)'
-          p={5}
-          borderRadius='xl'
-          color='rgb(124, 143, 172)'
-        >
+        <Box bg={childBgColor} color={textColor} p={5} borderRadius='xl'>
           <Heading>Product Details</Heading>
           <FormControl>
             <FormLabel>Categories</FormLabel>
@@ -325,13 +302,7 @@ function AddProduct() {
             <FormHelperText>Add product to a category.</FormHelperText>
           </FormControl>
         </Box>
-        <Box
-          bg='rgb(17, 28, 45)'
-          p={5}
-          mb={3}
-          borderRadius='xl'
-          color='rgb(124, 143, 172)'
-        >
+        <Box bg={childBgColor} color={textColor} p={5} mb={3} borderRadius='xl'>
           <Heading>Product Template</Heading>
           <FormControl>
             <FormLabel>Select a product template</FormLabel>

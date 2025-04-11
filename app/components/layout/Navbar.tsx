@@ -34,7 +34,7 @@ import Username from '@/lib/username';
 import ThemeToggleButton from '../themeToggleButton';
 import { CartWithBadge } from '../cartComponents/cartWithBadge';
 import { SearchDropdown } from '../searchDropdown';
-import { useThemeColor } from '../theme';
+import { useThemeColor } from '@/lib/themeUtil';
 
 //Navbar
 export default function Navbar() {

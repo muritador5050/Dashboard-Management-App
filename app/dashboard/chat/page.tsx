@@ -33,7 +33,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { AlignJustify } from 'lucide-react';
-import { useThemeColor } from '@/components/theme';
+import { useThemeColor } from '@/lib/themeUtil';
 
 const CallModal = dynamic(() => import('@/components/call'), {
   ssr: false,

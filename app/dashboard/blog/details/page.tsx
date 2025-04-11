@@ -21,7 +21,7 @@ import Loading from '@/loading';
 import { ArrowLeft, Eye, ThumbsUp } from 'lucide-react';
 import PageTitle from '@/components/pageTitle';
 import Link from 'next/link';
-import { useThemeColor } from '@/components/theme';
+import { useThemeColor } from '@/lib/themeUtil';
 
 //Details
 export default function Details() {

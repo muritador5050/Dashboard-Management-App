@@ -49,7 +49,7 @@ import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { db } from '@/config/firebase';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useThemeColor } from '@/components/theme';
+import { useThemeColor } from '@/lib/themeUtil';
 dayjs.extend(relativeTime);
 type CommentType = {
   id: string;

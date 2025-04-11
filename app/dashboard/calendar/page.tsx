@@ -28,7 +28,7 @@ import {
 } from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
 import styled from '@emotion/styled';
-import { useThemeColor } from '@/components/theme';
+import { useThemeColor } from '@/lib/themeUtil';
 
 const FullCalendarWrapper = styled.div`
   .fc-button {

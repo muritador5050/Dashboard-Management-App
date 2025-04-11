@@ -12,7 +12,7 @@ import ProductWithStatusAndPayment, {
   ProductWithRewiewAndTime,
 } from '../components/TableComponent';
 import useAuthRedirect from '@/lib/useAuthRedirect';
-import { useThemeColor } from '@/components/theme';
+import { useThemeColor } from '@/lib/themeUtil';
 
 const Dashboard = () => {
   useAuthRedirect(false);

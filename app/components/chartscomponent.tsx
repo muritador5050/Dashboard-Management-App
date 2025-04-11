@@ -24,7 +24,7 @@ import {
 } from '../lib/utils';
 import { dailyProfitData, yearlyProfit } from '../lib/datas';
 import { Image, Progress } from '@chakra-ui/react';
-import { useThemeColor } from './theme';
+import { useThemeColor } from '@/lib/themeUtil';
 
 // data
 export function EarningsChart() {

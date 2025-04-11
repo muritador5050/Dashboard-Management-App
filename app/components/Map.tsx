@@ -1,6 +1,6 @@
 'use client';
+import { useThemeColor } from '@/lib/themeUtil';
 import { Progress, AspectRatio } from '@chakra-ui/react';
-import { useThemeColor } from './theme';
 
 export default function MapComponent() {
   const { childBgColor, textColor } = useThemeColor();

@@ -16,7 +16,7 @@ import {
   Box,
   Heading,
 } from '@chakra-ui/react';
-import { useThemeColor } from '@/components/theme';
+import { useThemeColor } from '@/lib/themeUtil';
 
 function DasboardLayout({ children }: { children: React.ReactNode }) {
   const { isWide } = useNav();

@@ -1,5 +1,6 @@
 'use client';
 import PageTitle from '@/components/pageTitle';
+import { useThemeColor } from '@/lib/themeUtil';
 import {
   Box,
   Heading,
@@ -15,16 +16,20 @@ import {
   Tag,
   Flex,
   Switch,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { Check, X as Uncheck } from 'lucide-react';
 import React from 'react';
 
 export default function Pricing() {
+  const { childBgColor } = useThemeColor();
+  const planColor = useColorModeValue('black', 'white');
+
   return (
     <Box>
       <PageTitle />
       <Stack alignItems='center' my={5}>
-        <Heading textAlign='center' color='white' maxW={600}>
+        <Heading textAlign='center' color={planColor} maxW={600}>
           Flexible Plans Tailored to Fit Your Community&apos;s Unique Needs!
         </Heading>
         <Flex alignItems='center' mt={3} gap={2}>
@@ -42,7 +47,7 @@ export default function Pricing() {
           display='flex'
           flexDirection='column'
           gap={7}
-          bg='rgb(17, 28, 45)'
+          bg={childBgColor}
           p={5}
           borderRadius='3xl'
         >
@@ -53,7 +58,7 @@ export default function Pricing() {
             alt='silver'
           />
           <Stat>
-            <StatLabel fontSize='5xl' fontWeight='bold' color='white'>
+            <StatLabel fontSize='5xl' fontWeight='bold' color={planColor}>
               Free
             </StatLabel>
           </Stat>
@@ -90,7 +95,7 @@ export default function Pricing() {
           display='flex'
           flexDirection='column'
           gap={7}
-          bg='rgb(17, 28, 45)'
+          bg={childBgColor}
           p={5}
           borderRadius='3xl'
         >
@@ -107,7 +112,7 @@ export default function Pricing() {
           />
           <Stat>
             <Flex alignItems='center'>
-              <StatLabel fontSize='5xl' fontWeight='bold' color='white'>
+              <StatLabel fontSize='5xl' fontWeight='bold' color={planColor}>
                 <sup>$</sup> 4.99
               </StatLabel>
               <p className='text-xl ml-3'> /mo</p>
@@ -146,7 +151,7 @@ export default function Pricing() {
           display='flex'
           flexDirection='column'
           gap={7}
-          bg='rgb(17, 28, 45)'
+          bg={childBgColor}
           p={5}
           borderRadius='3xl'
         >
@@ -158,7 +163,7 @@ export default function Pricing() {
           />
           <Stat>
             <Flex alignItems='center'>
-              <StatLabel fontSize='5xl' fontWeight='bold' color='white'>
+              <StatLabel fontSize='5xl' fontWeight='bold' color={planColor}>
                 <sup>$</sup> 9.99
               </StatLabel>
               <p className='text-xl ml-3'> /mo</p>

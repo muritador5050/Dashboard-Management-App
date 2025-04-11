@@ -1,6 +1,6 @@
 'use client';
 import PageTitle from '@/components/pageTitle';
-import { useThemeColor } from '@/components/theme';
+import { useThemeColor } from '@/lib/themeUtil';
 import { PostProps } from '@/lib/utils';
 import {
   Card,

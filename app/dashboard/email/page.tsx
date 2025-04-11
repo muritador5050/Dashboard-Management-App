@@ -20,7 +20,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
-import { useThemeColor } from '@/components/theme';
+import { useThemeColor } from '@/lib/themeUtil';
 
 type EmailType = {
   id: number;
