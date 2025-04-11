@@ -12,8 +12,11 @@ import ProductWithStatusAndPayment, {
   ProductWithRewiewAndTime,
 } from '../components/TableComponent';
 import useAuthRedirect from '@/lib/useAuthRedirect';
+import { useThemeColor } from '@/components/theme';
 
 const Dashboard = () => {
+  useAuthRedirect(false);
+  const { childBgColor, bgColor, textColor } = useThemeColor();
   const MyMap = useMemo(
     () =>
       dynamic(() => import('../components/Map'), {
@@ -22,9 +25,8 @@ const Dashboard = () => {
       }),
     []
   );
-  useAuthRedirect(false);
   return (
-    <main className='min-h-screen'>
+    <main style={{ backgroundColor: bgColor }} className='min-h-screen'>
       <section className='min-[980px]:flex gap-7 mb-9'>
         <div className='flex flex-col gap-5 min-[980px]:basis-1/2'>
           <EarningsChart />
@@ -48,7 +50,7 @@ const Dashboard = () => {
         </div>
       </section>
       <section>
-        <div className='bg-custom-bg py-3 px-5 rounded-xl'>
+        <div className=' py-3 px-5 rounded-xl'>
           <ProductWithRewiewAndTime />
         </div>
       </section>

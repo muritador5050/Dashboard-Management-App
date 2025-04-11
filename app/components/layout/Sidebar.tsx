@@ -19,12 +19,14 @@ import Username from '@/lib/username';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import { showToast } from '@/lib/toastService';
+import { useThemeColor } from '../theme';
 
 const Sidebar = () => {
   const { isWide, closeSideBar } = useNav();
   const [isMinWidth, setIsMinWidth] = useState(false);
   const { isOpen, onClose } = useDrawer();
   const router = useRouter();
+  const { childBgColor, textColor } = useThemeColor();
   useEffect(() => {
     const checkWidth = () => setIsMinWidth(window.innerWidth >= 980);
     checkWidth(); // Run initially
@@ -88,7 +90,10 @@ const Sidebar = () => {
   }
 
   return (
-    <aside className={`bg-custom-bg text-custom-color w-64 py-4 px-2`}>
+    <aside
+      style={{ backgroundColor: childBgColor, color: textColor }}
+      className={`text-custom-color w-64 py-4 px-2`}
+    >
       <span className='flex justify-between items-center'>
         <span className='flex justify-between items-center'>
           <Rocket size={48} />

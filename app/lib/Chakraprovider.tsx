@@ -4,9 +4,9 @@ import theme from '@/components/theme';
 
 export default function Provider({ children }: { children: React.ReactNode }) {
   return (
-    <ChakraProvider theme={theme}>
+    <>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      {children}
-    </ChakraProvider>
+      <ChakraProvider theme={theme}>{children}</ChakraProvider>
+    </>
   );
 }

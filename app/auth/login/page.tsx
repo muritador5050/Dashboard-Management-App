@@ -179,24 +179,6 @@ export default function LoginPage() {
   //     });
   //   }
   // }
-  const signInWithFacebook = async () => {
-    try {
-      const result = await signInWithPopup(auth, facebookProvider);
-      // The signed-in user info
-      const user = result.user;
-      console.log('Facebook User:', user);
-
-      // Optional: Get Facebook Access Token if needed
-      const credential = facebookProvider.credentialFromResult(result);
-      const accessToken = credential?.accessToken;
-      console.log('Access Token:', accessToken);
-
-      return user;
-    } catch (error) {
-      console.error('Facebook Login Error:', error);
-      // You can handle errors here
-    }
-  };
 
   return (
     <Box className='bg-custom-bg text-custom-color p-9 rounded-xl flex flex-col items-center min-[980px]:flex-row gap-9 m-auto'>

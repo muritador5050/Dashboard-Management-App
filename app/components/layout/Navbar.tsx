@@ -34,6 +34,7 @@ import Username from '@/lib/username';
 import ThemeToggleButton from '../themeToggleButton';
 import { CartWithBadge } from '../cartComponents/cartWithBadge';
 import { SearchDropdown } from '../searchDropdown';
+import { useThemeColor } from '../theme';
 
 //Navbar
 export default function Navbar() {
@@ -41,10 +42,13 @@ export default function Navbar() {
   const { collapse, handleCollapse, toggleSiderbarWidth } = useNav();
   const { onOpen } = useDrawer();
   const [swipeModal, setSwipeModal] = useState(false);
-
+  const { childBgColor, textColor } = useThemeColor();
   return (
     <>
-      <nav className=' bg-custom-bg p-5 sticky top-0 right-0 z-1000  text-custom-color rounded-2xl m-[1em]  cursor-pointer'>
+      <nav
+        style={{ backgroundColor: childBgColor, color: textColor }}
+        className='p-5 sticky top-0 right-0 z-1000  text-custom-color rounded-2xl m-[1em]  cursor-pointer'
+      >
         {/* mobile-view */}
         <div className='px-2 min-[980px]:hidden'>
           <div className='flex justify-between items-center'>
@@ -204,13 +208,6 @@ export default function Navbar() {
           </ul>
           <ul className='flex gap-3 items-center'>
             <li>
-              {/* <span className=''>
-                <Search
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder='Try search here..'
-                />
-              </span> */}
               <SearchDropdown />
             </li>
             <li>
