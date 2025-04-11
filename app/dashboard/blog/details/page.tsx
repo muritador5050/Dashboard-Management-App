@@ -21,9 +21,11 @@ import Loading from '@/loading';
 import { ArrowLeft, Eye, ThumbsUp } from 'lucide-react';
 import PageTitle from '@/components/pageTitle';
 import Link from 'next/link';
+import { useThemeColor } from '@/components/theme';
 
 //Details
 export default function Details() {
+  const { childBgColor, textColor } = useThemeColor();
   const [post, setPost] = useState<PostProps | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -96,8 +98,8 @@ export default function Details() {
         shadow='lg'
         borderRadius='xl'
         overflow='hidden'
-        bg='rgb(17,28,45)'
-        color='rgb(124, 143, 172)'
+        bg={childBgColor}
+        color={textColor}
         cursor='pointer'
       >
         <Image

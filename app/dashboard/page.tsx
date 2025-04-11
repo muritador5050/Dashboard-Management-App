@@ -45,12 +45,18 @@ const Dashboard = () => {
         <div className='max-[980px]:mb-7'>
           <MyMap />
         </div>
-        <div className='w-full h-fit bg-custom-bg px-5 py-2 rounded-xl max-[980px]:mb-7'>
+        <div
+          style={{ backgroundColor: childBgColor, color: textColor }}
+          className='w-full h-fit px-5 py-2 rounded-xl max-[980px]:mb-7'
+        >
           <ProductWithStatusAndPayment />
         </div>
       </section>
       <section>
-        <div className=' py-3 px-5 rounded-xl'>
+        <div
+          style={{ backgroundColor: childBgColor, color: textColor }}
+          className='py-3 px-5 rounded-xl'
+        >
           <ProductWithRewiewAndTime />
         </div>
       </section>

@@ -1,4 +1,11 @@
-import { Avatar, Center, Flex, IconButton, Text } from '@chakra-ui/react';
+import {
+  Avatar,
+  Center,
+  Flex,
+  IconButton,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { Phone, Video } from 'lucide-react';
 import React from 'react';
 import { User } from 'firebase/auth';
@@ -10,11 +17,12 @@ interface ChatHeaderProps {
 }
 
 export default function ChatHeader({ identity, onCall }: ChatHeaderProps) {
+  const headColor = useColorModeValue('black', 'white');
   return (
     <Flex justifyContent='space-between' alignItems='center' pb={2}>
       <Flex align='center' gap={2}>
         <Avatar size='sm' src={identity?.photoURL ?? ''} />
-        <Text color='white' fontFamily='cursive'>
+        <Text color={headColor} fontFamily='cursive'>
           {identity?.displayName?.toLocaleUpperCase()}
         </Text>
       </Flex>

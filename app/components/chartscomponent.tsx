@@ -24,9 +24,11 @@ import {
 } from '../lib/utils';
 import { dailyProfitData, yearlyProfit } from '../lib/datas';
 import { Image, Progress } from '@chakra-ui/react';
+import { useThemeColor } from './theme';
 
 // data
 export function EarningsChart() {
+  const { childBgColor, textColor } = useThemeColor();
   const [earningsData, setEarningsData] = useState<EarningsData[]>([]);
 
   useEffect(() => {
@@ -60,7 +62,10 @@ export function EarningsChart() {
   };
 
   return (
-    <div className='rounded-xl bg-custom-bg p-3 text-custom-color'>
+    <div
+      style={{ backgroundColor: childBgColor, color: textColor }}
+      className='rounded-xl  p-3 text-custom-color'
+    >
       <div className='flex flex-col gap-1'>
         <span className='flex justify-between items-center text-sm'>
           <small>Latest Deal</small>
@@ -105,8 +110,12 @@ export function EarningsChart() {
 }
 
 export function LatestDeal() {
+  const { childBgColor, textColor, borderColor } = useThemeColor();
   return (
-    <div className='rounded-xl bg-custom-bg py-10 px-3 text-custom-color flex flex-col '>
+    <div
+      style={{ backgroundColor: childBgColor, color: textColor }}
+      className='rounded-xl py-10 px-3 text-custom-color flex flex-col '
+    >
       <div>
         <span className='flex justify-between items-center'>
           <small>Earning </small> <small>86.5%</small>
@@ -133,24 +142,24 @@ export function LatestDeal() {
           <small className=''>Recent purchasers</small>
           <div className='flex items-center mt-10 relative'>
             <div
-              style={{ border: '2px solid white' }}
+              style={{ border: borderColor }}
               className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center'
             ></div>
             <div
-              style={{ border: '2px solid white' }}
+              style={{ border: borderColor }}
               className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center'
             ></div>
             <div
-              style={{ border: '2px solid white' }}
+              style={{ border: borderColor }}
               className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center'
             ></div>
             <div
-              style={{ border: '2px solid white' }}
+              style={{ border: borderColor }}
               className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center'
             ></div>
             <div
-              style={{ border: '2px solid white' }}
-              className='w-[50px] h-[50px]   rounded-full border-2 border-text-sky-500 flex justify-center items-center bg-custom-bg text-sm'
+              style={{ border: borderColor }}
+              className='w-[50px] h-[50px]  rounded-full border-2 border-text-sky-500 flex justify-center items-center b text-sm'
             >
               80+
             </div>
@@ -212,6 +221,7 @@ const DailyProfitBreakdownChart: React.FC<{ data: DailyProfitData[] }> = ({
 };
 
 export function TotalOrders() {
+  const { childBgColor, textColor } = useThemeColor();
   const [totalOrder, setTotalOrder] = useState<TotalOrderData[]>([]);
 
   function groupOrdersByStatus(orders: TotalOrderData[]) {
@@ -247,7 +257,10 @@ export function TotalOrders() {
   }, []);
 
   return (
-    <div className='bg-custom-bg rounded-xl px-5 py-7 '>
+    <div
+      style={{ backgroundColor: childBgColor, color: textColor }}
+      className='rounded-xl px-5 py-7 '
+    >
       <div className='flex relative border-b-2 border-indigo-600 mb-10  min-h-1/2'>
         <div className='flex flex-col gap-5'>
           <span>
@@ -308,8 +321,12 @@ export function TotalOrders() {
 }
 
 export function YearlyProfitPieChart() {
+  const { childBgColor, textColor } = useThemeColor();
   return (
-    <div className='bg-custom-bg rounded-xl px-3 py-7.5 w-full mx-auto'>
+    <div
+      style={{ backgroundColor: childBgColor, color: textColor }}
+      className='rounded-xl px-3 py-7.5 w-full mx-auto'
+    >
       {/* Header */}
       <div className='flex justify-between text-sm md:text-base'>
         <p>Profit</p>
@@ -352,6 +369,7 @@ export function YearlyProfitPieChart() {
 }
 
 export function Customers() {
+  const { childBgColor, textColor } = useThemeColor();
   const [customers, setCustomers] = useState<CustomersEarning[]>();
   useEffect(() => {
     async function fecthCustomer() {
@@ -371,7 +389,10 @@ export function Customers() {
     fecthCustomer();
   }, []);
   return (
-    <div className='bg-custom-bg rounded-xl p-3'>
+    <div
+      style={{ backgroundColor: childBgColor, color: textColor }}
+      className='rounded-xl p-3'
+    >
       <div>
         <span className='flex justify-between'>
           <p>Profit</p>

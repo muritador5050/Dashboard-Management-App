@@ -13,17 +13,6 @@ const config: ThemeConfig = {
 
 const theme = extendTheme({
   config,
-  styles: {
-    global: (props: { colorMode: 'light' | 'dark' }) => ({
-      // 'html, body': {
-      //   bg: props.colorMode === 'light' ? 'green' : 'rgb(11, 30, 59)',
-      //   color: props.colorMode === 'light' ? 'black' : 'rgb(124, 143, 172)',
-      // },
-      // body: {
-      //   bg: props.colorMode === 'light' ? 'white' : 'rgb(11, 30, 59)',
-      // },
-    }),
-  },
   breakpoints: {
     xs: '320px',
     sm: '480px',
@@ -42,6 +31,6 @@ export const useThemeColor = () => {
   const bgColor = useColorModeValue('#e7ecf0', 'rgb(11, 30, 59)');
   const textColor = useColorModeValue('black', 'rgb(124, 143, 172)');
   const childBgColor = useColorModeValue('white', 'rgb(17, 28, 45)');
-
-  return { bgColor, textColor, childBgColor };
+  const borderColor = useColorModeValue('2px solid black', '2px solid white');
+  return { bgColor, textColor, childBgColor, borderColor };
 };

@@ -17,14 +17,13 @@ import {
   Heading,
 } from '@chakra-ui/react';
 import { useThemeColor } from '@/components/theme';
-import { text } from 'stream/consumers';
 
 function DasboardLayout({ children }: { children: React.ReactNode }) {
   const { isWide } = useNav();
   const sidebarWidth = isWide ? 'w-20' : 'w-fit-content';
   const contentMargin = isWide ? 'ml-20' : 'ml-67';
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { bgColor, textColor, childBgColor } = useThemeColor();
+  const { bgColor, childBgColor, textColor } = useThemeColor();
 
   return (
     <Box className='flex min-h-screen' bg={bgColor} color={textColor}>
@@ -35,12 +34,7 @@ function DasboardLayout({ children }: { children: React.ReactNode }) {
       </Box>
       <Box className={`${contentMargin} w-full max-[980px]:ml-0 `}>
         <Navbar />
-        <main
-          className='px-3'
-          style={{ backgroundColor: childBgColor, color: textColor }}
-        >
-          {children}
-        </main>
+        <main className='mx-3'>{children}</main>
         <Box
           className='flex justify-center items-center fixed bottom-10 right-15 bg-sky-600 cursor-pointer w-[70px] h-[70px] rounded-full'
           onClick={onOpen}
@@ -49,7 +43,7 @@ function DasboardLayout({ children }: { children: React.ReactNode }) {
         </Box>
         <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
           <DrawerOverlay />
-          <DrawerContent bg='rgb(17, 28, 45)'>
+          <DrawerContent bg={childBgColor} color={textColor}>
             <DrawerCloseButton />
             <DrawerHeader>Account Setting</DrawerHeader>
             <DrawerBody>

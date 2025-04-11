@@ -1,5 +1,6 @@
 'use client';
 import PageTitle from '@/components/pageTitle';
+import { useThemeColor } from '@/components/theme';
 import { PostProps } from '@/lib/utils';
 import {
   Card,
@@ -21,6 +22,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 export default function PostPage() {
+  const { childBgColor, textColor } = useThemeColor();
   const [posts, setPosts] = useState<PostProps[]>([]);
 
   const generateImageUrl = (tagOrTitle: string, id: number): string => {
@@ -63,8 +65,8 @@ export default function PostPage() {
             shadow='lg'
             borderRadius='xl'
             overflow='hidden'
-            bg='rgb(17,28,45)'
-            color='rgb(124, 143, 172)'
+            bg={childBgColor}
+            color={textColor}
             cursor='pointer'
             sx={{
               transition: 'transform 0.2s ease-in-out',

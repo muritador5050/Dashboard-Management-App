@@ -27,6 +27,7 @@ import {
   CardBody,
   Textarea,
   Tag,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
 import { auth } from '@/config/firebase';
@@ -48,6 +49,7 @@ import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { db } from '@/config/firebase';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useThemeColor } from '@/components/theme';
 dayjs.extend(relativeTime);
 type CommentType = {
   id: string;
@@ -85,6 +87,8 @@ interface GalleryImage {
 }
 
 export default function ProfileTabs() {
+  const { childBgColor, textColor } = useThemeColor();
+  const statColor = useColorModeValue('black', 'white');
   const [commentText, setCommentText] = useState('');
   const [comment, setComment] = useState<CommentType[]>([]);
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -155,7 +159,7 @@ export default function ProfileTabs() {
   return (
     <>
       <PageTitle />
-      <Box bg='rgb(17, 28, 45)' borderTopRadius='xl'>
+      <Box bg={childBgColor} color={textColor} borderTopRadius='xl'>
         <Image
           src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/backgrounds/profilebg.jpg'
           alt='al'
@@ -185,7 +189,7 @@ export default function ProfileTabs() {
               <Center>
                 <StickyNote size={20} />
               </Center>
-              <StatNumber fontSize='xl' color='white'>
+              <StatNumber fontSize='xl' color={statColor}>
                 23,6477
               </StatNumber>
               <StatHelpText>Posts</StatHelpText>
@@ -194,7 +198,7 @@ export default function ProfileTabs() {
               <Center>
                 <CircleUserRound size={20} />
               </Center>
-              <StatNumber fontSize='xl' color='white'>
+              <StatNumber fontSize='xl' color={statColor}>
                 23,6477
               </StatNumber>
               <StatHelpText>Followers</StatHelpText>
@@ -203,7 +207,7 @@ export default function ProfileTabs() {
               <Center>
                 <UserRoundCheck size={20} />
               </Center>
-              <StatNumber fontSize='xl' color='white'>
+              <StatNumber fontSize='xl' color={statColor}>
                 23,6477
               </StatNumber>
               <StatHelpText>Followers</StatHelpText>
@@ -229,18 +233,18 @@ export default function ProfileTabs() {
       <Tabs>
         <Flex justify='flex-end'>
           <TabList>
-            <Tab color='white'>Profile</Tab>
-            <Tab color='white'>Followers</Tab>
-            <Tab color='white'>Friends</Tab>
-            <Tab color='white'>Gallery</Tab>
+            <Tab color={statColor}>Profile</Tab>
+            <Tab color={statColor}>Followers</Tab>
+            <Tab color={statColor}>Friends</Tab>
+            <Tab color={statColor}>Gallery</Tab>
           </TabList>
         </Flex>
         <TabPanels>
           <TabPanel mt={5} p={0}>
             <Stack direction={{ base: 'column', xxl: 'row' }} gap={7}>
               <Card
-                bg='rgb(17, 28, 45)'
-                color='white'
+                bg={childBgColor}
+                color={statColor}
                 border='1px'
                 borderRadius='xl'
                 pl='5'
@@ -266,8 +270,8 @@ export default function ProfileTabs() {
                 ))}
               </Card>
               <Box
-                bg='rgb(17, 28, 45)'
-                color='white'
+                bg={childBgColor}
+                color={statColor}
                 border='1px'
                 borderRadius='xl'
                 px='4'
@@ -295,20 +299,20 @@ export default function ProfileTabs() {
               overflowY='scroll'
               position='static'
               mt={8}
-              bg='rgb(17, 28, 45)'
+              bg={childBgColor}
               border='1px'
               borderRadius='xl'
               p={5}
             >
               <Flex align='center' gap={3}>
                 <Avatar src={auth.currentUser?.photoURL ?? ''} />
-                <Text color='white' fontWeight='bold'>
+                <Text color={statColor} fontWeight='bold'>
                   {auth.currentUser?.displayName?.toUpperCase()}
                 </Text>
               </Flex>
               {comment.map((cm, i) => (
                 <Stack
-                  bg='rgb(17, 45, 78)'
+                  bg={childBgColor}
                   w={400}
                   borderTopRightRadius='3xl'
                   borderBottomLeftRadius='3xl'
@@ -333,7 +337,7 @@ export default function ProfileTabs() {
                   display='flex'
                   justifyContent='space-between'
                   alignItems='center'
-                  bg='rgb(17, 28, 45)'
+                  bg={childBgColor}
                   borderRadius='xl'
                   p={7}
                 >
@@ -367,7 +371,7 @@ export default function ProfileTabs() {
               {profile?.friends.map((friend) => (
                 <Box
                   key={friend.id}
-                  bg='rgb(17, 28, 45)'
+                  bg={childBgColor}
                   borderRadius='xl'
                   pt={7}
                   cursor='pointer'
@@ -404,7 +408,7 @@ export default function ProfileTabs() {
               {profile?.gallery.map((img) => (
                 <Box
                   key={img.id}
-                  bg='rgb(17, 28, 45)'
+                  bg={childBgColor}
                   borderRadius='xl'
                   pb={5}
                   cursor='pointer'

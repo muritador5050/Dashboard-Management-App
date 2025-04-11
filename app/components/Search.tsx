@@ -1,8 +1,8 @@
 import React from 'react';
-import { SearchX } from 'lucide-react';
+import { useColorModeValue } from '@chakra-ui/react';
 type OnChangeProps = {
-  value?: string; // Make value optional if it's not strictly required
-  placeholder?: string; // Same for placeholder
+  value?: string;
+  placeholder?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
@@ -12,16 +12,17 @@ export default function Search({
   onChange,
   onKeyDown,
 }: OnChangeProps) {
+  const searchColor = useColorModeValue('black', 'white');
   return (
     <div
       style={{ border: '2px solid rgb(124, 143, 172)' }}
       className='flex gap-3 items-center text-white  p-2 border border-custom-color rounded-4xl'
     >
-      <SearchX />
       <input
         type='search'
         name=''
         id=''
+        color={searchColor}
         placeholder={placeholder}
         className='outline-none'
         value={value}

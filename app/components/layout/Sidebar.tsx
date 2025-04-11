@@ -114,8 +114,7 @@ const Sidebar = () => {
         {!isWide && (
           <div className='w-[100%] flex justify-between items-center p-3 bg-gray-800 rounded-4xl h-32 sticky left-0 bottom-0'>
             <Box>
-              Admin
-              <Username />{' '}
+              <Username />
             </Box>
             <LogOut
               onClick={handleSignOut}

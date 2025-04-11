@@ -18,15 +18,18 @@ import {
   Image,
   Center,
   Tooltip,
+  Flex,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import Search from '@/components/Search';
 import { Product } from '@/lib/utils';
 import { UnicodeStarRating } from '@/components/StarRating';
 import { useCart } from '@/context/ThemeContext';
+import { useThemeColor } from '@/components/theme';
 
 //Shop
 export default function Shop() {
+  const { childBgColor, textColor } = useThemeColor();
   const { addToCart } = useCart();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedByPrice, setSelectedByPrice] = useState('all');
@@ -132,72 +135,77 @@ export default function Shop() {
   }, [searchItem, selectedCategory, selectedByPrice, searchProductByCategory]);
 
   return (
-    <div>
-      <>
-        <Drawer placement='left' onClose={onClose} isOpen={isOpen}>
-          <DrawerOverlay />
-          <DrawerContent className='bg-custom-bg text-custom-color'>
-            <DrawerCloseButton />
-            <DrawerHeader borderBottomWidth='1px'>Basic Drawer</DrawerHeader>
-            <DrawerBody>
-              <div className='flex flex-col gap-7 p-5'>
-                <section className='flex flex-col gap-5 '>
-                  <h1>By Category</h1>
-                  <RadioGroup
-                    onChange={setSelectedCategory}
-                    value={selectedCategory}
-                  >
-                    <Stack spacing={3}>
-                      <Radio value='all'>All</Radio>
-                      <Radio value='beauty'>Beauty</Radio>
-                      <Radio value='skin-care'>Skin-care</Radio>
-                      <Radio value='fragrances'>Fragrances</Radio>
-                      <Radio value='groceries'>Groceries</Radio>
-                      <Radio value='furniture'>Furniture</Radio>
-                      <Radio value='smartphones'>Smartphones</Radio>
-                      <Radio value='mens-shirts'>Mens-shirt</Radio>
-                      <Radio value='womens-dresses'>Womens-shirt</Radio>
-                      <Radio value='sports-accessories'>
-                        Sport-accessories
-                      </Radio>
-                    </Stack>
-                  </RadioGroup>
-                </section>
-                <section className='border-b-4 border-white'>
-                  <h1>By Pricing</h1>
-                  <RadioGroup
-                    onChange={setSelectedByPrice}
-                    value={selectedByPrice}
-                  >
-                    <Stack spacing={3}>
-                      <Radio value='all'>All</Radio>
-                      <Radio value='0-15'>0-15</Radio>
-                      <Radio value='15-50'>15-50</Radio>
-                      <Radio value='50-100'>50-100</Radio>
-                      <Radio value='Over100'>Over100</Radio>
-                    </Stack>
-                  </RadioGroup>
-                </section>
-                <section className='my-3'>
-                  <div className='flex items-center gap-3 break-all'>
-                    <div className='w-7 h-7 rounded-full bg-red-500'></div>
-                    <div className='w-7 h-7 rounded-full bg-blue-500'></div>
-                    <div className='w-7 h-7 rounded-full bg-purple-500'></div>
-                    <div className='w-7 h-7 rounded-full bg-green-500'></div>
-                    <div className='w-7 h-7 rounded-full bg-yellow-500'></div>
-                    <div className='w-7 h-7 rounded-full bg-brown-500'></div>
-                  </div>
-                </section>
-                <Button colorScheme='cyan' onClick={handleReset}>
-                  Reset filter
-                </Button>
-              </div>
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
-      </>
-      <div className='flex gap-3 bg-custom-bg rounded-xl'>
-        <div className='flex flex-col gap-7 p-5  max-[980px]:hidden grow-1'>
+    <Box>
+      <Drawer placement='left' onClose={onClose} isOpen={isOpen}>
+        <DrawerOverlay />
+        <DrawerContent bg={childBgColor} color={textColor}>
+          <DrawerCloseButton />
+          <DrawerHeader borderBottomWidth='1px'>Basic Drawer</DrawerHeader>
+          <DrawerBody>
+            <div className='flex flex-col gap-7 p-5'>
+              <section className='flex flex-col gap-5 '>
+                <h1>By Category</h1>
+                <RadioGroup
+                  onChange={setSelectedCategory}
+                  value={selectedCategory}
+                >
+                  <Stack spacing={3}>
+                    <Radio value='all'>All</Radio>
+                    <Radio value='beauty'>Beauty</Radio>
+                    <Radio value='skin-care'>Skin-care</Radio>
+                    <Radio value='fragrances'>Fragrances</Radio>
+                    <Radio value='groceries'>Groceries</Radio>
+                    <Radio value='furniture'>Furniture</Radio>
+                    <Radio value='smartphones'>Smartphones</Radio>
+                    <Radio value='mens-shirts'>Mens-shirt</Radio>
+                    <Radio value='womens-dresses'>Womens-shirt</Radio>
+                    <Radio value='sports-accessories'>Sport-accessories</Radio>
+                  </Stack>
+                </RadioGroup>
+              </section>
+              <section className='border-b-4 border-white'>
+                <h1>By Pricing</h1>
+                <RadioGroup
+                  onChange={setSelectedByPrice}
+                  value={selectedByPrice}
+                >
+                  <Stack spacing={3}>
+                    <Radio value='all'>All</Radio>
+                    <Radio value='0-15'>0-15</Radio>
+                    <Radio value='15-50'>15-50</Radio>
+                    <Radio value='50-100'>50-100</Radio>
+                    <Radio value='Over100'>Over100</Radio>
+                  </Stack>
+                </RadioGroup>
+              </section>
+              <section className='my-3'>
+                <div className='flex items-center gap-3 break-all'>
+                  <div className='w-7 h-7 rounded-full bg-red-500'></div>
+                  <div className='w-7 h-7 rounded-full bg-blue-500'></div>
+                  <div className='w-7 h-7 rounded-full bg-purple-500'></div>
+                  <div className='w-7 h-7 rounded-full bg-green-500'></div>
+                  <div className='w-7 h-7 rounded-full bg-yellow-500'></div>
+                  <div className='w-7 h-7 rounded-full bg-brown-500'></div>
+                </div>
+              </section>
+              <Button colorScheme='cyan' onClick={handleReset}>
+                Reset filter
+              </Button>
+            </div>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+      <Flex
+        // className='flex gap-3 rounded-3xl'
+        bg={childBgColor}
+        color={textColor}
+        borderRadius='3xl'
+        gap={3}
+      >
+        <div
+          className='flex flex-col gap-7 p-5  max-[980px]:hidden grow-1'
+          style={{ borderTopLeftRadius: '30px' }}
+        >
           <section className='flex flex-col gap-5 '>
             <h1>By Category</h1>
             <RadioGroup onChange={setSelectedCategory} value={selectedCategory}>
@@ -331,7 +339,7 @@ export default function Shop() {
             )}
           </div>
         </div>
-      </div>
-    </div>
+      </Flex>
+    </Box>
   );
 }

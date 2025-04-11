@@ -20,6 +20,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
+import { useThemeColor } from '@/components/theme';
 
 type EmailType = {
   id: number;
@@ -29,6 +30,7 @@ type EmailType = {
 };
 
 export default function Emails() {
+  const { childBgColor, textColor } = useThemeColor();
   const [emails, setEmails] = useState<EmailType[]>([]);
   const [loading, setLoading] = useState(false);
   const [to, setTo] = useState('');
@@ -37,46 +39,70 @@ export default function Emails() {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  useEffect(() => {
-    async function fetchEmails() {
+  async function fetchEmailsData() {
+    try {
       setLoading(true);
       const res = await fetch(
         'https://jsonplaceholder.typicode.com/comments?_limit=10'
       );
       const data = await res.json();
       setEmails(data);
+    } catch (error) {
+      console.error('Error fetching emails:', error);
+    } finally {
       setLoading(false);
     }
+  }
 
-    fetchEmails();
+  useEffect(() => {
+    fetchEmailsData();
   }, []);
+
+  const fakeEmailApi = 'https://jsonplaceholder.typicode.com/posts';
 
   const handleSend = async () => {
     if (!to || !subject || !message) return;
 
-    // Replace this with your webhook.site URL
-    const fakeEmailApi = 'https://jsonplaceholder.typicode.com/posts';
-    setLoading(true);
-    await fetch(fakeEmailApi, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ to, subject, message }),
-    });
-    setLoading(false);
-    toast({
-      title: 'Email sent!',
-      description: 'This is a mock send using webhook.site.',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
+    const emailData = { to, subject, message };
 
-    setTo('');
-    setSubject('');
-    setMessage('');
-    onClose();
+    try {
+      setLoading(true);
+      const response = await fetch(fakeEmailApi, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(emailData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+
+      toast({
+        title: 'Email sent!',
+        description: 'This is a mock send using webhook.site.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      // Reset form
+      setTo('');
+      setSubject('');
+      setMessage('');
+      onClose();
+    } catch (error) {
+      console.error('Send failed:', error);
+      toast({
+        title: 'Error sending email',
+        description: 'Something went wrong',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
-
   return (
     <Box p={6}>
       <PageTitle />
@@ -100,7 +126,7 @@ export default function Emails() {
               p={4}
               border='1px solid gray'
               borderRadius='md'
-              bg=' rgb(17, 28, 45)'
+              bg={childBgColor}
             >
               <Text fontWeight='bold'>{email.name}</Text>
               <Text fontSize='sm' color='gray.500'>
@@ -114,7 +140,7 @@ export default function Emails() {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent bg=' rgb(17, 28, 45)' color='rgb(124, 143, 172);'>
+        <ModalContent bg={childBgColor} color={textColor}>
           <ModalHeader>New Message</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

@@ -11,6 +11,7 @@ import {
   Flex,
   Stack,
   Text,
+  useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
@@ -32,6 +33,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { AlignJustify } from 'lucide-react';
+import { useThemeColor } from '@/components/theme';
 
 const CallModal = dynamic(() => import('@/components/call'), {
   ssr: false,
@@ -45,6 +47,8 @@ type User = {
 };
 
 export default function Chat() {
+  const { childBgColor, textColor } = useThemeColor();
+  const usersColor = useColorModeValue('black', 'white');
   const [callOpen, setCallOpen] = useState(false);
   const [callType, setCallType] = useState<'video' | 'voice' | null>(null);
   const [roomId, setRoomId] = useState<string>('');
@@ -168,9 +172,15 @@ export default function Chat() {
       <PageTitle />
       <Drawer placement='left' onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
-        <DrawerContent bg=' rgb(17, 28, 45)'>
+        <DrawerContent bg={childBgColor}>
           <DrawerBody>
-            <Box borderRight='2px solid gray' flexBasis={300} pr={4}>
+            <Box
+              bg={childBgColor}
+              color={textColor}
+              borderRight='2px solid gray'
+              flexBasis={300}
+              pr={4}
+            >
               <Search
                 placeholder='Search user'
                 value={searchQuery}
@@ -199,7 +209,13 @@ export default function Chat() {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-      <Stack direction='row' bg='gray.800' borderRadius='3xl' minH={600}>
+      <Stack
+        direction='row'
+        bg={childBgColor}
+        color={textColor}
+        borderRadius='3xl'
+        minH={600}
+      >
         <Box
           borderRight='2px solid gray'
           flexBasis={300}
@@ -226,7 +242,7 @@ export default function Chat() {
                   onClick={() => handleSelect(u)}
                 >
                   <Avatar src={u.photoURL} />
-                  <Text color='white'>{u.displayName}</Text>
+                  <Text color={usersColor}>{u.displayName}</Text>
                 </Flex>
               ))}
           </Box>

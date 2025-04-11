@@ -3,7 +3,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import { Dot } from 'lucide-react';
 import Link from 'next/link';
-import { Box, Heading } from '@chakra-ui/react';
+import { Box, Flex, Heading, useColorModeValue } from '@chakra-ui/react';
 
 //pageTitle
 export default function PageTitle() {
@@ -27,19 +27,19 @@ export default function PageTitle() {
   };
 
   const pageTitle = pageRoutes[pathname] || '';
-
+  const titleColor = useColorModeValue('black', 'white');
   return (
-    <header>
-      <Heading color='white' fontSize='2xl'>
+    <Box>
+      <Heading fontSize='2xl' color={titleColor}>
         {pageTitle}
       </Heading>
-      <Box className='flex items-center'>
+      <Flex align='center'>
         <Link href='/dashboard'>
           <span className='hover:text-blue-500'>Home</span>
         </Link>
         <Dot size={28} />
         <small>{pageTitle}</small>
-      </Box>
-    </header>
+      </Flex>
+    </Box>
   );
 }

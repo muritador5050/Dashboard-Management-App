@@ -28,6 +28,7 @@ import {
 } from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
 import styled from '@emotion/styled';
+import { useThemeColor } from '@/components/theme';
 
 const FullCalendarWrapper = styled.div`
   .fc-button {
@@ -66,6 +67,7 @@ export default function Calendar() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const calendarRef = useRef<any>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { childBgColor, textColor } = useThemeColor();
 
   const handleAddEvent = () => {
     if (!calendarRef.current) return;
@@ -94,7 +96,7 @@ export default function Calendar() {
     <Box>
       <PageTitle />
       <Box
-        bg='rgb(17, 28, 45)'
+        bg={childBgColor}
         borderRadius='xl'
         boxShadow='lg'
         // display={{ base: 'block', md: 'flex' }}
@@ -131,7 +133,7 @@ export default function Calendar() {
       </Box>
       <Modal isOpen={isOpen} onClose={onClose} size='xl'>
         <ModalOverlay />
-        <ModalContent bg=' rgb(17, 28, 45)' color='rgb(124, 143, 172);'>
+        <ModalContent bg={childBgColor} color={textColor}>
           <ModalHeader>New Message</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

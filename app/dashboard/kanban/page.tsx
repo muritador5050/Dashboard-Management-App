@@ -1,7 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Box, Heading, Stack, Tag, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Stack,
+  Tag,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import PageTitle from '@/components/pageTitle';
+import { useThemeColor } from '@/components/theme';
 
 interface TodoList {
   id: number;
@@ -11,7 +19,8 @@ interface TodoList {
 
 export default function Kanban() {
   const [todos, setTodos] = useState<TodoList[]>([]);
-
+  const { childBgColor } = useThemeColor();
+  const headColor = useColorModeValue('black', 'white');
   // Effect
   useEffect(() => {
     async function FetchTodo() {
@@ -37,13 +46,13 @@ export default function Kanban() {
   return (
     <Box>
       <PageTitle />
-      <Heading color='white' mb={4}>
+      <Heading color={headColor} mb={4}>
         Improving Work Processes
       </Heading>
       <Stack direction={{ base: 'column', xxl: 'row' }} spacing={4}>
         {/* Completed Todos Stack */}
         <Box flex='1' bg='whiteAlpha.500' p={4} borderRadius='2xl'>
-          <Heading size='md' mb={4} color='white' textAlign='center'>
+          <Heading size='md' mb={4} color={headColor} textAlign='center'>
             Completed
           </Heading>
           <Stack>
@@ -53,7 +62,7 @@ export default function Kanban() {
                 p={4}
                 borderWidth='1px'
                 borderRadius='lg'
-                bg=' rgb(17, 28, 45)'
+                bg={childBgColor}
               >
                 <Text>{todo}</Text>
                 <Tag colorScheme='green' variant='solid'>
@@ -66,7 +75,7 @@ export default function Kanban() {
 
         {/* Pending Todos Stack */}
         <Box flex='1' bg='whiteAlpha.500' p={4} borderRadius='2xl'>
-          <Heading size='md' mb={4} color='white' textAlign='center'>
+          <Heading size='md' mb={4} color={headColor} textAlign='center'>
             Pending
           </Heading>
           <Stack>
@@ -76,7 +85,7 @@ export default function Kanban() {
                 p={4}
                 borderWidth='1px'
                 borderRadius='lg'
-                bg=' rgb(17, 28, 45)'
+                bg={childBgColor}
               >
                 <Text>{todo}</Text>
                 <Tag colorScheme='red' variant='solid'>
