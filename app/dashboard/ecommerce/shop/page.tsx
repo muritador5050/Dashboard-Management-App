@@ -25,7 +25,7 @@ import Search from '@/components/Search';
 import { Product } from '@/lib/utils';
 import { UnicodeStarRating } from '@/components/StarRating';
 import { useCart } from '@/context/ThemeContext';
-import { useThemeColor } from '@/components/theme';
+import { useThemeColor } from '@/lib/themeUtil';
 
 //Shop
 export default function Shop() {

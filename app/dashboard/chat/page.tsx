@@ -168,7 +168,7 @@ export default function Chat() {
   const identity = auth.currentUser;
 
   return (
-    <Box p={4}>
+    <Box>
       <PageTitle />
       <Drawer placement='left' onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />

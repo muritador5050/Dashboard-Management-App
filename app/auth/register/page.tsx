@@ -33,7 +33,7 @@ import {
 } from 'firebase/auth';
 import { auth, db } from '@/config/firebase';
 import { useThemeColor } from '@/lib/themeUtil';
-//Loginpage
+//Register
 export default function SignUp() {
   const { childBgColor, textColor } = useThemeColor();
   const [credential, setCredential] = useState<SignUpCredentialProp>({

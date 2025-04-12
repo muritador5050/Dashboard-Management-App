@@ -47,7 +47,7 @@ export default function ChatMessages({ scrollRef }: ChatMessagesProps) {
       flex='1'
       overflowY='scroll'
       bg='rgb(10, 28, 49)'
-      // p={3}
+      p={3}
       borderRadius='lg'
       maxH={500}
     >

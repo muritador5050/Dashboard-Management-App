@@ -26,6 +26,20 @@ import {
   Text,
   Divider,
   Center,
+  Flex,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverArrow,
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionIcon,
+  AccordionPanel,
+  ListItem,
+  ListIcon,
+  List as ListParent,
 } from '@chakra-ui/react';
 import { useCart, useDrawer, useNav } from '@/context/ThemeContext';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -47,11 +61,11 @@ export default function Navbar() {
     <>
       <nav
         style={{ backgroundColor: childBgColor, color: textColor }}
-        className='p-5 sticky top-0 right-0 z-1000  text-custom-color rounded-2xl m-[1em]  cursor-pointer'
+        className='p-5 max-[980px]:px-2 max-[980px]:mx-2 sticky top-0 right-0 z-1000  text-custom-color rounded-2xl m-3 cursor-pointer'
       >
         {/* mobile-view */}
         <div className='px-2 min-[980px]:hidden'>
-          <div className='flex justify-between items-center'>
+          <div className='flex justify-between items-center mb-3'>
             <span>
               <AlignJustify onClick={onOpen} />
             </span>
@@ -72,15 +86,25 @@ export default function Navbar() {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
             <hr className='w-full my-4' />
-            <div className='flex justify-between items-center'>
+            <Flex align='center' justifyContent='space-between' mt={5}>
               <span>
                 <AlignJustify onClick={() => setSwipeModal(true)} />
               </span>
-              <ul className='flex gap-2 items-center'>
+              <ul className='flex gap-5 items-center'>
                 <li>
-                  <span>
-                    <SearchX />
-                  </span>
+                  <Popover>
+                    <PopoverTrigger>
+                      <span>
+                        <SearchX />
+                      </span>
+                    </PopoverTrigger>
+                    <PopoverContent bg={childBgColor} color={textColor}>
+                      <PopoverArrow />
+                      <PopoverBody>
+                        <SearchDropdown />
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
                 </li>
                 <li>
                   <BlinkingIcon />
@@ -97,7 +121,7 @@ export default function Navbar() {
                   <Username />
                 </li>
               </ul>
-            </div>
+            </Flex>
           </motion.div>
         </div>
         {/* desktop-view */}
@@ -121,7 +145,7 @@ export default function Navbar() {
                 <MenuList
                   display='flex'
                   gap={5}
-                  bg='rgb(17,28,45)'
+                  bg={childBgColor}
                   borderRadius='2xl'
                   border='none'
                   p={3}
@@ -133,7 +157,7 @@ export default function Navbar() {
                       display='flex'
                       alignItems='center'
                       gap={3}
-                      bg='rgb(17,28,45)'
+                      bg={childBgColor}
                       _hover={{ color: 'blue.500' }}
                     >
                       {' '}
@@ -145,7 +169,7 @@ export default function Navbar() {
                       display='flex'
                       alignItems='center'
                       gap={3}
-                      bg='rgb(17,28,45)'
+                      bg={childBgColor}
                       _hover={{ color: 'blue.500' }}
                     >
                       <Mails /> Email App{' '}
@@ -159,7 +183,7 @@ export default function Navbar() {
                       display='flex'
                       alignItems='center'
                       gap={3}
-                      bg='rgb(17,28,45)'
+                      bg={childBgColor}
                       _hover={{ color: 'blue.500' }}
                     >
                       {' '}
@@ -171,7 +195,7 @@ export default function Navbar() {
                       display='flex'
                       alignItems='center'
                       gap={3}
-                      bg='rgb(17,28,45)'
+                      bg={childBgColor}
                       _hover={{ color: 'blue.500' }}
                     >
                       {' '}
@@ -185,11 +209,6 @@ export default function Navbar() {
                     <Text fontWeight='bold'>Quick links</Text>
                     <Link href='/dashboard/pricing'>
                       <Text _hover={{ color: 'blue.500' }}>Pricing page</Text>
-                    </Link>
-                    <Link href='/dashboard/pricing'>
-                      <Text _hover={{ color: 'blue.500' }}>
-                        Account setting
-                      </Text>
                     </Link>
                   </Box>
                 </MenuList>
@@ -245,7 +264,8 @@ export default function Navbar() {
               animate={{ x: '0%' }}
               exit={{ x: '100%' }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className='fixed top-0 right-0 z-1000 w-80 h-full bg-custom-bg text-custom-color shadow-lg p-6 flex flex-col'
+              className='fixed top-0 right-0 z-1000 w-80 h-full  shadow-lg p-6 flex flex-col'
+              style={{ backgroundColor: childBgColor, color: textColor }}
             >
               <span>
                 <X
@@ -255,12 +275,46 @@ export default function Navbar() {
               </span>
               <ul className='flex flex-col gap-5'>
                 <li className='flex justify-between items-center'>
-                  Apps
-                  <ChevronDown />
+                  <Accordion allowToggle w='full' transition='ease-in-out'>
+                    <AccordionItem>
+                      <AccordionButton>
+                        <Box as='span' flex='1' textAlign='left'>
+                          Apps
+                        </Box>
+                        <AccordionIcon />
+                      </AccordionButton>
+                      <AccordionPanel pb={4}>
+                        <ListParent spacing={3}>
+                          <ListItem>
+                            <ListIcon as={MessagesSquare} color='green.500' />
+                            <Link href='/dashboard/chat'>Chat App</Link>
+                          </ListItem>
+                          <ListItem>
+                            <ListIcon as={Mails} color='green.500' />{' '}
+                            <Link href='/dashboard/email'>Email App</Link>
+                          </ListItem>
+                          <ListItem>
+                            <ListIcon as={UserPen} color='green.500' />
+                            <Link href='/dashboard/profile'>User Profile</Link>
+                          </ListItem>
+                          <ListItem>
+                            <ListIcon as={CalendarDays} color='green.500' />
+                            <Link href='/dashboard/calendar'>Calendar</Link>
+                          </ListItem>
+                        </ListParent>
+                      </AccordionPanel>
+                    </AccordionItem>
+                  </Accordion>
                 </li>
-                <li>Chat</li>
-                <li>Calendar</li>
-                <li>Email</li>
+                <li>
+                  <Link href='/dashboard/chat'>Chat</Link>
+                </li>
+                <li>
+                  <Link href='/dashboard/calendar'> Calendar</Link>
+                </li>
+                <li>
+                  <Link href='/dashboard/email'> Email</Link>
+                </li>
               </ul>
             </motion.div>
           </>

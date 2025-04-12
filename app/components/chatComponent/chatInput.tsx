@@ -6,13 +6,13 @@ import {
   IconButton,
   Flex,
 } from '@chakra-ui/react';
-import { Smile, ImagePlus, Paperclip, Mic, Square } from 'lucide-react';
+import { Smile, ImagePlus, Paperclip, Mic, Square, Send } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { auth, db, storage } from '@/config/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 interface ChatInputProps {
-  scrollRef: React.RefObject<HTMLDivElement | null>; // Type for scrollRef
+  scrollRef: React.RefObject<HTMLDivElement | null>;
 }
 export default function ChatInput({ scrollRef }: ChatInputProps) {
   const [message, setMessage] = useState('');
@@ -21,6 +21,7 @@ export default function ChatInput({ scrollRef }: ChatInputProps) {
 
   const handleSendMessage = async () => {
     const user = auth.currentUser;
+    if (!message) return;
     if (!user) return;
     if (user) {
       message.trim();
@@ -80,14 +81,21 @@ export default function ChatInput({ scrollRef }: ChatInputProps) {
       <Input
         placeholder='Type a message...'
         border='none'
+        borderRadius='xl'
         bg='gray.600'
         color='white'
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
       />
       <InputRightAddon bg='gray.600' border='none'>
         <Flex gap={2}>
+          <IconButton
+            icon={<Send size={18} />}
+            aria-label='Attach image'
+            variant='ghost'
+            size='sm'
+            onClick={handleSendMessage}
+          />
           <IconButton
             icon={<ImagePlus size={18} />}
             aria-label='Attach image'

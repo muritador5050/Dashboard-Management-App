@@ -43,8 +43,8 @@ export default function Username() {
 
   return (
     <Flex align='center' gap={4}>
-      <Avatar src={photoURL || '../user-11.png'} />
-      <Box ml='-1'>
+      <Avatar size='md' src={photoURL} />
+      <Box ml='-1' display={{ base: 'none', xxl: 'block' }}>
         <Text fontWeight='bold'>{`${userName
           .charAt(0)
           .toUpperCase()}${userName.slice(1)}`}</Text>
