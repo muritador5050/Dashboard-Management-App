@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { auth, db } from '@/config/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { Avatar, Flex, Text } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Spinner, Text } from '@chakra-ui/react';
 
 export default function Username() {
   const [userName, setUserName] = useState('');
@@ -17,7 +17,6 @@ export default function Username() {
           return;
         }
 
-        // Set photoURL directly from the authenticated user
         setPhotoURL(user.photoURL || '');
 
         const userRef = doc(db, 'users', user.uid);
@@ -38,16 +37,19 @@ export default function Username() {
     fetchUserData();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Spinner />;
 
   if (!auth.currentUser) return null;
 
   return (
     <Flex align='center' gap={4}>
       <Avatar src={photoURL || '../user-11.png'} />
-      <Text fontWeight='light'>
-        {userName} <br /> Admin!
-      </Text>
+      <Box ml='-1'>
+        <Text fontWeight='bold'>{`${userName
+          .charAt(0)
+          .toUpperCase()}${userName.slice(1)}`}</Text>
+        <Text> Admin</Text>
+      </Box>
     </Flex>
   );
 }

@@ -5,7 +5,6 @@ import { NavigationItemComponent } from '../NavigationItems';
 import { useDrawer, useNav } from '@/context/ThemeContext';
 import { useEffect, useState } from 'react';
 import {
-  Box,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -13,6 +12,8 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  Flex,
+  Tooltip,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
@@ -28,10 +29,13 @@ const Sidebar = () => {
   const { isOpen, onClose } = useDrawer();
   const router = useRouter();
   const { childBgColor, textColor } = useThemeColor();
-  const signOutColor = useColorModeValue('black', 'rgb(31, 41, 55)');
+  const signOutColor = useColorModeValue(
+    'rgb(125, 211, 252)',
+    'rgb(31, 41, 55)'
+  );
   useEffect(() => {
     const checkWidth = () => setIsMinWidth(window.innerWidth >= 980);
-    checkWidth(); // Run initially
+    checkWidth();
     window.addEventListener('resize', checkWidth);
     return () => window.removeEventListener('resize', checkWidth);
   }, []);
@@ -54,7 +58,7 @@ const Sidebar = () => {
     return isOpen ? (
       <Drawer placement='left' onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
-        <DrawerContent bg='rgb(17, 28, 45)' color='rgb(124, 143, 172)'>
+        <DrawerContent bg={childBgColor} color={textColor}>
           <DrawerHeader>
             <DrawerCloseButton />
             <span className='flex gap-5 items-center'>
@@ -74,17 +78,25 @@ const Sidebar = () => {
             </nav>
           </DrawerBody>
           <DrawerFooter>
-            <div className='w-full flex justify-between items-center p-3 bg-gray-800 rounded-4xl h-32 sticky left-0 bottom-0'>
-              <Box>
-                Admin
-                <Username />{' '}
-              </Box>
-              <LogOut
-                onClick={handleSignOut}
-                size={32}
-                className='cursor-pointer'
-              />
-            </div>
+            <Flex
+              bg={signOutColor}
+              position='sticky'
+              left={0}
+              bottom={0}
+              align='center'
+              justifyContent='space-between'
+              p={5}
+              borderRadius='3xl'
+            >
+              <Username />
+              <Tooltip hasArrow placement='top' label='Logout'>
+                <LogOut
+                  onClick={handleSignOut}
+                  size={32}
+                  className='cursor-pointer'
+                />
+              </Tooltip>
+            </Flex>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
@@ -114,19 +126,25 @@ const Sidebar = () => {
         ))}
 
         {!isWide && (
-          <div
-            style={{ backgroundColor: signOutColor }}
-            className='w-[100%] flex justify-between items-center p-3  rounded-4xl h-32 sticky left-0 bottom-0'
+          <Flex
+            bg={signOutColor}
+            position='sticky'
+            left={0}
+            bottom={0}
+            align='center'
+            justifyContent='space-between'
+            p={5}
+            borderRadius='3xl'
           >
-            <Box>
-              <Username />
-            </Box>
-            <LogOut
-              onClick={handleSignOut}
-              size={32}
-              className='cursor-pointer'
-            />
-          </div>
+            <Username />
+            <Tooltip hasArrow placement='top' label='Logout'>
+              <LogOut
+                onClick={handleSignOut}
+                size={32}
+                className='cursor-pointer'
+              />
+            </Tooltip>
+          </Flex>
         )}
       </nav>
     </aside>

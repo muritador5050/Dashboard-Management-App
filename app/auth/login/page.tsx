@@ -35,12 +35,16 @@ import {
   doc,
   getDocs,
   query,
+  QuerySnapshot,
   setDoc,
   where,
 } from 'firebase/firestore';
+import { useThemeColor } from '@/lib/themeUtil';
 
 //Loginpage
 export default function LoginPage() {
+  const { childBgColor, textColor } = useThemeColor();
+
   const [credential, setCredential] = useState<SignInCredentialProp>({
     email: '',
     password: '',
@@ -75,8 +79,17 @@ export default function LoginPage() {
     { email, password }: SignInCredentialProp,
     rememberMe: boolean
   ) => {
+    if (!email || !password) {
+      showToast({
+        title: 'Missing Info',
+        description: 'Email and password are required.',
+        status: 'warning',
+        duration: 3000,
+      });
+      setIsLoading(false);
+      return;
+    }
     try {
-      // Set persistence
       const persistence = rememberMe
         ? browserLocalPersistence
         : browserSessionPersistence;
@@ -90,7 +103,7 @@ export default function LoginPage() {
         showToast({
           title: 'Error',
           status: 'error',
-          description: 'please signUp first!',
+          description: 'No user with this email',
         });
         return;
       }
@@ -104,21 +117,21 @@ export default function LoginPage() {
         password
       );
       const user = userCredential.user;
-
-      showToast({
-        title: 'Sign in',
-        status: 'success',
-        description: 'Sign in successful',
-      });
-
       return { user, displayName: userData?.displayname };
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       console.error('Login error:', err);
+      let message = 'Something went wrong. Please try again.';
+      if (err.code === 'auth/invalid-credential') {
+        message = 'Email or password is incorrect';
+      }
       showToast({
-        title: 'Error',
+        title: 'Login failed',
+        description: message,
         status: 'error',
-        description: 'Error signing in',
+        duration: 4000,
       });
+      setIsLoading(false);
     }
   };
 
@@ -126,21 +139,13 @@ export default function LoginPage() {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      // Store user data in Firestore (optional)
       await setDoc(doc(db, 'users', user.uid), {
         displayName: user.displayName,
         email: user.email,
         uid: user.uid,
         photoURL: user.photoURL,
       });
-
-      showToast({
-        title: 'Google Sign-in',
-        description: 'SignIn successful!',
-        status: 'success',
-      });
-
-      return { user, displayName: user.displayName }; // Return user data
+      return { user, displayName: user.displayName };
     } catch (err) {
       console.error('Google sign-in error:', err);
       showToast({
@@ -181,7 +186,11 @@ export default function LoginPage() {
   // }
 
   return (
-    <Box className='bg-custom-bg text-custom-color p-9 rounded-xl flex flex-col items-center min-[980px]:flex-row gap-9 m-auto'>
+    <Box
+      bg={childBgColor}
+      color={textColor}
+      className='p-9 rounded-xl flex flex-col items-center min-[980px]:flex-row gap-9 m-auto'
+    >
       <Stack>
         <Flex>
           <Image
@@ -238,7 +247,7 @@ export default function LoginPage() {
         </Stack>
         <Box position='relative'>
           <Divider />
-          <AbsoluteCenter bg='rgb(17, 28, 45)' px='7'>
+          <AbsoluteCenter bg={childBgColor} px='7'>
             or sign in with
           </AbsoluteCenter>
         </Box>

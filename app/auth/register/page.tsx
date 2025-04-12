@@ -33,8 +33,10 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { auth, db } from '@/config/firebase';
+import { useThemeColor } from '@/lib/themeUtil';
 //Loginpage
 export default function SignUp() {
+  const { childBgColor, textColor } = useThemeColor();
   const [credential, setCredential] = useState<SignUpCredentialProp>({
     displayName: '',
     email: '',
@@ -116,7 +118,11 @@ export default function SignUp() {
     }
   };
   return (
-    <Box className='bg-custom-bg text-custom-color p-9 rounded-xl flex flex-col items-center min-[980px]:flex-row gap-9 m-auto'>
+    <Box
+      bg={childBgColor}
+      color={textColor}
+      className=' p-9 rounded-xl flex flex-col items-center min-[980px]:flex-row gap-9 m-auto'
+    >
       <Stack>
         <Flex>
           <Image
@@ -172,7 +178,7 @@ export default function SignUp() {
         </Stack>
         <Box position='relative'>
           <Divider />
-          <AbsoluteCenter bg='rgb(17, 28, 45)' px='7'>
+          <AbsoluteCenter bg={childBgColor} px='7'>
             or sign in with
           </AbsoluteCenter>
         </Box>
