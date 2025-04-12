@@ -33,6 +33,35 @@ const CallModal: React.FC<CallModalProps> = ({
   const audioTrackRef = useRef<IMicrophoneAudioTrack | null>(null);
   const videoTrackRef = useRef<ICameraVideoTrack | null>(null);
 
+  const cleanupCall = async () => {
+    try {
+      if (clientRef.current) {
+        await clientRef.current.leave();
+        clientRef.current.removeAllListeners();
+        clientRef.current = null;
+      }
+
+      if (audioTrackRef.current) {
+        audioTrackRef.current.stop();
+        audioTrackRef.current.close();
+        audioTrackRef.current = null;
+      }
+
+      if (videoTrackRef.current) {
+        videoTrackRef.current.stop();
+        videoTrackRef.current.close();
+        videoTrackRef.current = null;
+      }
+    } catch (error) {
+      console.error('Error cleaning up call:', error);
+    }
+  };
+
+  const endCall = async () => {
+    await cleanupCall();
+    onClose();
+  };
+
   useEffect(() => {
     const initCall = async () => {
       try {
@@ -45,10 +74,15 @@ const CallModal: React.FC<CallModalProps> = ({
         if (type === 'video') {
           const [audioTrack, videoTrack] =
             await AgoraRTC.createMicrophoneAndCameraTracks();
+          audioTrackRef.current = audioTrack;
+          videoTrackRef.current = videoTrack;
+
           videoTrack.play(localVideoRef.current!);
           await client.publish([audioTrack, videoTrack]);
         } else {
           const audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+          audioTrackRef.current = audioTrack;
+
           await client.publish([audioTrack]);
         }
       } catch (error) {
@@ -61,28 +95,12 @@ const CallModal: React.FC<CallModalProps> = ({
     }
 
     return () => {
-      clientRef.current?.leave();
+      cleanupCall();
     };
   }, [isOpen, type, roomId]);
 
-  const endCall = async () => {
-    try {
-      await clientRef.current?.leave();
-      clientRef.current?.removeAllListeners();
-      clientRef.current = null;
-      audioTrackRef.current?.stop();
-      audioTrackRef.current?.close();
-      videoTrackRef.current?.stop();
-      videoTrackRef.current?.close();
-    } catch (err) {
-      console.error('Error ending call:', err);
-    } finally {
-      onClose();
-    }
-  };
-
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size='xl' isCentered>
+    <Modal isOpen={isOpen} onClose={endCall} size='xl' isCentered>
       <ModalOverlay />
       <ModalContent p={4} bg='gray.800' color='white'>
         {type === 'video' ? (
