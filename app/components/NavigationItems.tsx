@@ -22,7 +22,7 @@ export const NavigationItemComponent: React.FC<{
       {item.children ? (
         <div
           onClick={() => setIsOpen(!isOpen)}
-          className={`flex items-center justify-between w-full p-2 hover:bg-purple-700 transition duration-300 rounded cursor-pointer `}
+          className={`flex items-center justify-between w-full p-2  hover:bg-orange-700/20 transition duration-500 rounded-tr-full rounded-br-full cursor-pointer `}
         >
           <div className='flex items-center gap-3'>
             {item.icon && <span>{item.icon}</span>}
@@ -37,13 +37,15 @@ export const NavigationItemComponent: React.FC<{
           )}
         </div>
       ) : (
-        <Link
-          href={`/dashboard/${item.segment}`}
-          className={`flex items-center gap-3 p-2 hover:bg-red-700 transition duration-500  rounded block`}
-        >
-          {item.icon && <span>{item.icon}</span>}
-          {!isWide && <span>{item.title}</span>}
-        </Link>
+        <div className='hover:bg-green-700/20 transition duration-500 rounded-tr-full rounded-br-full'>
+          <Link
+            href={`/dashboard/${item.segment}`}
+            className={`flex items-center gap-3 p-2   block`}
+          >
+            {item.icon && <span>{item.icon}</span>}
+            {!isWide && <span>{item.title}</span>}
+          </Link>
+        </div>
       )}
 
       {item.children && (
@@ -53,16 +55,21 @@ export const NavigationItemComponent: React.FC<{
           transition={{ duration: 0.3, ease: 'easeInOut' }}
           className='overflow-hidden'
         >
-          <div className='ml-4 mt-1 space-y-1'>
+          <div className='ml-4 mt-1 space-y-1 '>
             {item.children.map((child, idx) => (
-              <Link
-                href={`/dashboard/${item.title}/${child.segment}`}
-                className={`flex items-center gap-2 p-2 rounded block transition `}
+              <div
+                className='hover:bg-red-700/20 transition duration-500 rounded-tr-full rounded-br-full'
                 key={idx}
               >
-                {child.icon && <span>{child.icon}</span>}
-                {!isWide && <span>{child.title}</span>}
-              </Link>
+                <Link
+                  href={`/dashboard/${item.title}/${child.segment}`}
+                  className={`flex items-center gap-2 p-2 rounded block transition `}
+                  key={idx}
+                >
+                  {child.icon && <span>{child.icon}</span>}
+                  {!isWide && <span>{child.title}</span>}
+                </Link>
+              </div>
             ))}
           </div>
         </motion.div>

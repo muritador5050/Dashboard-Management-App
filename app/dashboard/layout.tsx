@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/layout/Sidebar';
 import Navbar from '../components/layout/Navbar';
 import { Settings } from 'lucide-react';
@@ -12,9 +12,11 @@ import {
   DrawerContent,
   DrawerCloseButton,
   useDisclosure,
-  Flex,
   Box,
   Heading,
+  useColorMode,
+  Button,
+  HStack,
 } from '@chakra-ui/react';
 import { useThemeColor } from '@/lib/themeUtil';
 
@@ -24,7 +26,11 @@ function DasboardLayout({ children }: { children: React.ReactNode }) {
   const contentMargin = isWide ? 'ml-20' : 'ml-67';
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { bgColor, childBgColor, textColor } = useThemeColor();
-
+  const { colorMode, setColorMode } = useColorMode();
+  const [changeTheme, setChangeTheme] = useState(colorMode === 'dark');
+  useEffect(() => {
+    setChangeTheme(colorMode === 'dark');
+  }, [colorMode]);
   return (
     <Box className='flex min-h-screen' bg={bgColor} color={textColor}>
       <Box
@@ -48,10 +54,23 @@ function DasboardLayout({ children }: { children: React.ReactNode }) {
             <DrawerHeader>Account Setting</DrawerHeader>
             <DrawerBody>
               <Heading>Theme</Heading>
-              <Flex>
-                <Box>Dark</Box>
-                <Box>Light</Box>
-              </Flex>
+              <HStack spacing={4}>
+                <Button
+                  onClick={() => setColorMode('light')}
+                  colorScheme={!changeTheme ? 'blue' : 'gray'}
+                  variant={!changeTheme ? 'solid' : 'outline'}
+                >
+                  Light Mode
+                </Button>
+
+                <Button
+                  onClick={() => setColorMode('dark')}
+                  colorScheme={changeTheme ? 'purple' : 'gray'}
+                  variant={changeTheme ? 'solid' : 'outline'}
+                >
+                  Dark Mode
+                </Button>
+              </HStack>
             </DrawerBody>
           </DrawerContent>
         </Drawer>
