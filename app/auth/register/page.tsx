@@ -15,6 +15,7 @@ import {
   AbsoluteCenter,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useThemeColor } from '@/lib/themeUtil';
 import { SignUpCredentialProp } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import {
@@ -32,7 +33,6 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { auth, db } from '@/config/firebase';
-import { useThemeColor } from '@/lib/themeUtil';
 //Register
 export default function SignUp() {
   const { childBgColor, textColor } = useThemeColor();

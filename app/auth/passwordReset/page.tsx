@@ -12,8 +12,8 @@ import {
   Button,
   Text,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import { useThemeColor } from '@/lib/themeUtil';
+import Link from 'next/link';
 import { showToast } from '@/lib/toastService';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '@/config/firebase';
