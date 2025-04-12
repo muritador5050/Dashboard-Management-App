@@ -87,6 +87,7 @@ const Sidebar = () => {
               justifyContent='space-between'
               p={5}
               borderRadius='3xl'
+              w='full'
             >
               <Username />
               <Tooltip hasArrow placement='top' label='Logout'>
