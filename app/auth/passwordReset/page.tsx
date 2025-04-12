@@ -22,7 +22,6 @@ import { auth } from '@/config/firebase';
 export default function PasswordReset() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const { childBgColor, textColor } = useThemeColor();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -119,7 +118,7 @@ export default function PasswordReset() {
             borderRadius='3xl'
             mt={5}
           >
-            {isLoading ? 'Sending...' : 'Send Reset Link'}
+            Send Reset Link
           </Button>
           <Button
             background='rgba(30, 42, 51, 0.6)'

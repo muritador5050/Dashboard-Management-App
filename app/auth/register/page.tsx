@@ -12,7 +12,6 @@ import {
   Button,
   Text,
   Divider,
-  Center,
   AbsoluteCenter,
 } from '@chakra-ui/react';
 import Link from 'next/link';
@@ -74,6 +73,15 @@ export default function SignUp() {
     email,
     password,
   }: SignUpCredentialProp) => {
+    if (!displayName || !email || !password) {
+      showToast({
+        title: 'Signup',
+        description: 'Please input your details',
+        status: 'info',
+      });
+      setIsLoading(false);
+      return;
+    }
     try {
       const usersRef = collection(db, 'users');
       const emailQuery = query(usersRef, where('email', '==', email));
@@ -81,10 +89,10 @@ export default function SignUp() {
       if (!emailSnapshot.empty) {
         showToast({
           title: 'Signup Info',
-          description: 'Email already exists!',
+          description: 'User with this email already exists!',
           status: 'warning',
         });
-        return null;
+        return;
       }
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -101,20 +109,21 @@ export default function SignUp() {
         displayName,
       });
       await setDoc(doc(db, 'userChats', user.uid), {});
-      showToast({
-        title: 'Success',
-        description: 'User registered successfully',
-        status: 'success',
-      });
       return { user, displayName };
-    } catch (error) {
-      console.error('Error registering user:', error);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      console.error('Error registering user:', err);
+      let message = 'Something went wrong. Please try again.';
+      if (err.code === 'auth/invalid-credential') {
+        message = 'Invalid credentials';
+      }
       showToast({
-        title: 'Error registering',
-        description: 'Failed to register user',
+        title: 'SingUp failed',
+        description: message,
         status: 'error',
+        duration: 4000,
       });
-      throw error;
+      setIsLoading(false);
     }
   };
   return (
@@ -147,42 +156,11 @@ export default function SignUp() {
           <Heading color='white'>Welcome to Spike Admin</Heading>
           <Text>Your Admin Dashboard</Text>
         </Box>
-        <Stack direction='row' gap={5}>
-          <Center
-            gap={3}
-            border='1px'
-            borderColor='rgb(124, 143, 172)'
-            borderRadius='xl'
-            p={3}
-            cursor='pointer'
-            width={200}
-          >
-            <Image
-              src=' https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/google-icon.svg'
-              alt='google'
-            />
-            <Text fontSize='xs'>Sign in with Google</Text>
-          </Center>
-          <Center
-            gap={3}
-            border='1px'
-            borderColor='rgb(124, 143, 172)'
-            borderRadius='xl'
-            p={3}
-            cursor='pointer'
-            width={200}
-          >
-            <Image
-              src=' https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/icon-facebook.svg'
-              alt='facebook'
-            />
-            <Text fontSize='xs'>Sign in with FB</Text>
-          </Center>
-        </Stack>
+
         <Box position='relative'>
           <Divider />
           <AbsoluteCenter bg={childBgColor} px='7'>
-            or sign in with
+            Register
           </AbsoluteCenter>
         </Box>
         <FormControl>
