@@ -118,10 +118,13 @@ export default function SignUp() {
     }
   };
   return (
-    <Box
+    <Stack
       bg={childBgColor}
       color={textColor}
-      className=' p-9 rounded-xl flex flex-col items-center min-[980px]:flex-row gap-9 m-auto'
+      borderRadius='3xl'
+      direction={{ base: 'column', xxl: 'row' }}
+      gap={9}
+      p={9}
     >
       <Stack>
         <Flex>
@@ -225,6 +228,6 @@ export default function SignUp() {
           </Link>
         </Flex>
       </Stack>
-    </Box>
+    </Stack>
   );
 }
