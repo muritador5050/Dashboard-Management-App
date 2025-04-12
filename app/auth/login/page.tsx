@@ -18,7 +18,6 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { SignInCredentialProp } from '@/lib/utils';
-// import { setAuthPersistenceMode } from '@/lib/authentication';
 import { useRouter } from 'next/navigation';
 import useAuthRedirect from '@/lib/useAuthRedirect';
 import {
@@ -156,13 +155,16 @@ export default function LoginPage() {
   };
 
   return (
-    <Box
+    <Stack
       bg={childBgColor}
       color={textColor}
-      className='p-9 rounded-xl flex flex-col items-center min-[980px]:flex-row gap-9 m-auto'
+      borderRadius='3xl'
+      direction={{ base: 'column', xxl: 'row' }}
+      gap={9}
+      p={9}
     >
       <Stack>
-        <Flex>
+        <Flex color={textColor}>
           <Image
             src='https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/logos/logo-dark.svg'
             alt='logo'
@@ -267,6 +269,6 @@ export default function LoginPage() {
           </Link>
         </Flex>
       </Stack>
-    </Box>
+    </Stack>
   );
 }
