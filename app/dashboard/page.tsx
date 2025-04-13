@@ -9,18 +9,18 @@ import {
   LatestDeal,
   TotalOrders,
   YearlyProfitPieChart,
-} from '@/components/chartComponent/chart-data';
+} from '@/components/chartComponent/chartData';
 import {
   ProductWithRewiewAndTime,
   ProductWithStatusAndPayment,
-} from '@/components/tableComponent/table-data';
+} from '@/components/tableComponent/tableData';
 
 const Dashboard = () => {
   useAuthRedirect(false);
   const { childBgColor, bgColor, textColor } = useThemeColor();
   const MyMap = useMemo(
     () =>
-      dynamic(() => import('../components/Map'), {
+      dynamic(() => import('@/components/Map'), {
         loading: () => <p>A map is loading</p>,
         ssr: false,
       }),
