@@ -3,17 +3,13 @@ import { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import useAuthRedirect from '@/lib/useAuthRedirect';
 import { useThemeColor } from '@/lib/themeUtil';
-import {
-  Customers,
-  EarningsChart,
-  LatestDeal,
-  TotalOrders,
-  YearlyProfitPieChart,
-} from '@/components/chartComponents/chartData';
-import {
-  ProductWithRewiewAndTime,
-  ProductWithStatusAndPayment,
-} from '@/components/tableComponents/tableData';
+import Customers from '@/components/chartComponents/Customers';
+import ProductWithRewiewAndTime from '@/components/tableComponents/TableWithTime';
+import ProductWithStatusAndPayment from '@/components/tableComponents/TableWithStatus';
+import EarningsChart from '@/components/chartComponents/EarningsChart';
+import LatestDeal from '@/components/chartComponents/LatestDeal';
+import TotalOrders from '@/components/chartComponents/TotalOrders';
+import YearlyProfitPieChart from '@/components/chartComponents/YearlyPieChart';
 
 const Dashboard = () => {
   useAuthRedirect(false);
