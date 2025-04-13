@@ -46,7 +46,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import Username from '@/lib/username';
 import ThemeToggleButton from '../themeToggleButton';
-import { CartWithBadge } from '../cartComponents/cartWithBadge';
+import CartWithBadge from '../cartComponents/cartWithBadge';
 import { SearchDropdown } from '../searchDropdown';
 import { useThemeColor } from '@/lib/themeUtil';
 

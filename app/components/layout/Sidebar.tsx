@@ -1,7 +1,7 @@
 'use client';
 import { LogOut, X, Rocket } from 'lucide-react';
 import { routes } from '@/lib/route';
-import { NavigationItemComponent } from '../NavigationItems';
+import { NavigationItemComponent } from '../../../data/NavigationItems';
 import { useDrawer, useNav } from '@/context/ThemeContext';
 import { useEffect, useState } from 'react';
 import {
