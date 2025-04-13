@@ -1,5 +1,8 @@
 'use client';
 import { useMemo } from 'react';
+import dynamic from 'next/dynamic';
+import useAuthRedirect from '@/lib/useAuthRedirect';
+import { useThemeColor } from '@/lib/themeUtil';
 import {
   Customers,
   EarningsChart,
@@ -7,13 +10,10 @@ import {
   TotalOrders,
   YearlyProfitPieChart,
 } from '@/components/chartComponent/chart-data';
-import dynamic from 'next/dynamic';
 import {
-  ProductWithStatusAndPayment,
   ProductWithRewiewAndTime,
+  ProductWithStatusAndPayment,
 } from '@/components/tableComponent/table-data';
-import useAuthRedirect from '@/lib/useAuthRedirect';
-import { useThemeColor } from '@/lib/themeUtil';
 
 const Dashboard = () => {
   useAuthRedirect(false);
