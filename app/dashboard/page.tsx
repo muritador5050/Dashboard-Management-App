@@ -9,11 +9,11 @@ import {
   LatestDeal,
   TotalOrders,
   YearlyProfitPieChart,
-} from '@/components/chartComponent/chartData';
+} from '../components/chartComponent/chartData';
 import {
   ProductWithRewiewAndTime,
   ProductWithStatusAndPayment,
-} from '@/components/tableComponent/tableData';
+} from '../components/tableComponent/tableData';
 
 const Dashboard = () => {
   useAuthRedirect(false);
