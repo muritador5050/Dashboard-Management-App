@@ -1,7 +1,7 @@
 'use client';
 import { LogOut, X, Rocket } from 'lucide-react';
-import { routes } from '@/lib/route';
-import { NavigationItemComponent } from '../../../data/NavigationItems';
+import { route_config } from '@/lib/route-config';
+import { NavigationItemComponent } from '../../../data/navigation-config';
 import { useDrawer, useNav } from '@/context/ThemeContext';
 import { useEffect, useState } from 'react';
 import {
@@ -68,7 +68,7 @@ const Sidebar = () => {
           </DrawerHeader>
           <DrawerBody>
             <nav className='flex flex-col gap-7'>
-              {routes.map((item, index) => (
+              {route_config.map((item, index) => (
                 <NavigationItemComponent
                   key={index}
                   item={item}
@@ -122,7 +122,7 @@ const Sidebar = () => {
         </span>
       </span>
       <nav className={`mt-5 `}>
-        {routes.map((item, index) => (
+        {route_config.map((item, index) => (
           <NavigationItemComponent key={index} item={item} isWide={isWide} />
         ))}
 

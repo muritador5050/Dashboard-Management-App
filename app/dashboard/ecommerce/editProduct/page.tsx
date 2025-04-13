@@ -16,11 +16,15 @@ import {
 } from '@chakra-ui/react';
 import FileDropzone from '@/components/FiledropZone';
 import DiscountSlider from '@/components/Slider';
-import SearchableDropdown from '@/components/Select';
 import RichEditor from '@/components/RichEditor';
 import { Product } from '@/lib/utils';
 import { showToast } from '@/lib/toastService';
 import { useThemeColor } from '@/lib/themeUtil';
+import dynamic from 'next/dynamic';
+
+const SearchableDropdown = dynamic(() => import('@/components/Select'), {
+  ssr: false,
+});
 //AddProduct
 function AddProduct() {
   const { childBgColor, textColor } = useThemeColor();

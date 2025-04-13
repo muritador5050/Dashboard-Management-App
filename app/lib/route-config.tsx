@@ -12,9 +12,9 @@ import {
   BadgePercent,
   TableOfContents,
 } from 'lucide-react';
-import { NavigationItem } from './utils';
+import { NavProps } from 'data/routeUtil';
 
-export const routes: NavigationItem[] = [
+export const route_config: NavProps[] = [
   { kind: 'header', title: 'HOME' },
   { title: 'Dashboard', segment: '/', icon: <Airplay /> },
 
