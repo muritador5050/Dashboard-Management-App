@@ -6,11 +6,12 @@ import {
   LatestDeal,
   TotalOrders,
   YearlyProfitPieChart,
-} from '../components/chart-data';
+} from '@/components/chartComponent/chart-data';
 import dynamic from 'next/dynamic';
-import ProductWithStatusAndPayment, {
+import {
+  ProductWithStatusAndPayment,
   ProductWithRewiewAndTime,
-} from '../components/table-data';
+} from '@/components/tableComponent/table-data';
 import useAuthRedirect from '@/lib/useAuthRedirect';
 import { useThemeColor } from '@/lib/themeUtil';
 
