@@ -25,7 +25,8 @@ import { UnicodeStarRating } from '@/components/StarRating';
 import Link from 'next/link';
 import { useCart } from '@/context/ThemeContext';
 import Loading from '@/loading';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Box } from 'lucide-react';
+import { useThemeColor } from '@/lib/themeUtil';
 
 //Details
 export default function Details() {
@@ -35,6 +36,7 @@ export default function Details() {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const { addToCart } = useCart();
+  const { childBgColor, textColor } = useThemeColor();
 
   //Effect
   useEffect(() => {
@@ -74,7 +76,7 @@ export default function Details() {
   if (!product) {
     return (
       <AbsoluteCenter>
-        <Text>Product not found try to select a product</Text>
+        <Text>Product not found try to select a product from SHOP</Text>
       </AbsoluteCenter>
     );
   }
@@ -86,8 +88,8 @@ export default function Details() {
       </Link>
       <Card
         direction={{ base: 'column', xxl: 'row' }}
-        background='rgb(17, 28, 45)'
-        color='rgb(124, 143, 172)'
+        bg={childBgColor}
+        color={textColor}
         p={3}
         borderRadius='2xl'
       >
@@ -105,9 +107,9 @@ export default function Details() {
               <Heading>{product.title}</Heading>
               <Text>{product.description}</Text>
               <Text>${product.price}</Text>
-              <Text>
+              <Box>
                 <UnicodeStarRating rating={product.rating} />
-              </Text>
+              </Box>
             </Stack>
           </CardBody>
           <Divider />
@@ -134,8 +136,8 @@ export default function Details() {
         </Stack>
       </Card>
       <Tabs
-        background='rgb(17, 28, 45)'
-        color='rgb(124, 143, 172)'
+        bg={childBgColor}
+        color={textColor}
         p={3}
         borderRadius='2xl'
         my={9}

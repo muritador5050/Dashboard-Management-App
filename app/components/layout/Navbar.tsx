@@ -61,7 +61,7 @@ export default function Navbar() {
     <>
       <nav
         style={{ backgroundColor: childBgColor, color: textColor }}
-        className='p-3 max-[980px]:px-2  sticky top-0 right-0 z-1000  text-custom-color rounded-2xl m-2 cursor-pointer'
+        className='p-3 max-[980px]:px-2  sticky top-0 right-0 z-1000  rounded-2xl m-2 cursor-pointer'
       >
         {/* mobile-view */}
         <div className='px-2 min-[980px]:hidden'>

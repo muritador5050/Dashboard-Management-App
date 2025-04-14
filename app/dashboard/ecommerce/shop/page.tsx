@@ -236,7 +236,6 @@ export default function Shop() {
               products.map((product) => (
                 <Box
                   key={product.id}
-                  // bg='rgba(17, 28, 45, 0.4)'
                   bg={childBgColor}
                   boxShadow='0 10px 1em black'
                   borderRadius='2xl'

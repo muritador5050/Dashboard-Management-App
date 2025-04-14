@@ -36,8 +36,6 @@ export default function Faq() {
         </Stack>
         <Accordion
           allowToggle
-          allowMultiple
-          // maxW={900}
           bg={childBgColor}
           borderRadius='2xl'
           mt={9}

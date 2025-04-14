@@ -88,7 +88,7 @@ export default function ChatInput({ scrollRef }: ChatInputProps) {
         onChange={(e) => setMessage(e.target.value)}
       />
       <InputRightAddon bg='gray.600' border='none'>
-        <Flex gap={2}>
+        <Flex gap={1}>
           <IconButton
             icon={<Send size={18} />}
             aria-label='Attach image'
