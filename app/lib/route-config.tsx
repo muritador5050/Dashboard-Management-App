@@ -11,6 +11,7 @@ import {
   MessageCircleCode,
   BadgePercent,
   TableOfContents,
+  CircleUserRound,
 } from 'lucide-react';
 import { NavProps } from 'data/routeUtil';
 
@@ -48,4 +49,9 @@ export const route_config: NavProps[] = [
   { kind: 'header', title: 'PAGES' },
   { title: 'pricing', segment: 'pricing', icon: <BadgePercent /> },
   { title: 'FAQ', segment: 'faq', icon: <TableOfContents /> },
+  {
+    title: 'Account Setting',
+    segment: 'accountSetting',
+    icon: <CircleUserRound />,
+  },
 ];

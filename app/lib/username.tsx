@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { auth, db } from '@/config/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { Avatar, Box, Flex, Spinner, Text } from '@chakra-ui/react';
+import {
+  Avatar,
+  AvatarBadge,
+  Box,
+  Flex,
+  Spinner,
+  Text,
+} from '@chakra-ui/react';
 
 export default function Username() {
   const [userName, setUserName] = useState('');
@@ -43,7 +50,9 @@ export default function Username() {
 
   return (
     <Flex align='center' gap={4}>
-      <Avatar size='md' src={photoURL} />
+      <Avatar size='md' src={photoURL} name={userName}>
+        <AvatarBadge boxSize='1em' bg='green.500' />
+      </Avatar>
       <Box ml='-1'>
         <Text fontWeight='bold'>{`${userName
           .charAt(0)

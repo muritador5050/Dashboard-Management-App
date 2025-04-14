@@ -18,6 +18,7 @@ export default function PageTitle() {
     '/dashboard/blog/post': 'Blog',
     '/dashboard/blog/details': 'Blog Details',
     '/dashboard/profile': 'Profile',
+    '/dashboard/accountSetting': 'Account Setting',
     '/dashboard/email': 'Email',
     '/dashboard/calendar': 'Calendar',
     '/dashboard/kanban': 'Kanban',
