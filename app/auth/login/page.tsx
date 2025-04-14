@@ -218,7 +218,7 @@ export default function LoginPage() {
             <Text fontSize='xs'>Sign in with FB</Text>
           </Center>
         </Stack>
-        <Box position='relative'>
+        <Box position='relative' mt='3'>
           <Divider />
           <AbsoluteCenter bg={childBgColor} px='7'>
             or sign in with
