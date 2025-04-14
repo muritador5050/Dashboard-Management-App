@@ -107,7 +107,7 @@ const Sidebar = () => {
   return (
     <aside
       style={{ backgroundColor: childBgColor, color: textColor }}
-      className={`text-custom-color w-64 py-4 px-2`}
+      className={` max-w-64 py-4 px-2`}
     >
       <span className='flex justify-between items-center'>
         <span className='flex justify-between items-center'>
