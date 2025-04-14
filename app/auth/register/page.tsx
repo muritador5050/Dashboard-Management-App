@@ -134,6 +134,7 @@ export default function SignUp() {
       direction={{ base: 'column', xxl: 'row' }}
       gap={9}
       p={9}
+      h='100vh'
     >
       <Stack>
         <Flex>
@@ -151,7 +152,7 @@ export default function SignUp() {
           />
         </Box>
       </Stack>
-      <Stack gap={10}>
+      <Stack gap={5}>
         <Box>
           <Heading color='white'>Welcome to Spike Admin</Heading>
           <Text>Your Admin Dashboard</Text>

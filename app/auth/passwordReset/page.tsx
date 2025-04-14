@@ -76,6 +76,7 @@ export default function PasswordReset() {
       direction={{ base: 'column', xxl: 'row' }}
       gap={9}
       p={9}
+      h='100vh'
     >
       <Stack>
         <Flex>

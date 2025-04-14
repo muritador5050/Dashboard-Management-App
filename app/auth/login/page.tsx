@@ -162,6 +162,7 @@ export default function LoginPage() {
       direction={{ base: 'column', xxl: 'row' }}
       gap={9}
       p={9}
+      h='100vh'
     >
       <Stack>
         <Flex color={textColor}>
@@ -179,7 +180,7 @@ export default function LoginPage() {
           />
         </Box>
       </Stack>
-      <Stack gap={10}>
+      <Stack gap={5}>
         <Box>
           <Heading color='white'>Welcome to Spike Admin</Heading>
           <Text>Your Admin Dashboard</Text>
