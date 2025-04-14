@@ -4,12 +4,7 @@ import React from 'react';
 export default function Loading() {
   return (
     <Center>
-      <Spinner
-        thickness='4px'
-        emptyColor='gray.200'
-        color='blue.500'
-        size='xl'
-      />
+      <Spinner emptyColor='gray.200' color='blue.500' />
     </Center>
   );
 }
