@@ -22,7 +22,6 @@ import { useThemeColor } from '@/lib/themeUtil';
 
 function DasboardLayout({ children }: { children: React.ReactNode }) {
   const { isWide } = useNav();
-  // const sidebarWidth = isWide ? 'w-20' : 'w-fit-content';
   const contentMargin = isWide ? 'ml-20' : 'ml-55';
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { bgColor, childBgColor, textColor } = useThemeColor();
@@ -35,17 +34,17 @@ function DasboardLayout({ children }: { children: React.ReactNode }) {
   //rendering
   return (
     <Box className='flex min-h-screen' bg={bgColor} color={textColor}>
-      <Box className={`fixed top-0 left-0 h-screen overflow-y-scroll `}>
+      <Box position='fixed' top='0' left='0' h='100vh' overflowY='scroll'>
         <Sidebar />
       </Box>
       <Box className={`${contentMargin} w-full max-[980px]:ml-0 `}>
         <Navbar />
-        <main className='mx-3'>{children}</main>
+        <main className='mx-2'>{children}</main>
         <Box
-          className='flex justify-center items-center fixed bottom-10 right-15 bg-sky-600 cursor-pointer w-[70px] h-[70px] rounded-full'
+          className='flex justify-center items-center fixed bottom-10 right-9 bg-sky-600 cursor-pointer w-[50px] h-[50px] rounded-full'
           onClick={onOpen}
         >
-          <Settings size={48} />
+          <Settings size={32} />
         </Box>
         <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
           <DrawerOverlay />

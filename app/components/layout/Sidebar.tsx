@@ -93,7 +93,7 @@ const Sidebar = () => {
               <Tooltip hasArrow placement='top' label='Logout'>
                 <LogOut
                   onClick={handleSignOut}
-                  size={32}
+                  size={28}
                   className='cursor-pointer'
                 />
               </Tooltip>
@@ -141,7 +141,7 @@ const Sidebar = () => {
             <Tooltip hasArrow placement='top' label='Logout'>
               <LogOut
                 onClick={handleSignOut}
-                size={32}
+                size={28}
                 className='cursor-pointer'
               />
             </Tooltip>
