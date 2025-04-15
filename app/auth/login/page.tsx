@@ -161,7 +161,8 @@ export default function LoginPage() {
       borderRadius='3xl'
       direction={{ base: 'column', xxl: 'row' }}
       gap={9}
-      p={9}
+      px={9}
+      py={12}
       h='100vh'
     >
       <Stack>
@@ -258,7 +259,7 @@ export default function LoginPage() {
             colorScheme='blue'
             width='100%'
             borderRadius='3xl'
-            mt={5}
+            mt={2}
           >
             Sign In
           </Button>
