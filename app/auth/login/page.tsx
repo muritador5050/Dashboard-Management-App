@@ -181,7 +181,7 @@ export default function LoginPage() {
           />
         </Box>
       </Stack>
-      <Stack gap={{ base: 5, xxl: 3 }}>
+      <Stack gap={{ base: 5, xxl: 3 }} pb={3}>
         <Box>
           <Heading color='white'>Welcome to Spike Admin</Heading>
           <Text>Your Admin Dashboard</Text>
