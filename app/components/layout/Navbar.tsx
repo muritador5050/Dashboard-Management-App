@@ -268,6 +268,14 @@ export default function Navbar() {
                   >
                     Pricing page
                   </ChakraLink>
+                  <ChakraLink
+                    as={Link}
+                    href='/dashboard/accountSetting'
+                    display='block'
+                    _hover={{ color: hoverColor }}
+                  >
+                    Account setting
+                  </ChakraLink>
                 </Box>
               </MenuList>
             </Menu>

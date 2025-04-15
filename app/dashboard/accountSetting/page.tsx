@@ -124,39 +124,58 @@ export default function AccountSetting() {
 
   //Upload
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    //Choose file
     const file = e.target.files?.[0];
     if (!file) return;
 
+    //Validate type
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      showToast({
+        title: 'Invalid file type',
+        description: 'Please upload a JPG, PNG, or GIF file',
+        status: 'error',
+      });
+      return;
+    }
+
+    // Check file size (800KB limit)
+    if (file.size > 800 * 1024) {
+      showToast({
+        title: 'File too large',
+        description: 'File size must be less than 800KB',
+        status: 'error',
+      });
+      return;
+    }
+    //current user
     const user = auth.currentUser;
     if (!user) {
       showToast({
-        title: 'Update failed',
+        title: 'Authentication error',
         description: 'You must be logged in to upload a profile picture',
         status: 'info',
       });
-
       return;
     }
 
     try {
       setIsUploading(true);
-
+      // Create a storage reference with a unique file name
+      const storageRef = ref(storage, `profile-pictures/${user.uid}`);
       // Upload file to Firebase Storage
-      const fileRef = ref(storage, `profile-pictures/${user.uid}`);
-      await uploadBytes(fileRef, file);
-
+      await uploadBytes(storageRef, file);
       // Get the download URL
-      const downloadUrl = await getDownloadURL(fileRef);
-
-      // Update user profile
+      const downloadUrl = await getDownloadURL(storageRef);
+      // Update user profile in Firestore
       await updateDoc(doc(db, 'users', user.uid), {
         photoURL: downloadUrl,
+        updatedAt: new Date(),
       });
-
       // Update UI
       setAvatarUrl(downloadUrl);
       showToast({
-        title: 'Picture update',
+        title: 'Success',
         description: 'Profile picture updated successfully!',
         status: 'success',
       });
@@ -164,7 +183,7 @@ export default function AccountSetting() {
       console.error('Error uploading file:', error);
       showToast({
         title: 'Update failed',
-        description: 'Failed to upload profile picture',
+        description: `Failed to upload profile picture: Unknown error`,
         status: 'error',
       });
     } finally {
@@ -361,6 +380,7 @@ export default function AccountSetting() {
                 >
                   Upload
                 </Button>
+
                 <Button
                   colorScheme='orange'
                   borderRadius='3xl'
