@@ -181,7 +181,7 @@ export default function LoginPage() {
           />
         </Box>
       </Stack>
-      <Stack gap={5}>
+      <Stack gap={{ base: 5, xxl: 3 }}>
         <Box>
           <Heading color='white'>Welcome to Spike Admin</Heading>
           <Text>Your Admin Dashboard</Text>
@@ -232,7 +232,7 @@ export default function LoginPage() {
             name='email'
             value={credential.email}
             onChange={handleOnchange}
-            mb={5}
+            mb={3}
           />
           <FormLabel>Password</FormLabel>
           <Input
@@ -240,7 +240,7 @@ export default function LoginPage() {
             name='password'
             value={credential.password}
             onChange={handleOnchange}
-            mb={5}
+            mb={3}
           />
           <Flex justify='space-between' mb={5}>
             <Checkbox
