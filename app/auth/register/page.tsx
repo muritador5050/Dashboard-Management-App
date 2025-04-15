@@ -171,7 +171,7 @@ export default function SignUp() {
             name='displayName'
             value={credential.displayName}
             onChange={handleOnchange}
-            mb={5}
+            mb={3}
           />
           <FormLabel>Username </FormLabel>
           <Input
@@ -179,7 +179,7 @@ export default function SignUp() {
             name='email'
             value={credential.email}
             onChange={handleOnchange}
-            mb={5}
+            mb={3}
           />
           <FormLabel>Password</FormLabel>
           <Input
@@ -187,7 +187,7 @@ export default function SignUp() {
             name='password'
             value={credential.password}
             onChange={handleOnchange}
-            mb={5}
+            mb={3}
           />
           <Button
             onClick={handleSignUp}
@@ -195,7 +195,7 @@ export default function SignUp() {
             colorScheme='blue'
             width='100%'
             borderRadius='3xl'
-            mt={5}
+            mt={2}
           >
             Sign Up
           </Button>
