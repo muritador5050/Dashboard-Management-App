@@ -18,27 +18,40 @@ interface Message {
   createdAt: Timestamp;
   uid: string;
 }
+
 interface ChatMessagesProps {
   scrollRef: React.RefObject<HTMLDivElement | null>;
+  chatId: string | null; // ✅ now linked to active chat
 }
-export default function ChatMessages({ scrollRef }: ChatMessagesProps) {
+
+export default function ChatMessages({ scrollRef, chatId }: ChatMessagesProps) {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    const q = query(collection(db, 'chats'), orderBy('createdAt'), limit(50));
+    if (!chatId) return; // ✅ wait until chat is selected
+
+    const q = query(
+      collection(db, 'chats', chatId, 'messages'),
+      orderBy('createdAt'),
+      limit(50)
+    );
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const msgs = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as Message[];
+
       setMessages(msgs);
+
+      // auto scroll to latest
       setTimeout(() => {
         scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     });
 
     return () => unsubscribe();
-  }, [scrollRef]);
+  }, [chatId, scrollRef]);
 
   return (
     <VStack
@@ -46,7 +59,6 @@ export default function ChatMessages({ scrollRef }: ChatMessagesProps) {
       align='stretch'
       flex='1'
       overflowY='scroll'
-      bg='rgb(10, 28, 49)'
       p={3}
       borderRadius='lg'
       maxH={500}

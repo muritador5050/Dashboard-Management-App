@@ -27,9 +27,7 @@ import {
   getDoc,
   getDocs,
   query,
-  serverTimestamp,
   setDoc,
-  updateDoc,
   where,
 } from 'firebase/firestore';
 import { AlignJustify } from 'lucide-react';
@@ -39,7 +37,6 @@ const CallModal = dynamic(() => import('@/components/call'), {
   ssr: false,
 });
 
-// Define the User type
 type User = {
   uid: string;
   displayName: string;
@@ -55,39 +52,30 @@ export default function Chat() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState<User[] | null>([]);
+  const [chatId, setChatId] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // Fetch users from Firestore
 
   const handleSelect = async (selectedUser: User) => {
     const currentUser = auth.currentUser;
     if (!currentUser) return;
-
+    setSelectedUser(selectedUser);
     const combinedId =
       currentUser.uid > selectedUser.uid
         ? currentUser.uid + selectedUser.uid
         : selectedUser.uid + currentUser.uid;
 
+    setChatId(combinedId);
+
     try {
-      const res = await getDoc(doc(db, 'chats', combinedId));
+      const chatRef = doc(db, 'chats', combinedId);
+      const res = await getDoc(chatRef);
+
       if (!res.exists()) {
-        await setDoc(doc(db, 'chats', combinedId), { messages: [] });
-
-        await updateDoc(doc(db, 'userChats', currentUser.uid), {
-          [combinedId + '.userInfo']: {
-            uid: selectedUser.uid,
-            displayName: selectedUser.displayName,
-            photoURL: selectedUser.photoURL,
-          },
-          [combinedId + '.date']: serverTimestamp(),
-        });
-
-        await updateDoc(doc(db, 'userChats', selectedUser.uid), {
-          [combinedId + '.userInfo']: {
-            uid: currentUser.uid,
-            displayName: currentUser.displayName,
-            photoURL: currentUser.photoURL,
-          },
-          [combinedId + '.date']: serverTimestamp(),
+        // Create new chat doc
+        await setDoc(chatRef, {
+          participants: [currentUser.uid, selectedUser.uid],
+          messages: [],
         });
       }
     } catch (err) {
@@ -95,7 +83,6 @@ export default function Chat() {
     }
   };
 
-  // Handle user search
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleSearch = async () => {
     const q = query(
@@ -149,6 +136,7 @@ export default function Chat() {
     });
     setUser(usersList);
   };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -164,8 +152,6 @@ export default function Chat() {
 
     return () => clearTimeout(delayDebounce);
   }, [handleSearch, searchQuery]);
-
-  const identity = auth.currentUser;
 
   return (
     <Box>
@@ -263,9 +249,9 @@ export default function Chat() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </Flex>
-          <ChatHeader identity={identity} onCall={handleCall} />
-          <ChatMessages scrollRef={scrollRef} />
-          <ChatInput scrollRef={scrollRef} />
+          <ChatHeader selectedUser={selectedUser} onCall={handleCall} />
+          <ChatMessages scrollRef={scrollRef} chatId={chatId as string} />
+          <ChatInput scrollRef={scrollRef} chatId={chatId as string} />
         </Box>
       </Stack>
       {callType && (
