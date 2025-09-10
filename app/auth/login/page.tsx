@@ -13,8 +13,8 @@ import {
   Button,
   Text,
   Divider,
-  Center,
   AbsoluteCenter,
+  AspectRatio,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { SignInCredentialProp } from '@/lib/utils';
@@ -186,40 +186,36 @@ export default function LoginPage() {
   };
 
   return (
-    <Stack
+    <Flex
       bg={childBgColor}
       color={textColor}
-      borderRadius='3xl'
       direction={{ base: 'column', xxl: 'row' }}
-      gap={9}
-      px={9}
-      py={12}
+      justify={{ base: 'normal', xxl: 'space-evenly' }}
+      align={{ base: 'normal', xxl: 'center' }}
+      p={{ base: 3, xxl: 6 }}
+      py={9}
       h='100vh'
     >
-      <Stack>
-        <Flex color={textColor}>
-          <Image
-            src='https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/logos/logo-dark.svg'
-            alt='logo'
-          />
-        </Flex>
-        <Box className='max-[980px]:hidden'>
-          <Image
-            src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/backgrounds/login-security.png'
-            alt='big-img'
-            width={600}
-            height={400}
-          />
-        </Box>
-      </Stack>
-      <Stack gap={{ base: 5, xxl: 3 }} pb={3}>
+      <AspectRatio
+        minW='500px'
+        ratio={4 / 4}
+        display={{ base: 'none', xxl: 'block' }}
+      >
+        <Image
+          src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/backgrounds/login-security.png'
+          alt='big-img'
+          objectFit='cover'
+          display={{ base: 'none', xxl: 'block' }}
+        />
+      </AspectRatio>
+      <Stack gap={{ base: 5, xxl: 3 }} minW={'50%'}>
         <Box>
-          <Heading fontSize={{ base: 'xs', xxl: 'revert' }} color='white'>
+          <Heading fontSize={{ base: 'sm', xxl: '3xl' }} color='white'>
             Welcome to Spike Admin
           </Heading>
           <Text>Your Admin Dashboard</Text>
         </Box>
-        <Center
+        <Flex
           onClick={handleGoogleSignIn}
           gap={3}
           border='1px'
@@ -227,13 +223,15 @@ export default function LoginPage() {
           borderRadius='xl'
           p={3}
           cursor='pointer'
+          justify='center'
+          align='center'
         >
           <Image
             src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/google-icon.svg'
             alt='google'
           />
           <Text fontSize='xs'>Sign in with Google</Text>
-        </Center>
+        </Flex>
 
         <Box position='relative' mt='3'>
           <Divider />
@@ -287,6 +285,6 @@ export default function LoginPage() {
           </Link>
         </Flex>
       </Stack>
-    </Stack>
+    </Flex>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 import PageTitle from '@/components/pageTitle';
 import { useThemeColor } from '@/lib/themeUtil';
+import { showToast } from '@/lib/toastService';
 import {
   Box,
   Heading,
@@ -19,11 +20,13 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { Check, X as Uncheck } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 export default function Pricing() {
   const { childBgColor } = useThemeColor();
   const planColor = useColorModeValue('black', 'white');
+  const router = useRouter();
 
   return (
     <Box>
@@ -50,6 +53,11 @@ export default function Pricing() {
           bg={childBgColor}
           p={5}
           borderRadius='3xl'
+          border='1px solid'
+          position='relative'
+          transform='scale(1.05)'
+          _hover={{ transform: 'scale(1.08)' }}
+          transition='all 0.2s'
         >
           <Text fontWeight='medium'>SILVER</Text>
           <Image
@@ -86,7 +94,17 @@ export default function Pricing() {
           <Button
             width={{ base: 'full', xxl: 300 }}
             colorScheme='blue'
+            variant='outline'
             borderRadius='3xl'
+            onClick={() => {
+              showToast({
+                title: 'Plan',
+                description:
+                  'Congratulation you just choose Silver plan, feel free and enjoy our services',
+                status: 'success',
+              });
+              router.push('/dashboard/ecommerce/shop');
+            }}
           >
             Choose Silver
           </Button>
@@ -98,6 +116,11 @@ export default function Pricing() {
           bg={childBgColor}
           p={5}
           borderRadius='3xl'
+          border='1px solid purple'
+          position='relative'
+          transform='scale(1.05)'
+          _hover={{ transform: 'scale(1.08)' }}
+          transition='all 0.2s'
         >
           <Flex justifyContent='space-between' w='full'>
             <Text fontWeight='medium'>BRONZE</Text>
@@ -141,8 +164,18 @@ export default function Pricing() {
           </List>
           <Button
             width={{ base: 'full', xxl: 300 }}
-            colorScheme='blue'
+            colorScheme='gray'
+            variant='outline'
             borderRadius='3xl'
+            onClick={() => {
+              showToast({
+                title: 'Plan',
+                description:
+                  'Congratulation you just choose Bronze plan, feel free and enjoy our services',
+                status: 'success',
+              });
+              router.push('/dashboard/ecommerce/shop');
+            }}
           >
             Choose Bronze
           </Button>
@@ -154,6 +187,11 @@ export default function Pricing() {
           bg={childBgColor}
           p={5}
           borderRadius='3xl'
+          border='1px solid yellow'
+          position='relative'
+          transform='scale(1.05)'
+          _hover={{ transform: 'scale(1.08)' }}
+          transition='all 0.2s'
         >
           <Text fontWeight='medium'>GOLD</Text>
           <Image
@@ -192,8 +230,18 @@ export default function Pricing() {
           </List>
           <Button
             width={{ base: 'full', xxl: 300 }}
-            colorScheme='blue'
+            colorScheme='yellow'
+            variant='outline'
             borderRadius='3xl'
+            onClick={() => {
+              showToast({
+                title: 'Plan',
+                description:
+                  'Congratulation you just choose Gold plan, feel free and enjoy our services',
+                status: 'success',
+              });
+              router.push('/dashboard/ecommerce/shop');
+            }}
           >
             Choose Gold
           </Button>

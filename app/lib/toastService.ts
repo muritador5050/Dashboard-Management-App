@@ -23,7 +23,7 @@ export const showToast = ({
   description,
   status = 'info',
   duration = 3000,
-  position = 'top',
+  position = 'top-right',
 }: ToastOptions): void => {
   toast({
     title,

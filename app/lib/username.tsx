@@ -50,14 +50,13 @@ export default function Username() {
 
   return (
     <Flex align='center' gap={4}>
-      <Avatar size='md' src={photoURL} name={userName}>
+      <Avatar size={{ base: 'sm', xxl: 'md' }} src={photoURL} name={userName}>
         <AvatarBadge boxSize='1em' bg='green.500' />
       </Avatar>
-      <Box ml='-1'>
+      <Box ml='-1' display={{ base: 'none', xl: 'flex' }}>
         <Text fontWeight='bold'>{`${userName
           .charAt(0)
           .toUpperCase()}${userName.slice(1)}`}</Text>
-        <Text> Admin</Text>
       </Box>
     </Flex>
   );

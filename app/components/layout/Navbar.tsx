@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import BlinkingIcon from '../BlinkingIcon';
 import {
   ChevronDown,
   AlignJustify,
@@ -55,7 +54,7 @@ import CartWithBadge from '../cartComponents/cartWithBadge';
 import { SearchDropdown } from '../searchDropdown';
 import { useThemeColor } from '@/lib/themeUtil';
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 export default function Navbar() {
   const { cart } = useCart();
@@ -143,7 +142,6 @@ export default function Navbar() {
                   </PopoverContent>
                 </Popover>
 
-                <BlinkingIcon />
                 <ThemeToggleButton />
 
                 <Link href='/dashboard/ecommerce/checkout' passHref>
@@ -310,7 +308,6 @@ export default function Navbar() {
 
           <HStack spacing={4}>
             <SearchDropdown />
-            <BlinkingIcon />
             <ThemeToggleButton />
             <Box>
               <Link href='/dashboard/ecommerce/checkout' passHref>
