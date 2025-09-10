@@ -10,9 +10,9 @@ export default function useAuthRedirect(requireAuth: boolean) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (requireAuth && !user) {
-        router.push('/auth/login'); // If user needs to be logged in
+        router.push('/auth/login'); 
       } else if (!requireAuth && user) {
-        router.push('/dashboard'); // If user is already logged in
+        router.push('/dashboard'); 
       }
     });
     return () => unsubscribe();

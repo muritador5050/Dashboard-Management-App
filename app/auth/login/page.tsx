@@ -1,5 +1,5 @@
 'use client';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -25,7 +25,8 @@ import {
   browserSessionPersistence,
   setPersistence,
   signInWithEmailAndPassword,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
 } from 'firebase/auth';
 import { auth, db, googleProvider } from '@/config/firebase';
 import { showToast } from '@/lib/toastService';
@@ -133,17 +134,47 @@ export default function LoginPage() {
     }
   };
 
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          const user = result.user;
+          await setDoc(
+            doc(db, 'users', user.uid),
+            {
+              displayName: user.displayName,
+              email: user.email,
+              uid: user.uid,
+              photoURL: user.photoURL,
+            },
+            { merge: true }
+          );
+
+          showToast({
+            title: 'Sign-in successful',
+            description: `Welcome, ${user.displayName}!`,
+            status: 'success',
+          });
+
+          router.push('/dashboard');
+        }
+      } catch (err) {
+        console.error('Error handling redirect result:', err);
+        showToast({
+          title: 'Sign-in failed',
+          description: 'Error completing Google sign-in',
+          status: 'error',
+        });
+      }
+    };
+
+    handleRedirectResult();
+  }, [router]);
+
   const handleGoogleSignIn = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-      await setDoc(doc(db, 'users', user.uid), {
-        displayName: user.displayName,
-        email: user.email,
-        uid: user.uid,
-        photoURL: user.photoURL,
-      });
-      return { user, displayName: user.displayName };
+      await signInWithRedirect(auth, googleProvider);
     } catch (err) {
       console.error('Google sign-in error:', err);
       showToast({
@@ -183,42 +214,27 @@ export default function LoginPage() {
       </Stack>
       <Stack gap={{ base: 5, xxl: 3 }} pb={3}>
         <Box>
-          <Heading color='white'>Welcome to Spike Admin</Heading>
+          <Heading fontSize={{ base: 'xs', xxl: 'revert' }} color='white'>
+            Welcome to Spike Admin
+          </Heading>
           <Text>Your Admin Dashboard</Text>
         </Box>
-        <Stack direction='row' gap={5}>
-          <Center
-            onClick={handleGoogleSignIn}
-            gap={3}
-            border='1px'
-            borderColor='rgb(124, 143, 172)'
-            borderRadius='xl'
-            p={3}
-            cursor='pointer'
-            width={200}
-          >
-            <Image
-              src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/google-icon.svg'
-              alt='google'
-            />
-            <Text fontSize='xs'>Sign in with Google</Text>
-          </Center>
-          <Center
-            gap={3}
-            border='1px'
-            borderColor='rgb(124, 143, 172)'
-            borderRadius='xl'
-            p={3}
-            cursor='pointer'
-            width={200}
-          >
-            <Image
-              src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/icon-facebook.svg'
-              alt='facebook'
-            />
-            <Text fontSize='xs'>Sign in with FB</Text>
-          </Center>
-        </Stack>
+        <Center
+          onClick={handleGoogleSignIn}
+          gap={3}
+          border='1px'
+          borderColor='rgb(124, 143, 172)'
+          borderRadius='xl'
+          p={3}
+          cursor='pointer'
+        >
+          <Image
+            src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/google-icon.svg'
+            alt='google'
+          />
+          <Text fontSize='xs'>Sign in with Google</Text>
+        </Center>
+
         <Box position='relative' mt='3'>
           <Divider />
           <AbsoluteCenter bg={childBgColor} px='7'>
