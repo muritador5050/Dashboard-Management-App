@@ -1,8 +1,6 @@
 'use client';
 import React from 'react';
-
 import { formatCurrency } from '../../lib/utils';
-
 import { Progress } from '@chakra-ui/react';
 import { useThemeColor } from '@/lib/themeUtil';
 

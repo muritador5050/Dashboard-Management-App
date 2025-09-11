@@ -1,9 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-
 import { CustomersEarning } from '../../lib/utils';
-
 import { useThemeColor } from '@/lib/themeUtil';
 
 export default function Customers() {

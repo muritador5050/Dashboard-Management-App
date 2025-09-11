@@ -114,6 +114,12 @@ export default function SignUp() {
         displayName,
       });
       await setDoc(doc(db, 'userChats', user.uid), {});
+      showToast({
+        title: 'SingUp',
+        description: 'SignUp successful',
+        status: 'success',
+        duration: 3000,
+      });
       return { user, displayName };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {

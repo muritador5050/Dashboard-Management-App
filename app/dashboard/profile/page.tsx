@@ -99,7 +99,7 @@ export default function ProfileTabs() {
       label: <PictureInPicture2 />,
       value: userDetail?.displayName?.toUpperCase(),
     },
-    { label: <Mail />, value: userDetail?.email?.toUpperCase() },
+    { label: <Mail />, value: userDetail?.email },
   ];
 
   const handlePost = async () => {
@@ -149,7 +149,7 @@ export default function ProfileTabs() {
     fetchComments();
 
     async function fetchProfile() {
-      const res = await fetch('/mockProfile.json'); // replace with your hosted URL
+      const res = await fetch('/mockProfile.json');
       const data = await res.json();
       setProfile(data);
     }
@@ -165,19 +165,18 @@ export default function ProfileTabs() {
           alt='al'
           borderTopRadius='xl'
         />
-        <Box position='relative' mb={{ base: '24', xxl: '12' }}>
+        <Center position='relative' mb={{ base: '24', xxl: '12' }}>
           <AbsoluteCenter>
             <Avatar
               size='xl'
               src={auth.currentUser?.photoURL ?? '../user'}
               border='4px'
             />
-            <Text textAlign='center'>Admin</Text>
-            <Text textAlign='center' fontSize='2xl'>
+            <Text fontSize='xl'>
               {auth.currentUser?.displayName?.toUpperCase()}
             </Text>
           </AbsoluteCenter>
-        </Box>
+        </Center>
         <Stack
           direction={{ base: 'column', xxl: 'row' }}
           justifyContent={{ base: 'center', xxl: 'space-between' }}
