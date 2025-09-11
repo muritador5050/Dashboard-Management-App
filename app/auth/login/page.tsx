@@ -179,14 +179,34 @@ export default function LoginPage() {
 
   const handleGoogleSignIn = async () => {
     try {
+      setIsLoading(true);
       await signInWithRedirect(auth, googleProvider);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Google sign-in error:', err);
-      showToast({
-        title: 'Google Sign-in failed',
-        description: 'Error signing in with Google',
-        status: 'error',
-      });
+      if (typeof err === 'object' && err !== null && 'code' in err) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const errorCode = (err as any).code;
+        if (errorCode === 'auth/unauthorized-domain') {
+          showToast({
+            title: 'Domain not authorized',
+            description: 'This domain is not authorized for Google sign-in',
+            status: 'error',
+          });
+        } else {
+          showToast({
+            title: 'Google Sign-in failed',
+            description: 'Error signing in with Google',
+            status: 'error',
+          });
+        }
+      } else {
+        showToast({
+          title: 'Google Sign-in failed',
+          description: 'Error signing in with Google',
+          status: 'error',
+        });
+      }
+      setIsLoading(false);
     }
   };
 
@@ -230,6 +250,7 @@ export default function LoginPage() {
           cursor='pointer'
           justify='center'
           align='center'
+          display='none'
         >
           <Image
             src='	https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/svgs/google-icon.svg'
@@ -238,7 +259,7 @@ export default function LoginPage() {
           <Text fontSize='xs'>Sign in with Google</Text>
         </Flex>
 
-        <Box position='relative' mt='3'>
+        <Box position='relative' mt='3' display='none'>
           <Divider />
           <AbsoluteCenter bg={childBgColor} px='7'>
             or sign in with
