@@ -69,7 +69,7 @@ export default function ChatMessages({ scrollRef, chatId }: ChatMessagesProps) {
           alignSelf={
             msg.uid === auth.currentUser?.uid ? 'flex-end' : 'flex-start'
           }
-          bg={msg.uid === auth.currentUser?.uid ? 'purple.500' : 'gray.600'}
+          bg={msg.uid === auth.currentUser?.uid ? 'blue.500' : 'gray.600'}
           color='white'
           px={2}
           py={2}

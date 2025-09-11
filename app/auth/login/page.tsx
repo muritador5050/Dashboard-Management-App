@@ -15,6 +15,9 @@ import {
   Divider,
   AbsoluteCenter,
   AspectRatio,
+  InputGroup,
+  InputRightElement,
+  IconButton,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { SignInCredentialProp } from '@/lib/utils';
@@ -39,6 +42,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { useThemeColor } from '@/lib/themeUtil';
+import { Eye, EyeClosed } from 'lucide-react';
 
 //Loginpage
 export default function LoginPage() {
@@ -50,6 +54,7 @@ export default function LoginPage() {
   });
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   useAuthRedirect(false);
 
@@ -249,13 +254,24 @@ export default function LoginPage() {
             mb={3}
           />
           <FormLabel>Password</FormLabel>
-          <Input
-            type='password'
-            name='password'
-            value={credential.password}
-            onChange={handleOnchange}
-            mb={3}
-          />
+          <InputGroup>
+            <Input
+              type={showPassword ? 'text' : 'password'}
+              name='password'
+              value={credential.password}
+              onChange={handleOnchange}
+              mb={3}
+            />
+            <InputRightElement>
+              <IconButton
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                icon={showPassword ? <Eye /> : <EyeClosed />}
+                variant='ghost'
+                size='sm'
+                onClick={() => setShowPassword((prev) => !prev)}
+              />
+            </InputRightElement>
+          </InputGroup>
           <Flex justify='space-between' mb={5}>
             <Checkbox
               isChecked={rememberMe}

@@ -13,6 +13,9 @@ import {
   Text,
   Divider,
   AbsoluteCenter,
+  InputGroup,
+  IconButton,
+  InputRightElement,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useThemeColor } from '@/lib/themeUtil';
@@ -33,6 +36,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { auth, db } from '@/config/firebase';
+import { Eye, EyeClosed } from 'lucide-react';
 //Register
 export default function SignUp() {
   const { childBgColor, textColor } = useThemeColor();
@@ -41,6 +45,7 @@ export default function SignUp() {
     email: '',
     password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -182,13 +187,25 @@ export default function SignUp() {
             mb={3}
           />
           <FormLabel>Password</FormLabel>
-          <Input
-            type='password'
-            name='password'
-            value={credential.password}
-            onChange={handleOnchange}
-            mb={3}
-          />
+          <InputGroup>
+            <Input
+              type={showPassword ? 'text' : 'password'}
+              name='password'
+              value={credential.password}
+              onChange={handleOnchange}
+              mb={3}
+            />
+            <InputRightElement>
+              <IconButton
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                icon={showPassword ? <Eye /> : <EyeClosed />}
+                variant='ghost'
+                size='sm'
+                onClick={() => setShowPassword((prev) => !prev)}
+              />
+            </InputRightElement>
+          </InputGroup>
+
           <Button
             onClick={handleSignUp}
             isLoading={isLoading}

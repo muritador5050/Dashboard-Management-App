@@ -45,6 +45,12 @@ interface CountryProps {
   };
 }
 
+interface Currency {
+  code: string;
+  name: string;
+  symbol: string;
+}
+
 export default function AccountSetting() {
   const { childBgColor, textColor } = useThemeColor();
   const changeColor = useColorModeValue('black', 'white');
@@ -54,6 +60,7 @@ export default function AccountSetting() {
   //Avatar
   const [avatarUrl, setAvatarUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   //Password Reset
@@ -74,6 +81,7 @@ export default function AccountSetting() {
     address: '',
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [originalDetails, setOriginalDetails] = useState(personalDetails);
 
   // Handle input changes
   const handleInputChange = (
@@ -86,12 +94,17 @@ export default function AccountSetting() {
     }));
   };
 
+  // Cancel changes - reset to original values
+  const handleCancelChanges = () => {
+    setPersonalDetails(originalDetails);
+  };
+
   // Save personal details
   const handleSaveDetails = async () => {
     const user = auth.currentUser;
     if (!user) {
       showToast({
-        title: 'info',
+        title: 'Authentication Required',
         description: 'You must be logged in to save details',
         status: 'info',
       });
@@ -100,21 +113,24 @@ export default function AccountSetting() {
 
     try {
       setIsSaving(true);
-      await updateDoc(doc(db, 'users', user.uid), {
+      const updateData = {
         ...personalDetails,
         updatedAt: new Date(),
-      });
+      };
+
+      await updateDoc(doc(db, 'users', user.uid), updateData);
+      setOriginalDetails(personalDetails);
+
       showToast({
-        title: 'Update',
+        title: 'Success',
         description: 'Personal details updated successfully!',
         status: 'success',
       });
     } catch (error) {
       console.error('Error saving details:', error);
-
       showToast({
-        title: 'Update failed',
-        description: 'Failed to save personal details',
+        title: 'Update Failed',
+        description: 'Failed to save personal details. Please try again.',
         status: 'error',
       });
     } finally {
@@ -122,6 +138,7 @@ export default function AccountSetting() {
     }
   };
 
+  //Upload
   //Upload
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     //Choose file
@@ -132,7 +149,7 @@ export default function AccountSetting() {
     const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (!validTypes.includes(file.type)) {
       showToast({
-        title: 'Invalid file type',
+        title: 'Invalid File Type',
         description: 'Please upload a JPG, PNG, or GIF file',
         status: 'error',
       });
@@ -142,36 +159,43 @@ export default function AccountSetting() {
     // Check file size (800KB limit)
     if (file.size > 800 * 1024) {
       showToast({
-        title: 'File too large',
+        title: 'File Too Large',
         description: 'File size must be less than 800KB',
         status: 'error',
       });
       return;
     }
+
     //current user
     const user = auth.currentUser;
     if (!user) {
       showToast({
-        title: 'Authentication error',
+        title: 'Authentication Required',
         description: 'You must be logged in to upload a profile picture',
         status: 'info',
       });
       return;
     }
 
+    setIsUploading(true);
+
     try {
-      setIsUploading(true);
       // Create a storage reference with a unique file name
       const storageRef = ref(storage, `profile-pictures/${user.uid}`);
+
       // Upload file to Firebase Storage
-      await uploadBytes(storageRef, file);
+      const uploadResult = await uploadBytes(storageRef, file);
+      console.log('Upload successful:', uploadResult);
+
       // Get the download URL
       const downloadUrl = await getDownloadURL(storageRef);
+
       // Update user profile in Firestore
       await updateDoc(doc(db, 'users', user.uid), {
         photoURL: downloadUrl,
         updatedAt: new Date(),
       });
+
       // Update UI
       setAvatarUrl(downloadUrl);
       showToast({
@@ -181,51 +205,95 @@ export default function AccountSetting() {
       });
     } catch (error) {
       console.error('Error uploading file:', error);
+
+      // More specific error handling
+      let errorMessage = 'Failed to upload profile picture. Please try again.';
+
+      if (error && typeof error === 'object') {
+        const err = error as any;
+        if (err.code === 'storage/unauthorized') {
+          errorMessage =
+            'You do not have permission to upload files. Please check your authentication.';
+        } else if (err.code === 'storage/canceled') {
+          errorMessage = 'Upload was canceled.';
+        } else if (err.code === 'storage/unknown') {
+          errorMessage =
+            'An unknown error occurred. Please check your internet connection and try again.';
+        } else if (
+          err.message?.includes('network') ||
+          err.message?.includes('ERR_FAILED')
+        ) {
+          errorMessage =
+            'Network error. Please check your internet connection and Firebase configuration.';
+        }
+      }
+
       showToast({
-        title: 'Update failed',
-        description: `Failed to upload profile picture: Unknown error`,
+        title: 'Upload Failed',
+        description: errorMessage,
         status: 'error',
       });
     } finally {
+      // This ensures loading state always stops
       setIsUploading(false);
+      // Clear the file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
   // Function to reset profile picture
   const handleResetAvatar = async () => {
     const user = auth.currentUser;
-    if (!user) return;
+    if (!user) {
+      showToast({
+        title: 'Authentication Required',
+        description: 'You must be logged in to reset profile picture',
+        status: 'info',
+      });
+      return;
+    }
 
     try {
-      setIsUploading(true);
-      // Update user document with default avatar URL
+      setIsResetting(true);
+      // Update user document with null photoURL
       await updateDoc(doc(db, 'users', user.uid), {
         photoURL: null,
+        updatedAt: new Date(),
       });
 
       setAvatarUrl('');
       showToast({
-        title: 'Reset update',
+        title: 'Success',
         description: 'Profile picture reset successfully!',
         status: 'success',
       });
     } catch (error) {
       console.error('Error resetting profile picture:', error);
       showToast({
-        title: 'Failed',
-        description: 'Failed to reset profile picture',
+        title: 'Reset Failed',
+        description: 'Failed to reset profile picture. Please try again.',
         status: 'error',
       });
     } finally {
-      setIsUploading(false);
+      setIsResetting(false);
     }
   };
 
   //Change Password
   const handlePasswordChange = async () => {
+    // Clear previous errors
+    setPasswordError('');
+
     // Basic validation
-    if (newPassword !== confirmPassword) {
-      setPasswordError('New passwords do not match');
+    if (!currentPassword.trim()) {
+      setPasswordError('Current password is required');
+      return;
+    }
+
+    if (!newPassword.trim()) {
+      setPasswordError('New password is required');
       return;
     }
 
@@ -233,14 +301,18 @@ export default function AccountSetting() {
       setPasswordError('Password must be at least 6 characters long');
       return;
     }
-    setPasswordError('');
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError('New passwords do not match');
+      return;
+    }
 
     try {
       setIsUpdatingPassword(true);
       const user = auth.currentUser;
 
       if (!user || !user.email) {
-        throw new Error('User not found');
+        throw new Error('User not authenticated');
       }
 
       // Re-authenticate user before changing password
@@ -260,15 +332,24 @@ export default function AccountSetting() {
       setConfirmPassword('');
 
       showToast({
-        title: 'password update',
+        title: 'Success',
         description: 'Password updated successfully!',
         status: 'success',
       });
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error updating password:', error);
-      setPasswordError(
-        'Failed to update password. Please check your current password.'
-      );
+      let errorMessage = 'Failed to update password. Please try again.';
+
+      if (error && typeof error === 'object' && 'code' in error) {
+        const firebaseError = error as { code: string };
+        if (firebaseError.code === 'auth/wrong-password') {
+          errorMessage = 'Current password is incorrect';
+        } else if (firebaseError.code === 'auth/too-many-requests') {
+          errorMessage = 'Too many attempts. Please try again later.';
+        }
+      }
+
+      setPasswordError(errorMessage);
     } finally {
       setIsUpdatingPassword(false);
     }
@@ -276,48 +357,73 @@ export default function AccountSetting() {
 
   //Effect for selecting country
   useEffect(() => {
-    setIsLoading(true);
-    fetch('https://restcountries.com/v3.1/all')
-      .then((response) => response.json())
-      .then((data) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const sortedCountries = data.sort((a: any, b: any) =>
+    const fetchCountries = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(
+          'https://restcountries.com/v3.1/all?fields=name,cca3,currencies'
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const sortedCountries = data.sort((a: CountryProps, b: CountryProps) =>
           a.name.common.localeCompare(b.name.common)
         );
         setCountries(sortedCountries);
-        setIsLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error('Failed to fetch countries:', error);
+        showToast({
+          title: 'Warning',
+          description: 'Failed to load countries list',
+          status: 'warning',
+        });
+        // Fallback: set empty array to prevent UI issues
+        setCountries([]);
+      } finally {
         setIsLoading(false);
-      });
+      }
+    };
+
+    fetchCountries();
   }, []);
 
   useEffect(() => {
     const loadUserData = async () => {
       const user = auth.currentUser;
 
-      if (user) {
-        try {
-          const userDoc = await getDoc(doc(db, 'users', user.uid));
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setPersonalDetails({
-              displayName: userData.displayName || '',
-              location: userData.location || '',
-              email: userData.email || user.email || '',
-              storeName: userData.storeName || '',
-              currency: userData.currency || '',
-              phoneNumber: userData.phoneNumber || '',
-              address: userData.address || '',
-            });
-            if (userDoc.exists() && userData.photoURL) {
-              setAvatarUrl(userData.photoURL);
-            }
+      if (!user) return;
+
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const userDetails = {
+            displayName: userData.displayName || '',
+            location: userData.location || '',
+            email: userData.email || user.email || '',
+            storeName: userData.storeName || '',
+            currency: userData.currency || '',
+            phoneNumber: userData.phoneNumber || '',
+            address: userData.address || '',
+          };
+
+          setPersonalDetails(userDetails);
+          setOriginalDetails(userDetails); // Set original details for cancel functionality
+
+          if (userData.photoURL) {
+            setAvatarUrl(userData.photoURL);
           }
-        } catch (error) {
-          console.error('Error loading user data:', error);
         }
+      } catch (error) {
+        console.error('Error loading user data:', error);
+        showToast({
+          title: 'Warning',
+          description: 'Failed to load user data',
+          status: 'warning',
+        });
       }
     };
 
@@ -325,8 +431,8 @@ export default function AccountSetting() {
   }, []);
 
   //Select currency
-  const getCurrencyOptions = () => {
-    const currencyMap = new Map();
+  const getCurrencyOptions = (): Currency[] => {
+    const currencyMap = new Map<string, Currency>();
 
     countries.forEach((country) => {
       if (country.currencies) {
@@ -348,6 +454,10 @@ export default function AccountSetting() {
     );
   };
 
+  // Check if there are unsaved changes
+  const hasUnsavedChanges =
+    JSON.stringify(personalDetails) !== JSON.stringify(originalDetails);
+
   return (
     <>
       <PageTitle />
@@ -362,11 +472,11 @@ export default function AccountSetting() {
               <Avatar
                 size='xl'
                 src={avatarUrl || undefined}
-                name={personalDetails.displayName}
+                name={personalDetails.displayName || 'User'}
               />
               <input
                 type='file'
-                accept='image/*'
+                accept='image/jpeg,image/png,image/gif'
                 style={{ display: 'none' }}
                 onChange={handleFileUpload}
                 ref={fileInputRef}
@@ -377,6 +487,8 @@ export default function AccountSetting() {
                   borderRadius='3xl'
                   isLoading={isUploading}
                   onClick={() => fileInputRef.current?.click()}
+                  loadingText='Uploading...'
+                  isDisabled={isResetting}
                 >
                   Upload
                 </Button>
@@ -385,25 +497,32 @@ export default function AccountSetting() {
                   colorScheme='orange'
                   borderRadius='3xl'
                   onClick={handleResetAvatar}
+                  isLoading={isResetting}
+                  loadingText='Resetting...'
+                  isDisabled={isUploading}
                 >
                   Reset
                 </Button>
               </ButtonGroup>
-              <Text>Allowed JPG, GIF or PNG. Max size of 800K</Text>
+              <Text fontSize='sm' color='gray.500'>
+                Allowed JPG, GIF or PNG. Max size of 800K
+              </Text>
             </Stack>
           </Box>
+
           <Box border='1px' borderRadius='xl' flex='1' px={3} py={5}>
             <Text fontSize='xl' fontWeight='bold' color={changeColor}>
               Change Password
             </Text>
             <Text>To change your password please confirm here</Text>
-            <Stack mt={3}>
-              <FormControl isInvalid={!!passwordError}>
+            <Stack mt={3} spacing={4}>
+              <FormControl>
                 <FormLabel>Current Password</FormLabel>
                 <Input
                   type='password'
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
+                  placeholder='Enter current password'
                 />
               </FormControl>
               <FormControl>
@@ -412,14 +531,16 @@ export default function AccountSetting() {
                   type='password'
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder='Enter new password (min 6 characters)'
                 />
               </FormControl>
               <FormControl isInvalid={!!passwordError}>
-                <FormLabel>Confirm Password</FormLabel>
+                <FormLabel>Confirm New Password</FormLabel>
                 <Input
                   type='password'
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder='Confirm new password'
                 />
                 {passwordError && (
                   <Text color='red.500' fontSize='sm' mt={1}>
@@ -429,20 +550,24 @@ export default function AccountSetting() {
               </FormControl>
               <Button
                 colorScheme='blue'
-                mt={2}
                 isLoading={isUpdatingPassword}
                 onClick={handlePasswordChange}
+                loadingText='Updating...'
+                isDisabled={
+                  !currentPassword || !newPassword || !confirmPassword
+                }
               >
                 Update Password
               </Button>
             </Stack>
           </Box>
         </Stack>
+
         <Box border='1px' borderRadius='xl' px={3} py={5}>
           <Text fontSize='xl' fontWeight='bold' color={changeColor}>
             Personal Details
           </Text>
-          <Text>To change your personal detail , edit and save from here</Text>
+          <Text>To change your personal detail, edit and save from here</Text>
           <Stack direction={{ base: 'column', xxl: 'row' }} gap={5} mt={3}>
             <Box flex='1' display='flex' flexDirection='column' gap={3}>
               <FormControl>
@@ -452,6 +577,7 @@ export default function AccountSetting() {
                   name='displayName'
                   value={personalDetails.displayName}
                   onChange={handleInputChange}
+                  placeholder='Enter your full name'
                 />
               </FormControl>
 
@@ -479,6 +605,7 @@ export default function AccountSetting() {
                   name='email'
                   value={personalDetails.email}
                   onChange={handleInputChange}
+                  placeholder='Enter your email address'
                 />
               </FormControl>
             </Box>
@@ -491,6 +618,7 @@ export default function AccountSetting() {
                   name='storeName'
                   value={personalDetails.storeName}
                   onChange={handleInputChange}
+                  placeholder='Enter your store name'
                 />
               </FormControl>
 
@@ -518,6 +646,7 @@ export default function AccountSetting() {
                   name='phoneNumber'
                   value={personalDetails.phoneNumber}
                   onChange={handleInputChange}
+                  placeholder='Enter your phone number'
                 />
               </FormControl>
             </Box>
@@ -529,6 +658,7 @@ export default function AccountSetting() {
               name='address'
               value={personalDetails.address}
               onChange={handleInputChange}
+              placeholder='Enter your full address'
             />
           </FormControl>
           <Stack mt={3}>
@@ -538,10 +668,17 @@ export default function AccountSetting() {
                 borderRadius='3xl'
                 isLoading={isSaving}
                 onClick={handleSaveDetails}
+                loadingText='Saving...'
+                isDisabled={!hasUnsavedChanges}
               >
-                Save
+                Save Changes
               </Button>
-              <Button colorScheme='orange' borderRadius='3xl'>
+              <Button
+                colorScheme='orange'
+                borderRadius='3xl'
+                onClick={handleCancelChanges}
+                isDisabled={!hasUnsavedChanges}
+              >
                 Cancel
               </Button>
             </ButtonGroup>

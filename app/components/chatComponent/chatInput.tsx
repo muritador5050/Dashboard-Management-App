@@ -98,55 +98,50 @@ export default function ChatInput({ scrollRef, chatId }: ChatInputProps) {
         };
 
         mediaRecorder.onstop = async () => {
-          try {
-            console.log('Processing recorded audio...');
+          console.log('Processing recorded audio...');
 
-            // Stop all tracks to release the microphone
-            stream.getTracks().forEach((track) => track.stop());
+          // Stop all tracks to release the microphone
+          stream.getTracks().forEach((track) => track.stop());
 
-            const blob = new Blob(chunks, { type: 'audio/webm; codecs=opus' });
+          const blob = new Blob(chunks, { type: 'audio/webm; codecs=opus' });
 
-            if (blob.size === 0) {
-              console.error('Recording is empty');
-              return;
-            }
-
-            if (!chatId || !auth.currentUser) {
-              console.error('Missing chatId or user');
-              return;
-            }
-
-            console.log('Uploading voice note...');
-            const fileRef = ref(
-              storage,
-              `voice_notes/${Date.now()}-${auth.currentUser.uid}.webm`
-            );
-
-            await uploadBytes(fileRef, blob);
-            const url = await getDownloadURL(fileRef);
-            console.log('Generated voice note URL:', url);
-
-            console.log('Adding message to database...');
-            await addDoc(collection(db, 'chats', chatId, 'messages'), {
-              type: 'voice',
-              audioUrl: url,
-              displayName: auth.currentUser.displayName || 'Anonymous',
-              photoURL: auth.currentUser.photoURL || '',
-              uid: auth.currentUser.uid,
-              createdAt: serverTimestamp(),
-            });
-
-            await updateDoc(doc(db, 'chats', chatId), {
-              lastMessage: '🎤 Voice message',
-              lastMessageAt: serverTimestamp(),
-            });
-
-            console.log('Voice message sent successfully!');
-            scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
-          } catch (uploadError) {
-            console.error('Error uploading voice message:', uploadError);
-            alert('Failed to send voice message. Please try again.');
+          if (blob.size === 0) {
+            console.error('Recording is empty');
+            return;
           }
+
+          if (!chatId || !auth.currentUser) {
+            console.error('Missing chatId or user');
+            return;
+          }
+
+          console.log('Uploading voice note...');
+          const fileRef = ref(
+            storage,
+            `voice_notes/${Date.now()}-${auth.currentUser.uid}.webm`
+          );
+
+          await uploadBytes(fileRef, blob);
+          const url = await getDownloadURL(fileRef);
+          console.log('Generated voice note URL:', url);
+
+          console.log('Adding message to database...');
+          await addDoc(collection(db, 'chats', chatId, 'messages'), {
+            type: 'voice',
+            audioUrl: url,
+            displayName: auth.currentUser.displayName || 'Anonymous',
+            photoURL: auth.currentUser.photoURL || '',
+            uid: auth.currentUser.uid,
+            createdAt: serverTimestamp(),
+          });
+
+          await updateDoc(doc(db, 'chats', chatId), {
+            lastMessage: '🎤 Voice message',
+            lastMessageAt: serverTimestamp(),
+          });
+
+          console.log('Voice message sent successfully!');
+          scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
         };
 
         mediaRecorder.onerror = (event) => {
@@ -171,7 +166,6 @@ export default function ChatInput({ scrollRef, chatId }: ChatInputProps) {
         console.log('Recording started');
       } catch (error) {
         console.error('Error accessing microphone:', error);
-
         setIsRecording(false);
       }
     } else {
