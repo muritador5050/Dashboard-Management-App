@@ -28,7 +28,7 @@ export default function ChatMessages({ scrollRef, chatId }: ChatMessagesProps) {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    if (!chatId) return; // ✅ wait until chat is selected
+    if (!chatId) return;
 
     const q = query(
       collection(db, 'chats', chatId, 'messages'),
@@ -70,7 +70,7 @@ export default function ChatMessages({ scrollRef, chatId }: ChatMessagesProps) {
             msg.uid === auth.currentUser?.uid ? 'flex-end' : 'flex-start'
           }
           bg={msg.uid === auth.currentUser?.uid ? 'blue.500' : 'gray.600'}
-          color='white'
+          color={'white'}
           px={2}
           py={2}
           borderTopRightRadius='2xl'

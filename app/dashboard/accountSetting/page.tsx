@@ -51,26 +51,31 @@ interface Currency {
   symbol: string;
 }
 
+interface FirebaseError {
+  code: string;
+  message?: string;
+}
+
 export default function AccountSetting() {
   const { childBgColor, textColor } = useThemeColor();
   const changeColor = useColorModeValue('black', 'white');
   const [countries, setCountries] = useState<CountryProps[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  //Avatar
+  // Avatar
   const [avatarUrl, setAvatarUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  //Password Reset
+  // Password Reset
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
 
-  //Personal Details
+  // Personal Details
   const [personalDetails, setPersonalDetails] = useState({
     displayName: '',
     location: '',
@@ -126,8 +131,7 @@ export default function AccountSetting() {
         description: 'Personal details updated successfully!',
         status: 'success',
       });
-    } catch (error) {
-      console.error('Error saving details:', error);
+    } catch {
       showToast({
         title: 'Update Failed',
         description: 'Failed to save personal details. Please try again.',
@@ -138,14 +142,12 @@ export default function AccountSetting() {
     }
   };
 
-  //Upload
-  //Upload
+  // Upload with timeout
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    //Choose file
     const file = e.target.files?.[0];
     if (!file) return;
 
-    //Validate type
+    // Validate type
     const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (!validTypes.includes(file.type)) {
       showToast({
@@ -156,7 +158,6 @@ export default function AccountSetting() {
       return;
     }
 
-    // Check file size (800KB limit)
     if (file.size > 800 * 1024) {
       showToast({
         title: 'File Too Large',
@@ -166,7 +167,6 @@ export default function AccountSetting() {
       return;
     }
 
-    //current user
     const user = auth.currentUser;
     if (!user) {
       showToast({
@@ -180,23 +180,26 @@ export default function AccountSetting() {
     setIsUploading(true);
 
     try {
-      // Create a storage reference with a unique file name
-      const storageRef = ref(storage, `profile-pictures/${user.uid}`);
-
-      // Upload file to Firebase Storage
-      const uploadResult = await uploadBytes(storageRef, file);
-      console.log('Upload successful:', uploadResult);
-
-      // Get the download URL
-      const downloadUrl = await getDownloadURL(storageRef);
-
-      // Update user profile in Firestore
-      await updateDoc(doc(db, 'users', user.uid), {
-        photoURL: downloadUrl,
-        updatedAt: new Date(),
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Upload timeout')), 10000);
       });
 
-      // Update UI
+      const uploadPromise = (async () => {
+        const storageRef = ref(storage, `profile-pictures/${user.uid}`);
+        const uploadResult = await uploadBytes(storageRef, file);
+        const downloadUrl = await getDownloadURL(uploadResult.ref);
+
+        await updateDoc(doc(db, 'users', user.uid), {
+          photoURL: downloadUrl,
+          updatedAt: new Date(),
+        });
+
+        return downloadUrl;
+      })();
+
+      // Race between upload and timeout
+      const downloadUrl = await Promise.race([uploadPromise, timeoutPromise]);
+
       setAvatarUrl(downloadUrl);
       showToast({
         title: 'Success',
@@ -204,27 +207,25 @@ export default function AccountSetting() {
         status: 'success',
       });
     } catch (error) {
-      console.error('Error uploading file:', error);
-
-      // More specific error handling
       let errorMessage = 'Failed to upload profile picture. Please try again.';
 
-      if (error && typeof error === 'object') {
-        const err = error as any;
-        if (err.code === 'storage/unauthorized') {
+      if (error instanceof Error) {
+        if (error.message === 'Upload timeout') {
           errorMessage =
-            'You do not have permission to upload files. Please check your authentication.';
-        } else if (err.code === 'storage/canceled') {
-          errorMessage = 'Upload was canceled.';
-        } else if (err.code === 'storage/unknown') {
-          errorMessage =
-            'An unknown error occurred. Please check your internet connection and try again.';
+            'Upload timeout. Please check your connection and try again.';
         } else if (
-          err.message?.includes('network') ||
-          err.message?.includes('ERR_FAILED')
+          error.message?.includes('network') ||
+          error.message?.includes('ERR_FAILED')
         ) {
           errorMessage =
-            'Network error. Please check your internet connection and Firebase configuration.';
+            'Network error. Please check your internet connection and try again.';
+        }
+      } else if (error && typeof error === 'object' && 'code' in error) {
+        const firebaseError = error as FirebaseError;
+        if (firebaseError.code === 'storage/unauthorized') {
+          errorMessage = 'You do not have permission to upload files.';
+        } else if (firebaseError.code === 'storage/canceled') {
+          errorMessage = 'Upload was canceled.';
         }
       }
 
@@ -234,9 +235,7 @@ export default function AccountSetting() {
         status: 'error',
       });
     } finally {
-      // This ensures loading state always stops
       setIsUploading(false);
-      // Clear the file input
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -257,7 +256,6 @@ export default function AccountSetting() {
 
     try {
       setIsResetting(true);
-      // Update user document with null photoURL
       await updateDoc(doc(db, 'users', user.uid), {
         photoURL: null,
         updatedAt: new Date(),
@@ -269,8 +267,7 @@ export default function AccountSetting() {
         description: 'Profile picture reset successfully!',
         status: 'success',
       });
-    } catch (error) {
-      console.error('Error resetting profile picture:', error);
+    } catch {
       showToast({
         title: 'Reset Failed',
         description: 'Failed to reset profile picture. Please try again.',
@@ -281,12 +278,10 @@ export default function AccountSetting() {
     }
   };
 
-  //Change Password
+  // Change Password
   const handlePasswordChange = async () => {
-    // Clear previous errors
     setPasswordError('');
 
-    // Basic validation
     if (!currentPassword.trim()) {
       setPasswordError('Current password is required');
       return;
@@ -315,18 +310,13 @@ export default function AccountSetting() {
         throw new Error('User not authenticated');
       }
 
-      // Re-authenticate user before changing password
       const credential = EmailAuthProvider.credential(
         user.email,
         currentPassword
       );
-
       await reauthenticateWithCredential(user, credential);
-
-      // Change password
       await updatePassword(user, newPassword);
 
-      // Clear form
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
@@ -336,12 +326,11 @@ export default function AccountSetting() {
         description: 'Password updated successfully!',
         status: 'success',
       });
-    } catch (error: unknown) {
-      console.error('Error updating password:', error);
+    } catch (error) {
       let errorMessage = 'Failed to update password. Please try again.';
 
       if (error && typeof error === 'object' && 'code' in error) {
-        const firebaseError = error as { code: string };
+        const firebaseError = error as FirebaseError;
         if (firebaseError.code === 'auth/wrong-password') {
           errorMessage = 'Current password is incorrect';
         } else if (firebaseError.code === 'auth/too-many-requests') {
@@ -355,7 +344,7 @@ export default function AccountSetting() {
     }
   };
 
-  //Effect for selecting country
+  // Effect for selecting country
   useEffect(() => {
     const fetchCountries = async () => {
       try {
@@ -373,14 +362,12 @@ export default function AccountSetting() {
           a.name.common.localeCompare(b.name.common)
         );
         setCountries(sortedCountries);
-      } catch (error) {
-        console.error('Failed to fetch countries:', error);
+      } catch {
         showToast({
           title: 'Warning',
           description: 'Failed to load countries list',
           status: 'warning',
         });
-        // Fallback: set empty array to prevent UI issues
         setCountries([]);
       } finally {
         setIsLoading(false);
@@ -393,7 +380,6 @@ export default function AccountSetting() {
   useEffect(() => {
     const loadUserData = async () => {
       const user = auth.currentUser;
-
       if (!user) return;
 
       try {
@@ -411,14 +397,13 @@ export default function AccountSetting() {
           };
 
           setPersonalDetails(userDetails);
-          setOriginalDetails(userDetails); // Set original details for cancel functionality
+          setOriginalDetails(userDetails);
 
           if (userData.photoURL) {
             setAvatarUrl(userData.photoURL);
           }
         }
-      } catch (error) {
-        console.error('Error loading user data:', error);
+      } catch {
         showToast({
           title: 'Warning',
           description: 'Failed to load user data',
@@ -430,7 +415,7 @@ export default function AccountSetting() {
     loadUserData();
   }, []);
 
-  //Select currency
+  // Select currency
   const getCurrencyOptions = (): Currency[] => {
     const currencyMap = new Map<string, Currency>();
 
@@ -448,7 +433,6 @@ export default function AccountSetting() {
       }
     });
 
-    // Convert map to array and sort by currency name
     return Array.from(currencyMap.values()).sort((a, b) =>
       a.name.localeCompare(b.name)
     );
